@@ -1849,4 +1849,79 @@ function openArchive() {
   document.getElementById('archiveModal').classList.add('show');
 }
 
-function
+function openSettings() {
+  const data = localStorage.getItem('mesozoicLab');
+  const specimens = data ? JSON.parse(data) : [];
+  const researchers = specimens.map(s => s.researcher).join('\n');
+  document.getElementById('researcherList').value = researchers;
+  document.getElementById('settingsModal').classList.add('show');
+}
+
+function closeModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+}
+
+function saveResearchers() {
+  const list = document.getElementById('researcherList').value.split('\n').filter(n => n.trim());
+  if (list.length === 0) {
+    alert('研究员名单不能为空');
+    return;
+  }
+  
+  specimens = list.map((name, i) => {
+    const old = specimens[i];
+    return {
+      id: i,
+      researcher: name.trim(),
+      speciesId: old ? old.speciesId : Math.floor(Math.random() * 8),
+      stage: old ? old.stage : Math.floor(Math.random() * 3),
+      growth: old ? old.growth : Math.floor(Math.random() * 50),
+      maxGrowth: old ? old.maxGrowth : 100,
+      vitality: old ? old.vitality : 80,
+      discipline: old ? old.discipline : 60
+    };
+  });
+  
+  saveSystem();
+  renderGrid();
+  closeModals();
+  showNotification('研究员配置已更新');
+}
+
+function resetSystem() {
+  if (!confirm('确定要重置整个实验室系统吗？所有数据将被清除！')) return;
+  
+  localStorage.removeItem('mesozoicLab');
+  location.reload();
+}
+
+// ==================== 键盘快捷键 ====================
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModals();
+  
+  if (!activeId) return;
+  
+  switch(e.key) {
+    case '1': interact('feed'); break;
+    case '2': interact('exercise'); break;
+    case '3': interact('study'); break;
+    case '4': interact('groom'); break;
+    case '5': interact('discipline'); break;
+    case 'e': triggerEvolution(); break;
+  }
+});
+
+// ==================== 自动保存 ====================
+setInterval(() => {
+  if (specimens.length > 0) saveSystem();
+}, 30000);
+
+// ==================== 初始化完成提示 ====================
+console.log('%c Mesozoic BioLab v2.0 ', 'background: #ff9f43; color: #0a0a0f; font-size: 20px; font-weight: bold; padding: 10px 20px; border-radius: 4px;');
+console.log('%c 系统已就绪 | 8种中生代物种 | 8个发育阶段 | 解剖学精确建模 ', 'color: #636e72; font-size: 12px;');
+</script>
+
+</body>
+</html>
+
+
