@@ -92,7 +92,7 @@
 
   /* ==================== 蛋仔派对主题主网格 ==================== */
   #petGrid {
-    display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);
+    display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(5, 1fr);
     gap: 12px; padding: 20px;
     height: calc(100vh - 230px); width: 100%;
     position: absolute; top: 80px; left: 0; z-index: 1;
@@ -106,6 +106,7 @@
     overflow: hidden; 
     box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
     backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
   }
   .pet-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -138,26 +139,26 @@
   .team-purple { border-bottom: 5px solid #8ac926; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(138, 201, 38, 0.3); }
 
   .canvas-container { 
-    width: 100%; height: 62%; 
+    width: 100%; flex: 1;
     background: radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 70%);
     position: relative; border-radius: 15px 15px 0 0;
   }
   
   .info-area {
-    height: 38%; display: flex; flex-direction: column;
+    height: 45px; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.4) 100%);
-    padding: 8px; border-radius: 0 0 17px 17px;
+    padding: 5px; border-radius: 0 0 17px 17px;
   }
   .pet-name { 
-    font-weight: bold; font-size: 1rem; color: #ff6b6b; 
-    margin-bottom: 3px; white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; width: 90%; text-align: center;
+    font-weight: bold; font-size: 0.8rem; color: #ff6b6b; 
+    margin-bottom: 2px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; width: 100%; text-align: center;
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
   }
   .pet-role { 
-    font-size: 0.75rem; color: rgba(255,107,107,0.8); 
-    background: rgba(255,255,255,0.1); padding: 3px 10px; 
+    font-size: 0.6rem; color: rgba(255,107,107,0.8); 
+    background: rgba(255,255,255,0.1); padding: 2px 8px; 
     border-radius: 10px; backdrop-filter: blur(5px);
   }
   .level-badge {
@@ -377,19 +378,20 @@
   #captain-preview { width: 140px; height: 140px; margin: 0 auto; background: rgba(255, 107, 107, 0.1); border-radius: 50%; border: 4px solid rgba(255, 107, 107, 0.5); box-shadow: 0 0 40px rgba(255, 107, 107, 0.3); }
   .custom-input { position: absolute; width: 40px; text-align: center; font-weight: bold; border: 2px solid #ff6b6b; border-radius: 8px; z-index: 3000; display: none; font-size: 0.8rem; background: rgba(255,255,255,0.9); color: #ff6b6b; }
 
-  /* 商店样式 */
-  .shop-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-height: 55vh; overflow-y: auto; padding: 10px; }
+  /* 商店样式 - 区分装备类型 */
+  .shop-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; max-height: 55vh; overflow-y: auto; padding: 10px; }
   .shop-item {
     background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
     border: 2px solid rgba(255,255,255,0.15); border-radius: 15px;
     padding: 12px; text-align: center; cursor: pointer;
     transition: all 0.3s; position: relative; backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
   }
   .shop-item:hover { border-color: #ff6b6b; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
   .shop-item.equipped { border-color: #06d6a0; background: rgba(6, 214, 160, 0.2); box-shadow: 0 0 30px rgba(6, 214, 160, 0.3); }
   .shop-item.locked { opacity: 0.4; cursor: not-allowed; }
-  .item-preview { width: 60px; height: 60px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-  .item-name { font-weight: bold; font-size: 0.85rem; color: #ff6b6b; margin-bottom: 4px; }
+  .item-preview { width: 100%; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 8px; }
+  .item-name { font-weight: bold; font-size: 0.8rem; color: #ff6b6b; margin-bottom: 4px; }
   .item-desc { font-size: 0.7rem; color: rgba(255,107,107,0.6); }
   .item-price { font-size: 0.8rem; color: #ffd166; font-weight: bold; margin-top: 6px; }
   
@@ -422,6 +424,13 @@
     background: rgba(255,255,255,0.3); border-radius: 10px;
     font-size: 0.7rem; color: #ffd166;
   }
+  
+  /* 装备图标样式区分 */
+  .equipment-weapon { border: 3px solid #e74c3c; }
+  .equipment-armor { border: 3px solid #3498db; }
+  .equipment-helmet { border: 3px solid #f39c12; }
+  .equipment-accessory { border: 3px solid #9b59b6; }
+  .equipment-special { border: 3px solid #e67e22; }
 </style>
 </head>
 <body>
@@ -874,74 +883,74 @@ const SKILLS_DATA = [
 // ==================== 60件蛋仔派对装备 ====================
 const EQUIPMENT_DATA = [
   // 武器类 (15件)
-  { id: 'w1', name: '木质棒棒', icon: '棍', category: '武器', color: '#8B4513', bonus: 1, price: 10, slot: 'weapon', rarity: '普通' },
-  { id: 'w2', name: '铁质棒棒', icon: '⚔️', category: '武器', color: '#708090', bonus: 2, price: 30, slot: 'weapon', rarity: '普通' },
-  { id: 'w3', name: '银光棒棒', icon: '🗡️', category: '武器', color: '#C0C0C0', bonus: 3, price: 60, slot: 'weapon', rarity: '稀有' },
-  { id: 'w4', name: '金光棒棒', icon: '✨', category: '武器', color: '#FFD700', bonus: 5, price: 100, slot: 'weapon', rarity: '稀有' },
-  { id: 'w5', name: '钻石棒棒', icon: '💎', category: '武器', color: '#00CED1', bonus: 8, price: 200, slot: 'weapon', rarity: '史诗' },
-  { id: 'w6', name: '火焰棒棒', icon: '🔥', category: '武器', color: '#FF4500', bonus: 10, price: 300, slot: 'weapon', rarity: '史诗' },
-  { id: 'w7', name: '冰霜棒棒', icon: '❄️', category: '武器', color: '#00BFFF', bonus: 10, price: 300, slot: 'weapon', rarity: '史诗' },
-  { id: 'w8', name: '雷电棒棒', icon: '⚡', category: '武器', color: '#FFD700', bonus: 12, price: 400, slot: 'weapon', rarity: '史诗' },
-  { id: 'w9', name: '圣光棒棒', icon: '🌟', category: '武器', color: '#FFFACD', bonus: 15, price: 500, slot: 'weapon', rarity: '传说' },
-  { id: 'w10', name: '暗影棒棒', icon: '🌑', category: '武器', color: '#2C3E50', bonus: 15, price: 500, slot: 'weapon', rarity: '传说' },
-  { id: 'w11', name: '龙牙棒棒', icon: '🐉', category: '武器', color: '#8B0000', bonus: 18, price: 700, slot: 'weapon', rarity: '传说' },
-  { id: 'w12', name: '星辰棒棒', icon: '⭐', category: '武器', color: '#9B59B6', bonus: 20, price: 900, slot: 'weapon', rarity: '传说' },
-  { id: 'w13', name: '彩虹棒棒', icon: '🌈', category: '武器', color: '#FF69B4', bonus: 25, price: 1200, slot: 'weapon', rarity: '神话' },
-  { id: 'w14', name: '传说棒棒', icon: '👑', category: '武器', color: '#FFD700', bonus: 30, price: 1500, slot: 'weapon', rarity: '神话' },
-  { id: 'w15', name: '神话棒棒', icon: '🌟', category: '武器', color: '#FFD700', bonus: 40, price: 2000, slot: 'weapon', rarity: '神话' },
+  { id: 'w1', name: '木质棒棒', icon: '棍', category: '武器', color: '#8B4513', bonus: 1, price: 10, slot: 'weapon', rarity: '普通', type: 'weapon' },
+  { id: 'w2', name: '铁质棒棒', icon: '⚔️', category: '武器', color: '#708090', bonus: 2, price: 30, slot: 'weapon', rarity: '普通', type: 'weapon' },
+  { id: 'w3', name: '银光棒棒', icon: '🗡️', category: '武器', color: '#C0C0C0', bonus: 3, price: 60, slot: 'weapon', rarity: '稀有', type: 'weapon' },
+  { id: 'w4', name: '金光棒棒', icon: '✨', category: '武器', color: '#FFD700', bonus: 5, price: 100, slot: 'weapon', rarity: '稀有', type: 'weapon' },
+  { id: 'w5', name: '钻石棒棒', icon: '💎', category: '武器', color: '#00CED1', bonus: 8, price: 200, slot: 'weapon', rarity: '史诗', type: 'weapon' },
+  { id: 'w6', name: '火焰棒棒', icon: '🔥', category: '武器', color: '#FF4500', bonus: 10, price: 300, slot: 'weapon', rarity: '史诗', type: 'weapon' },
+  { id: 'w7', name: '冰霜棒棒', icon: '❄️', category: '武器', color: '#00BFFF', bonus: 10, price: 300, slot: 'weapon', rarity: '史诗', type: 'weapon' },
+  { id: 'w8', name: '雷电棒棒', icon: '⚡', category: '武器', color: '#FFD700', bonus: 12, price: 400, slot: 'weapon', rarity: '史诗', type: 'weapon' },
+  { id: 'w9', name: '圣光棒棒', icon: '🌟', category: '武器', color: '#FFFACD', bonus: 15, price: 500, slot: 'weapon', rarity: '传说', type: 'weapon' },
+  { id: 'w10', name: '暗影棒棒', icon: '🌑', category: '武器', color: '#2C3E50', bonus: 15, price: 500, slot: 'weapon', rarity: '传说', type: 'weapon' },
+  { id: 'w11', name: '龙牙棒棒', icon: '🐉', category: '武器', color: '#8B0000', bonus: 18, price: 700, slot: 'weapon', rarity: '传说', type: 'weapon' },
+  { id: 'w12', name: '星辰棒棒', icon: '⭐', category: '武器', color: '#9B59B6', bonus: 20, price: 900, slot: 'weapon', rarity: '传说', type: 'weapon' },
+  { id: 'w13', name: '彩虹棒棒', icon: '🌈', category: '武器', color: '#FF69B4', bonus: 25, price: 1200, slot: 'weapon', rarity: '神话', type: 'weapon' },
+  { id: 'w14', name: '传说棒棒', icon: '👑', category: '武器', color: '#FFD700', bonus: 30, price: 1500, slot: 'weapon', rarity: '神话', type: 'weapon' },
+  { id: 'w15', name: '神话棒棒', icon: '🌟', category: '武器', color: '#FFD700', bonus: 40, price: 2000, slot: 'weapon', rarity: '神话', type: 'weapon' },
   
   // 防具类 (15件)
-  { id: 'd1', name: '布制外套', icon: '👕', category: '防具', color: '#DEB887', bonus: 1, price: 10, slot: 'armor', rarity: '普通' },
-  { id: 'd2', name: '皮质护甲', icon: '🧥', category: '防具', color: '#8B4513', bonus: 2, price: 30, slot: 'armor', rarity: '普通' },
-  { id: 'd3', name: '锁子甲', icon: '🛡️', category: '防具', color: '#708090', bonus: 3, price: 60, slot: 'armor', rarity: '稀有' },
-  { id: 'd4', name: '铁制护甲', icon: '⚔️', category: '防具', color: '#2C3E50', bonus: 5, price: 100, slot: 'armor', rarity: '稀有' },
-  { id: 'd5', name: '银光护甲', icon: '🛡️', category: '防具', color: '#C0C0C0', bonus: 7, price: 150, slot: 'armor', rarity: '稀有' },
-  { id: 'd6', name: '金光护甲', icon: '✨', category: '防具', color: '#FFD700', bonus: 10, price: 250, slot: 'armor', rarity: '史诗' },
-  { id: 'd7', name: '钻石护甲', icon: '💎', category: '防具', color: '#00CED1', bonus: 13, price: 400, slot: 'armor', rarity: '史诗' },
-  { id: 'd8', name: '火焰护甲', icon: '🔥', category: '防具', color: '#FF4500', bonus: 15, price: 500, slot: 'armor', rarity: '史诗' },
-  { id: 'd9', name: '冰霜护甲', icon: '❄️', category: '防具', color: '#00BFFF', bonus: 15, price: 500, slot: 'armor', rarity: '史诗' },
-  { id: 'd10', name: '雷电护甲', icon: '⚡', category: '防具', color: '#FFD700', bonus: 18, price: 700, slot: 'armor', rarity: '传说' },
-  { id: 'd11', name: '圣光护甲', icon: '🌟', category: '防具', color: '#FFFACD', bonus: 20, price: 800, slot: 'armor', rarity: '传说' },
-  { id: 'd12', name: '暗影护甲', icon: '🌑', category: '防具', color: '#2C3E50', bonus: 20, price: 800, slot: 'armor', rarity: '传说' },
-  { id: 'd13', name: '龙鳞护甲', icon: '🐉', category: '防具', color: '#8B0000', bonus: 25, price: 1000, slot: 'armor', rarity: '传说' },
-  { id: 'd14', name: '传说护甲', icon: '👑', category: '防具', color: '#FFD700', bonus: 30, price: 1500, slot: 'armor', rarity: '神话' },
-  { id: 'd15', name: '神话护甲', icon: '🌟', category: '防具', color: '#FFD700', bonus: 40, price: 2000, slot: 'armor', rarity: '神话' },
+  { id: 'd1', name: '布制外套', icon: '👕', category: '防具', color: '#DEB887', bonus: 1, price: 10, slot: 'armor', rarity: '普通', type: 'armor' },
+  { id: 'd2', name: '皮质护甲', icon: '🧥', category: '防具', color: '#8B4513', bonus: 2, price: 30, slot: 'armor', rarity: '普通', type: 'armor' },
+  { id: 'd3', name: '锁子甲', icon: '🛡️', category: '防具', color: '#708090', bonus: 3, price: 60, slot: 'armor', rarity: '稀有', type: 'armor' },
+  { id: 'd4', name: '铁制护甲', icon: '⚔️', category: '防具', color: '#2C3E50', bonus: 5, price: 100, slot: 'armor', rarity: '稀有', type: 'armor' },
+  { id: 'd5', name: '银光护甲', icon: '🛡️', category: '防具', color: '#C0C0C0', bonus: 7, price: 150, slot: 'armor', rarity: '稀有', type: 'armor' },
+  { id: 'd6', name: '金光护甲', icon: '✨', category: '防具', color: '#FFD700', bonus: 10, price: 250, slot: 'armor', rarity: '史诗', type: 'armor' },
+  { id: 'd7', name: '钻石护甲', icon: '💎', category: '防具', color: '#00CED1', bonus: 13, price: 400, slot: 'armor', rarity: '史诗', type: 'armor' },
+  { id: 'd8', name: '火焰护甲', icon: '🔥', category: '防具', color: '#FF4500', bonus: 15, price: 500, slot: 'armor', rarity: '史诗', type: 'armor' },
+  { id: 'd9', name: '冰霜护甲', icon: '❄️', category: '防具', color: '#00BFFF', bonus: 15, price: 500, slot: 'armor', rarity: '史诗', type: 'armor' },
+  { id: 'd10', name: '雷电护甲', icon: '⚡', category: '防具', color: '#FFD700', bonus: 18, price: 700, slot: 'armor', rarity: '传说', type: 'armor' },
+  { id: 'd11', name: '圣光护甲', icon: '🌟', category: '防具', color: '#FFFACD', bonus: 20, price: 800, slot: 'armor', rarity: '传说', type: 'armor' },
+  { id: 'd12', name: '暗影护甲', icon: '🌑', category: '防具', color: '#2C3E50', bonus: 20, price: 800, slot: 'armor', rarity: '传说', type: 'armor' },
+  { id: 'd13', name: '龙鳞护甲', icon: '🐉', category: '防具', color: '#8B0000', bonus: 25, price: 1000, slot: 'armor', rarity: '传说', type: 'armor' },
+  { id: 'd14', name: '传说护甲', icon: '👑', category: '防具', color: '#FFD700', bonus: 30, price: 1500, slot: 'armor', rarity: '神话', type: 'armor' },
+  { id: 'd15', name: '神话护甲', icon: '🌟', category: '防具', color: '#FFD700', bonus: 40, price: 2000, slot: 'armor', rarity: '神话', type: 'armor' },
   
   // 头盔类 (10件)
-  { id: 'h1', name: '布帽', icon: '🎩', category: '头盔', color: '#DEB887', bonus: 1, price: 10, slot: 'helmet', rarity: '普通' },
-  { id: 'h2', name: '铁盔', icon: '⛑️', category: '头盔', color: '#708090', bonus: 2, price: 40, slot: 'helmet', rarity: '普通' },
-  { id: 'h3', name: '银光头盔', icon: '🪖', category: '头盔', color: '#C0C0C0', bonus: 3, price: 80, slot: 'helmet', rarity: '稀有' },
-  { id: 'h4', name: '金光头盔', icon: '✨', category: '头盔', color: '#FFD700', bonus: 5, price: 150, slot: 'helmet', rarity: '稀有' },
-  { id: 'h5', name: '钻石头盔', icon: '💎', category: '头盔', color: '#00CED1', bonus: 7, price: 300, slot: 'helmet', rarity: '史诗' },
-  { id: 'h6', name: '火焰头盔', icon: '🔥', category: '头盔', color: '#FF4500', bonus: 10, price: 500, slot: 'helmet', rarity: '史诗' },
-  { id: 'h7', name: '冰霜头盔', icon: '❄️', category: '头盔', color: '#00BFFF', bonus: 10, price: 500, slot: 'helmet', rarity: '史诗' },
-  { id: 'h8', name: '龙角头盔', icon: '🐉', category: '头盔', color: '#8B0000', bonus: 15, price: 800, slot: 'helmet', rarity: '传说' },
-  { id: 'h9', name: '传说头盔', icon: '👑', category: '头盔', color: '#FFD700', bonus: 20, price: 1200, slot: 'helmet', rarity: '神话' },
-  { id: 'h10', name: '神话头盔', icon: '🌟', category: '头盔', color: '#FFD700', bonus: 25, price: 1600, slot: 'helmet', rarity: '神话' },
+  { id: 'h1', name: '布帽', icon: '🎩', category: '头盔', color: '#DEB887', bonus: 1, price: 10, slot: 'helmet', rarity: '普通', type: 'helmet' },
+  { id: 'h2', name: '铁盔', icon: '⛑️', category: '头盔', color: '#708090', bonus: 2, price: 40, slot: 'helmet', rarity: '普通', type: 'helmet' },
+  { id: 'h3', name: '银光头盔', icon: '🪖', category: '头盔', color: '#C0C0C0', bonus: 3, price: 80, slot: 'helmet', rarity: '稀有', type: 'helmet' },
+  { id: 'h4', name: '金光头盔', icon: '✨', category: '头盔', color: '#FFD700', bonus: 5, price: 150, slot: 'helmet', rarity: '稀有', type: 'helmet' },
+  { id: 'h5', name: '钻石头盔', icon: '💎', category: '头盔', color: '#00CED1', bonus: 7, price: 300, slot: 'helmet', rarity: '史诗', type: 'helmet' },
+  { id: 'h6', name: '火焰头盔', icon: '🔥', category: '头盔', color: '#FF4500', bonus: 10, price: 500, slot: 'helmet', rarity: '史诗', type: 'helmet' },
+  { id: 'h7', name: '冰霜头盔', icon: '❄️', category: '头盔', color: '#00BFFF', bonus: 10, price: 500, slot: 'helmet', rarity: '史诗', type: 'helmet' },
+  { id: 'h8', name: '龙角头盔', icon: '🐉', category: '头盔', color: '#8B0000', bonus: 15, price: 800, slot: 'helmet', rarity: '传说', type: 'helmet' },
+  { id: 'h9', name: '传说头盔', icon: '👑', category: '头盔', color: '#FFD700', bonus: 20, price: 1200, slot: 'helmet', rarity: '神话', type: 'helmet' },
+  { id: 'h10', name: '神话头盔', icon: '🌟', category: '头盔', color: '#FFD700', bonus: 25, price: 1600, slot: 'helmet', rarity: '神话', type: 'helmet' },
   
   // 饰品类 (10件)
-  { id: 'acc1', name: '力量戒指', icon: '💍', category: '饰品', color: '#E74C3C', bonus: 2, price: 50, slot: 'accessory', rarity: '稀有' },
-  { id: 'acc2', name: '敏捷戒指', icon: '💍', category: '饰品', color: '#3498DB', bonus: 2, price: 50, slot: 'accessory', rarity: '稀有' },
-  { id: 'acc3', name: '智慧项链', icon: '📿', category: '饰品', color: '#9B59B6', bonus: 3, price: 80, slot: 'accessory', rarity: '稀有' },
-  { id: 'acc4', name: '生命项链', icon: '💚', category: '饰品', color: '#2ECC71', bonus: 3, price: 80, slot: 'accessory', rarity: '稀有' },
-  { id: 'acc5', name: '幸运徽章', icon: '🍀', category: '饰品', color: '#2ECC71', bonus: 5, price: 150, slot: 'accessory', rarity: '史诗' },
-  { id: 'acc6', name: '勇气徽章', icon: '🦁', category: '饰品', color: '#F39C12', bonus: 5, price: 150, slot: 'accessory', rarity: '史诗' },
-  { id: 'acc7', name: '守护护符', icon: '🛡️', category: '饰品', color: '#3498DB', bonus: 8, price: 300, slot: 'accessory', rarity: '史诗' },
-  { id: 'acc8', name: '龙心宝石', icon: '❤️', category: '饰品', color: '#E74C3C', bonus: 10, price: 500, slot: 'accessory', rarity: '传说' },
-  { id: 'acc9', name: '传说宝石', icon: '💎', category: '饰品', color: '#FFD700', bonus: 15, price: 800, slot: 'accessory', rarity: '神话' },
-  { id: 'acc10', name: '神话宝石', icon: '🌟', category: '饰品', color: '#FFD700', bonus: 20, price: 1200, slot: 'accessory', rarity: '神话' },
+  { id: 'acc1', name: '力量戒指', icon: '💍', category: '饰品', color: '#E74C3C', bonus: 2, price: 50, slot: 'accessory', rarity: '稀有', type: 'accessory' },
+  { id: 'acc2', name: '敏捷戒指', icon: '💍', category: '饰品', color: '#3498DB', bonus: 2, price: 50, slot: 'accessory', rarity: '稀有', type: 'accessory' },
+  { id: 'acc3', name: '智慧项链', icon: '📿', category: '饰品', color: '#9B59B6', bonus: 3, price: 80, slot: 'accessory', rarity: '稀有', type: 'accessory' },
+  { id: 'acc4', name: '生命项链', icon: '💚', category: '饰品', color: '#2ECC71', bonus: 3, price: 80, slot: 'accessory', rarity: '稀有', type: 'accessory' },
+  { id: 'acc5', name: '幸运徽章', icon: '🍀', category: '饰品', color: '#2ECC71', bonus: 5, price: 150, slot: 'accessory', rarity: '史诗', type: 'accessory' },
+  { id: 'acc6', name: '勇气徽章', icon: '🦁', category: '饰品', color: '#F39C12', bonus: 5, price: 150, slot: 'accessory', rarity: '史诗', type: 'accessory' },
+  { id: 'acc7', name: '守护护符', icon: '🛡️', category: '饰品', color: '#3498DB', bonus: 8, price: 300, slot: 'accessory', rarity: '史诗', type: 'accessory' },
+  { id: 'acc8', name: '龙心宝石', icon: '❤️', category: '饰品', color: '#E74C3C', bonus: 10, price: 500, slot: 'accessory', rarity: '传说', type: 'accessory' },
+  { id: 'acc9', name: '传说宝石', icon: '💎', category: '饰品', color: '#FFD700', bonus: 15, price: 800, slot: 'accessory', rarity: '神话', type: 'accessory' },
+  { id: 'acc10', name: '神话宝石', icon: '🌟', category: '饰品', color: '#FFD700', bonus: 20, price: 1200, slot: 'accessory', rarity: '神话', type: 'accessory' },
   
   // 特殊装备 (10件) - 蛋仔派对主题
-  { id: 's1', name: '粉色翅膀', icon: '🪽', category: '特殊', color: '#ff9a9e', bonus: 5, price: 200, slot: 'special', rarity: '史诗' },
-  { id: 's2', name: '蓝色翅膀', icon: '🦋', category: '特殊', color: '#a1c4fd', bonus: 5, price: 200, slot: 'special', rarity: '史诗' },
-  { id: 's3', name: '彩虹翅膀', icon: '🌈', category: '特殊', color: '#ff69b4', bonus: 8, price: 400, slot: 'special', rarity: '传说' },
-  { id: 's4', name: '火焰光环', icon: '🔥', category: '特殊', color: '#FF4500', bonus: 10, price: 500, slot: 'special', rarity: '传说' },
-  { id: 's5', name: '冰霜光环', icon: '❄️', category: '特殊', color: '#00BFFF', bonus: 10, price: 500, slot: 'special', rarity: '传说' },
-  { id: 's6', name: '雷电光环', icon: '⚡', category: '特殊', color: '#FFD700', bonus: 12, price: 600, slot: 'special', rarity: '传说' },
-  { id: 's7', name: '圣光光环', icon: '✨', category: '特殊', color: '#FFFACD', bonus: 15, price: 800, slot: 'special', rarity: '神话' },
-  { id: 's8', name: '暗影光环', icon: '🌑', category: '特殊', color: '#2C3E50', bonus: 15, price: 800, slot: 'special', rarity: '神话' },
-  { id: 's9', name: '龙魂印记', icon: '🐉', category: '特殊', color: '#8B0000', bonus: 20, price: 1000, slot: 'special', rarity: '神话' },
-  { id: 's10', name: '神话光环', icon: '🌟', category: '特殊', color: '#FFD700', bonus: 30, price: 1500, slot: 'special', rarity: '神话' }
+  { id: 's1', name: '粉色翅膀', icon: '🪽', category: '特殊', color: '#ff9a9e', bonus: 5, price: 200, slot: 'special', rarity: '史诗', type: 'special' },
+  { id: 's2', name: '蓝色翅膀', icon: '🦋', category: '特殊', color: '#a1c4fd', bonus: 5, price: 200, slot: 'special', rarity: '史诗', type: 'special' },
+  { id: 's3', name: '彩虹翅膀', icon: '🌈', category: '特殊', color: '#ff69b4', bonus: 8, price: 400, slot: 'special', rarity: '传说', type: 'special' },
+  { id: 's4', name: '火焰光环', icon: '🔥', category: '特殊', color: '#FF4500', bonus: 10, price: 500, slot: 'special', rarity: '传说', type: 'special' },
+  { id: 's5', name: '冰霜光环', icon: '❄️', category: '特殊', color: '#00BFFF', bonus: 10, price: 500, slot: 'special', rarity: '传说', type: 'special' },
+  { id: 's6', name: '雷电光环', icon: '⚡', category: '特殊', color: '#FFD700', bonus: 12, price: 600, slot: 'special', rarity: '传说', type: 'special' },
+  { id: 's7', name: '圣光光环', icon: '✨', category: '特殊', color: '#FFFACD', bonus: 15, price: 800, slot: 'special', rarity: '神话', type: 'special' },
+  { id: 's8', name: '暗影光环', icon: '🌑', category: '特殊', color: '#2C3E50', bonus: 15, price: 800, slot: 'special', rarity: '神话', type: 'special' },
+  { id: 's9', name: '龙魂印记', icon: '🐉', category: '特殊', color: '#8B0000', bonus: 20, price: 1000, slot: 'special', rarity: '神话', type: 'special' },
+  { id: 's10', name: '神话光环', icon: '🌟', category: '特殊', color: '#FFD700', bonus: 30, price: 1500, slot: 'special', rarity: '神话', type: 'special' }
 ];
 
 // ==================== 应用程序状态 ====================
@@ -1917,7 +1926,7 @@ function drawCaptain() {
 function renderGrid() {
   const grid = document.getElementById('petGrid');
   grid.innerHTML = '';
-  const list = appState.students.slice(0, 36);
+  const list = appState.students.slice(0, 40);
 
   list.forEach(s => {
     const card = document.createElement('div');
@@ -1938,7 +1947,6 @@ function renderGrid() {
       <div class="level-badge" style="${isUlt ? 'background:linear-gradient(135deg,#ffd166,#ff9e6d);box-shadow:0 0 20px rgba(255,209,102,0.8);' : ''}">${isUlt ? '⭐' : ''}Lv.${s.level}</div>
       <div class="pet-name">${s.name}</div>
       <div class="pet-role">${pData.role} • ${pData.name}${isUlt ? ' ★' : ''}</div>
-      <div class="xp-bar"><div class="xp-fill" style="width:${(s.xp/s.maxXp)*100}%"></div></div>
     `;
     card.appendChild(info);
     grid.appendChild(card);
@@ -2341,7 +2349,7 @@ function renderShopList(category = null) {
     const canBuy = appState.gold >= e.price;
     
     return `
-      <div class="shop-item ${equipped ? 'equipped' : ''} ${!owned && !canBuy ? 'locked' : ''}">
+      <div class="shop-item ${equipped ? 'equipped' : ''} ${!owned && !canBuy ? 'locked' : ''} ${e.type ? 'equipment-' + e.type : ''}">
         <div class="item-preview" style="background:${e.color}30; color:${rarityColors[e.rarity]}; display:flex; align-items:center; justify-content:center; font-size:2rem;">${e.icon}</div>
         <div class="item-name" style="color:${rarityColors[e.rarity]}">${e.name}</div>
         <div class="item-desc">+${e.bonus} ${e.rarity}</div>
@@ -2684,7 +2692,7 @@ function showPK() {
   sorted.forEach((t,i) => {
     const pct = (scores[t.id]/max)*100;
     const row = document.createElement('div');
-    row.style.cssText = "display:flex; align-items:center; background:rgba(255,255,255,0.05); padding:15px; margin-bottom:12px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);";
+    row.style.cssText = "display:flex; align-items=center; background:rgba(255,255,255,0.05); padding:15px; margin-bottom:12px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);";
     row.innerHTML = `
       <div style="font-weight:bold; width:100px; text-align:left; color:#ff6b6b;">${i===0?'👑 ':''}${t.n}</div>
       <div style="flex:1; height:18px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden; margin:0 15px;">
