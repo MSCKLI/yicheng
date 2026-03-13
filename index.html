@@ -2,1927 +2,393 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>中生代古生物培育实验室 | Mesozoic BioLab</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🐕 汪汪队班级管理系统 PRO - PAW PATROL</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
+/* ==================== 科技感全局样式 ==================== */
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
 :root {
-  --obsidian: #0a0a0f;
-  --slate: #1a1a24;
-  --graphite: #2d2d3a;
-  --amber: #ff9f43;
-  --amber-dark: #e67e22;
-  --jade: #00b894;
-  --crimson: #d63031;
-  --frost: #dfe6e9;
+  --primary: #00d4ff;
+  --secondary: #7b2cbf;
+  --accent: #ff6b35;
+  --success: #00ff88;
+  --warning: #ffd60a;
+  --danger: #ff4757;
+  --bg-dark: #0a0a1a;
+  --bg-card: rgba(20, 20, 40, 0.8);
+  --glow: 0 0 20px var(--primary);
 }
 
-body {
-  font-family: 'Inter', 'Noto Sans SC', sans-serif;
-  background: var(--obsidian);
-  color: var(--frost);
-  min-height: 100vh;
-  overflow: hidden;
-}
-
-/* 极简科技风头部 */
-.header {
-  height: 64px;
-  background: linear-gradient(180deg, var(--slate) 0%, var(--obsidian) 100%);
-  border-bottom: 1px solid var(--graphite);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  position: relative;
-  z-index: 100;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.brand-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 4px 20px rgba(255, 159, 67, 0.3);
-}
-
-.brand-text h1 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+html, body { 
+  width: 100%; height: 100%; overflow: hidden; 
+  font-family: 'Orbitron', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-dark);
   color: #fff;
 }
 
-.brand-text p {
-  font-size: 0.75rem;
-  color: #636e72;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+/* 科技感背景 */
+.tech-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(123, 44, 191, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
 }
 
-/* 主网格 - 博物馆级展示 */
-.specimen-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 1px;
-  padding: 1px;
-  height: calc(100vh - 180px);
-  background: var(--graphite);
-}
-
-.specimen-card {
-  background: var(--slate);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
-}
-
-.specimen-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
-  z-index: 2;
+/* 扫描线效果 */
+.scanlines {
+  position: fixed; inset: 0; z-index: 1;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 212, 255, 0.03) 2px,
+    rgba(0, 212, 255, 0.03) 4px
+  );
   pointer-events: none;
 }
 
-.specimen-card:hover {
-  background: var(--graphite);
+/* 网格背景 */
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background-image: 
+    linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+/* ==================== 顶部导航 - 科技风 ==================== */
+header {
+  position: fixed; top: 0; left: 0; right: 0; height: 80px;
+  background: linear-gradient(180deg, rgba(10,10,26,0.95) 0%, rgba(10,10,26,0.8) 100%);
+  border-bottom: 2px solid var(--primary);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 30px; z-index: 100;
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.logo-section {
+  display: flex; align-items: center; gap: 20px;
+}
+
+.logo-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 15px var(--primary));
+  animation: logoGlow 2s ease-in-out infinite;
+}
+@keyframes logoGlow {
+  0%, 100% { filter: drop-shadow(0 0 15px var(--primary)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 30px var(--primary)); transform: scale(1.05); }
+}
+
+.logo-text {
+  font-size: 1.8rem; font-weight: bold; letter-spacing: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px var(--primary);
+}
+
+.class-badge {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 44, 191, 0.2));
+  border: 1px solid var(--primary);
+  border-radius: 25px;
+  font-size: 1rem;
+  color: var(--primary);
+  box-shadow: var(--glow);
+}
+
+.nav-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.nav-btn {
+  padding: 12px 20px; 
+  border: 2px solid rgba(0, 212, 255, 0.5);
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--primary);
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; border-radius: 8px;
+  transition: all 0.3s;
+  display: flex; align-items: center; gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.nav-btn:hover {
+  background: rgba(0, 212, 255, 0.3);
+  border-color: var(--primary);
+  box-shadow: var(--glow), inset 0 0 20px rgba(0, 212, 255, 0.2);
+  transform: translateY(-2px);
+}
+.nav-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: var(--primary);
+  color: #000;
+  box-shadow: var(--glow);
+}
+.nav-btn.teacher {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 107, 53, 0.1);
+}
+.nav-btn.teacher:hover, .nav-btn.teacher.active {
+  background: linear-gradient(135deg, var(--accent), #ff8c42);
+  color: #000;
+  box-shadow: 0 0 20px var(--accent);
+}
+.nav-btn.primary {
+  background: linear-gradient(135deg, var(--accent), #ff8c42);
+  color: #000;
+  font-weight: bold;
+}
+
+/* 下拉菜单 */
+.dropdown-menu {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  background: rgba(10, 10, 26, 0.98);
+  border: 2px solid var(--primary);
+  border-radius: 15px;
+  padding: 10px;
+  z-index: 1000;
+  min-width: 150px;
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  text-align: left;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+.dropdown-item:hover {
+  background: rgba(0, 212, 255, 0.2);
+  color: var(--primary);
+}
+
+/* ==================== 主内容区 ==================== */
+#mainContent {
+  position: fixed; top: 80px; left: 0; right: 0; bottom: 0;
+  display: flex; z-index: 10;
+}
+
+/* 左侧面板 */
+#leftPanel {
+  width: 300px;
+  background: var(--bg-card);
+  border-right: 1px solid rgba(0, 212, 255, 0.3);
+  display: flex; flex-direction: column;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 15px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.panel-title {
+  font-size: 1.2rem; color: var(--primary);
+  display: flex; align-items: center; gap: 10px;
+  text-shadow: 0 0 10px var(--primary);
+}
+
+.team-badge {
+  padding: 4px 12px; border-radius: 15px;
+  font-size: 0.75rem; font-weight: bold;
+  box-shadow: 0 0 10px currentColor;
+}
+.team-badge.red { background: linear-gradient(135deg, #ff4757, #ff6b81); color: #fff; }
+.team-badge.blue { background: linear-gradient(135deg, #00d4ff, #0099cc); color: #000; }
+.team-badge.green { background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; }
+.team-badge.yellow { background: linear-gradient(135deg, #ffd60a, #ffaa00); color: #000; }
+
+/* 学生卡片 */
+#studentList {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.student-card {
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 15px; padding: 15px;
+  cursor: pointer; transition: all 0.3s;
+  display: flex; align-items: center; gap: 15px;
+}
+.student-card:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  transform: translateX(5px);
+}
+.student-card.selected {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: var(--primary);
+  box-shadow: var(--glow);
+}
+
+.student-avatar {
+  width: 55px; height: 55px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+}
+
+.student-info { flex: 1; min-width: 0; }
+
+.student-name {
+  font-size: 1.1rem; color: #fff; font-weight: bold;
+}
+
+.student-pet-name {
+  font-size: 0.85rem; color: rgba(255,255,255,0.6);
+  margin-top: 3px;
+}
+
+.student-level {
+  display: inline-block;
+  padding: 3px 10px; border-radius: 10px;
+  font-size: 0.75rem;
+  background: linear-gradient(135deg, var(--secondary), #9b59b6);
+  color: #fff; font-weight: bold;
+  box-shadow: 0 0 10px rgba(123, 44, 191, 0.5);
+}
+
+.student-score {
+  font-size: 1.3rem; color: var(--warning);
+  font-weight: bold; text-shadow: 0 0 10px var(--warning);
+}
+
+/* 中间展示区 */
+#centerStage {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 15px;
+  min-width: 720px;
+}
+
+.stage-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.stage-title {
+  font-size: 1.4rem; color: var(--primary);
+  display: flex; align-items: center; gap: 15px;
+  text-shadow: 0 0 15px var(--primary);
+}
+
+/* 宠物展示大屏 */
+#petDisplay {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card);
+  border-radius: 20px;
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  position: relative; overflow: hidden;
+  box-shadow: 
+    inset 0 0 50px rgba(0, 212, 255, 0.1),
+    0 0 30px rgba(0, 212, 255, 0.2);
+  min-height: 450px;
+}
+
+#petDisplay::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: 
+    linear-gradient(45deg, transparent 40%, rgba(0, 212, 255, 0.1) 50%, transparent 60%);
+  background-size: 200% 200%;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 200%; }
+  100% { background-position: -200% -200%; }
+}
+
+#petCanvas {
+  position: relative; z-index: 2;
+  width: 700px; height: 500px;
+}
+
+/* 场景指示器 */
+.scene-indicator {
+  position: absolute; top: 15px; left: 15px;
+  background: rgba(10, 10, 26, 0.9);
+  border: 2px solid var(--primary);
+  border-radius: 25px; padding: 10px 20px;
+  display: flex; align-items: center; gap: 10px;
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+.scene-icon { font-size: 1.5rem; }
+.scene-name { 
+  color: var(--primary); font-weight: bold;
+  text-shadow: 0 0 10px var(--primary);
+}
+
+/* 场景控制按钮 */
+.scene-controls {
+  position: absolute; top: 15px; right: 15px;
+  display: flex; gap: 8px;
   z-index: 10;
 }
-
-.specimen-card.selected {
-  border-color: var(--amber);
-  box-shadow: 0 0 0 1px var(--amber), inset 0 0 30px rgba(255, 159, 67, 0.1);
-  z-index: 20;
-}
-
-.specimen-card.selected::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--amber);
-  box-shadow: 0 0 10px var(--amber);
-}
-
-/* 3D展示区域 */
-.specimen-view {
-  height: 70%;
-  position: relative;
-  background: radial-gradient(ellipse at center, #1e272e 0%, var(--obsidian) 100%);
-}
-
-.specimen-view::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40%;
-  background: linear-gradient(180deg, transparent 0%, rgba(10,10,15,0.8) 100%);
-  pointer-events: none;
-}
-
-/* 信息层 */
-.specimen-data {
-  height: 30%;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  z-index: 3;
-}
-
-.data-primary {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.species-name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: -0.01em;
-}
-
-.species-stage {
-  font-size: 0.625rem;
-  font-weight: 500;
-  color: var(--amber);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 2px 8px;
-  background: rgba(255, 159, 67, 0.1);
-  border: 1px solid rgba(255, 159, 67, 0.3);
-  border-radius: 4px;
-}
-
-.data-secondary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  color: #b2bec3;
-}
-
-.growth-track {
-  width: 60%;
-  height: 3px;
-  background: var(--graphite);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.growth-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--jade), var(--amber));
-  border-radius: 2px;
-  transition: width 0.6s ease;
-}
-
-/* 底部控制面板 */
-.control-dock {
-  height: 116px;
-  background: var(--slate);
-  border-top: 1px solid var(--graphite);
-  display: flex;
-  align-items: center;
-  padding: 0 32px;
-  gap: 32px;
-}
-
-.subject-panel {
-  width: 200px;
-  background: var(--obsidian);
-  border: 1px solid var(--graphite);
-  border-radius: 8px;
-  padding: 16px;
-  position: relative;
-}
-
-.subject-panel::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  height: 2px;
-  background: var(--amber);
-  border-radius: 8px 8px 0 0;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.subject-panel.active::before {
-  opacity: 1;
-}
-
-.subject-id {
-  font-size: 0.625rem;
-  color: #636e72;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 4px;
-}
-
-.subject-name {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 8px;
-}
-
-.subject-meta {
-  display: flex;
-  gap: 16px;
-  font-size: 0.75rem;
-}
-
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.meta-label {
-  color: #636e72;
-  font-size: 0.625rem;
-  text-transform: uppercase;
-}
-
-.meta-value {
-  color: var(--frost);
-  font-weight: 600;
-}
-
-/* 操作矩阵 */
-.action-matrix {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  flex: 1;
-}
-
-.action-cell {
-  background: var(--obsidian);
-  border: 1px solid var(--graphite);
-  border-radius: 6px;
-  padding: 12px 8px;
+.scene-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 212, 255, 0.5);
+  background: rgba(10, 10, 26, 0.9);
+  color: #fff; font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  transition: all 0.3s;
+}
+.scene-btn:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--primary);
+  transform: scale(1.1);
+}
+.scene-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 20px var(--primary);
 }
 
-.action-cell:hover {
-  background: var(--graphite);
-  border-color: #4b5563;
+/* 装备槽位 */
+.equipment-slots {
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 20px; padding: 15px;
+  margin: 15px 0;
 }
-
-.action-cell:active {
-  transform: scale(0.98);
+.slot-row {
+  display: flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap;
 }
-
-.action-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  background: rgba(255,255,255,0.05);
-  border-radius: 6px;
-}
-
-.action-label {
-  font-size: 0.6875rem;
-  color: #b2bec3;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.action-cell.primary .action-icon { color: var(--jade); }
-.action-cell.secondary .action-icon { color: var(--amber); }
-.action-cell.tertiary .action-icon { color: #74b9ff; }
-.action-cell.warning .action-icon { color: var(--crimson); }
-
-/* 特殊操作 */
-.action-special {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 140px;
-}
-
-.special-action {
-  flex: 1;
-  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
-  border: none;
-  border-radius: 6px;
-  color: var(--obsidian);
-  font-weight: 700;
-  font-size: 0.875rem;
+.equip-slot {
+  width: 90px; height: 100px;
+  background: rgba(10, 10, 26, 0.8);
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  border-radius: 15px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.special-action:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 159, 67, 0.4);
-}
-
-.special-action:active {
-  transform: translateY(0);
-}
-
-.special-action.secondary {
-  background: transparent;
-  border: 1px solid var(--graphite);
-  color: var(--frost);
-}
-
-/* 模态框 - 实验室风格 */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(10px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 40px;
-}
-
-.modal-overlay.show { display: flex; }
-
-.modal-frame {
-  background: var(--slate);
-  border: 1px solid var(--graphite);
-  border-radius: 12px;
-  width: 100%;
-  max-width: 1200px;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  padding: 24px 32px;
-  border-bottom: 1px solid var(--graphite);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.02em;
-}
-
-.modal-close {
-  width: 36px;
-  height: 36px;
-  background: var(--obsidian);
-  border: 1px solid var(--graphite);
-  border-radius: 8px;
-  color: #b2bec3;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.modal-close:hover {
-  background: var(--crimson);
-  color: #fff;
-  border-color: var(--crimson);
-}
-
-.modal-body {
-  padding: 32px;
-  overflow-y: auto;
-  flex: 1;
-}
-
-/* 数据浮动文字 */
-.data-float {
-  position: fixed;
-  font-family: 'Inter', monospace;
-  font-size: 1.5rem;
-  font-weight: 700;
-  pointer-events: none;
-  z-index: 9999;
-  animation: dataRise 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  text-shadow: 0 0 20px currentColor;
-}
-
-@keyframes dataRise {
-  0% { opacity: 0; transform: translateY(20px) scale(0.8); }
-  20% { opacity: 1; transform: translateY(0) scale(1.1); }
-  100% { opacity: 0; transform: translateY(-60px) scale(0.9); }
-}
-
-/* 进化通知 */
-.evolution-notice {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 10001;
-  display: none;
-}
-
-.evolution-notice.show {
-  display: block;
-  animation: noticeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes noticeIn {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-
-.notice-glow {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--amber) 0%, transparent 70%);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.3;
-  animation: pulseGlow 2s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
-}
-
-.notice-text {
+  transition: all 0.3s;
   position: relative;
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #fff;
-  text-shadow: 0 0 40px var(--amber), 0 4px 20px rgba(0,0,0,0.5);
-  letter-spacing: -0.02em;
 }
-
-.notice-sub {
-  font-size: 1rem;
-  color: var(--amber);
-  margin-top: 8px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+.equip-slot:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  transform: translateY(-3px);
 }
-</style>
-</head>
-<body>
-
-<header class="header">
-  <div class="brand">
-    <div class="brand-icon">🦕</div>
-    <div class="brand-text">
-      <h1>中生代古生物培育实验室</h1>
-      <p>Mesozoic BioLab // Specimen Management System</p>
-    </div>
-  </div>
-  <div style="display:flex;gap:12px;">
-    <button onclick="openArchive()" class="special-action secondary" style="padding:10px 20px;height:auto;">📊 物种档案</button>
-    <button onclick="openSettings()" class="special-action secondary" style="padding:10px 20px;height:auto;">⚙️ 系统设置</button>
-  </div>
-</header>
-
-<main id="grid" class="specimen-grid"></main>
-
-<footer class="control-dock">
-  <div id="subjectPanel" class="subject-panel">
-    <div class="subject-id">NO SPECIMEN SELECTED</div>
-    <div class="subject-name">等待选择</div>
-    <div class="subject-meta">
-      <div class="meta-item">
-        <span class="meta-label">Growth</span>
-        <span class="meta-value">--</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Stage</span>
-        <span class="meta-value">--</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="action-matrix">
-    <button onclick="interact('feed')" class="action-cell primary">
-      <div class="action-icon">🌿</div>
-      <span class="action-label">营养供给</span>
-    </button>
-    <button onclick="interact('exercise')" class="action-cell primary">
-      <div class="action-icon">🏃</div>
-      <span class="action-label">体能训练</span>
-    </button>
-    <button onclick="interact('study')" class="action-cell secondary">
-      <div class="action-icon">📖</div>
-      <span class="action-label">行为研究</span>
-    </button>
-    <button onclick="interact('groom')" class="action-cell tertiary">
-      <div class="action-icon">✨</div>
-      <span class="action-label">健康护理</span>
-    </button>
-    <button onclick="interact('discipline')" class="action-cell warning">
-      <div class="action-icon">⚠️</div>
-      <span class="action-label">行为矫正</span>
-    </button>
-  </div>
-
-  <div class="action-special">
-    <button onclick="triggerEvolution()" class="special-action">🧬 诱导进化</button>
-    <button onclick="openArchive()" class="special-action secondary">🔬 完整标本</button>
-  </div>
-</footer>
-
-<div id="evolutionNotice" class="evolution-notice">
-  <div class="notice-glow"></div>
-  <div class="notice-text">SPECIES EVOLVED</div>
-  <div class="notice-sub">New biological stage reached</div>
-</div>
-
-<!-- 物种档案 -->
-<div id="archiveModal" class="modal-overlay">
-  <div class="modal-frame">
-    <div class="modal-header">
-      <h2 class="modal-title">📊 物种形态学档案</h2>
-      <button onclick="closeModals()" class="modal-close">✕</button>
-    </div>
-    <div class="modal-body">
-      <div id="archiveGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- 设置 -->
-<div id="settingsModal" class="modal-overlay">
-  <div class="modal-frame" style="max-width:600px;">
-    <div class="modal-header">
-      <h2 class="modal-title">⚙️ 实验室设置</h2>
-      <button onclick="closeModals()" class="modal-close">✕</button>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:24px;">
-        <label style="display:block;font-size:0.75rem;color:#636e72;text-transform:uppercase;margin-bottom:8px;">研究员名单</label>
-        <textarea id="researcherList" style="width:100%;height:120px;background:var(--obsidian);border:1px solid var(--graphite);border-radius:8px;padding:12px;color:var(--frost);font-family:inherit;font-size:0.875rem;resize:none;"></textarea>
-      </div>
-      <div style="display:flex;gap:12px;">
-        <button onclick="saveResearchers()" style="flex:1;background:var(--jade);color:var(--obsidian);border:none;border-radius:8px;padding:12px;font-weight:600;cursor:pointer;">保存配置</button>
-        <button onclick="resetSystem()" style="flex:1;background:var(--crimson);color:#fff;border:none;border-radius:8px;padding:12px;font-weight:600;cursor:pointer;">系统重置</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// ==================== 科学级恐龙数据 ====================
-const SPECIES = [
-  {
-    id: "TREX",
-    name: "Tyrannosaurus rex",
-    commonName: "暴龙",
-    period: "晚白垩纪",
-    diet: "carnivore",
-    features: {
-      length: "12-13米",
-      weight: "8-14吨",
-      distinctive: "最大陆地掠食者，咬合力达12,800磅"
-    },
-    morphology: {
-      skullRatio: 1.5,      // 大头比例
-      armReduction: 0.15,   // 前肢退化程度
-      bipedalStance: 0.45,  // 双足站立角度
-      tailBalance: true     // 尾平衡
-    },
-    colorBase: 0x4a4a4a,
-    colorVariation: 0x2d2d2d
-  },
-  {
-    id: "TRIC",
-    name: "Triceratops horridus",
-    commonName: "三角龙",
-    period: "晚白垩纪",
-    diet: "herbivore",
-    features: {
-      length: "8-9米",
-      weight: "6-12吨",
-      distinctive: "颈盾长度可达2米，三只角用于防御"
-    },
-    morphology: {
-      frillSize: 1.8,
-      hornConfig: [0.3, 0.8, 0.8], // 鼻角、眉角长度
-      beakShape: "parrot",
-      quadrupedal: true
-    },
-    colorBase: 0x6b5b4f,
-    colorVariation: 0x4a3f35
-  },
-  {
-    id: "PTER",
-    name: "Pteranodon longiceps",
-    commonName: "无齿翼龙",
-    period: "晚白垩纪",
-    diet: "piscivore",
-    features: {
-      wingspan: "7米",
-      weight: "20-93千克",
-      distinctive: "翼膜由第四指支撑，中空骨骼减轻重量"
-    },
-    morphology: {
-      wingMembrane: true,
-      crestShape: "vertical",
-      beakLength: 1.8,
-      hollowBones: 0.7
-    },
-    colorBase: 0x5a6b7a,
-    colorVariation: 0x3d4a56
-  },
-  {
-    id: "STEG",
-    name: "Stegosaurus stenops",
-    commonName: "剑龙",
-    period: "晚侏罗纪",
-    diet: "herbivore",
-    features: {
-      length: "9米",
-      weight: "5-7吨",
-      distinctive: "背板用于体温调节，尾刺长度可达1米"
-    },
-    morphology: {
-      plateCount: 17,
-      plateArrangement: "alternating",
-      thagomizer: 4,
-      lowSlung: true
-    },
-    colorBase: 0x7a6b5a,
-    colorVariation: 0x5a4d3f
-  },
-  {
-    id: "BRAC",
-    name: "Brachiosaurus altithorax",
-    commonName: "腕龙",
-    period: "晚侏罗纪",
-    diet: "herbivore",
-    features: {
-      length: "20-22米",
-      weight: "28-58吨",
-      distinctive: "前肢比后肢长，颈部可达9米"
-    },
-    morphology: {
-      neckLength: 2.5,      // 相对比例
-      forelimbRatio: 1.3,   // 前肢/后肢
-      nostrilPosition: "high",
-      verticalFeeding: true
-    },
-    colorBase: 0x8a7a6a,
-    colorVariation: 0x6a5a4a
-  },
-  {
-    id: "VELO",
-    name: "Velociraptor mongoliensis",
-    commonName: "伶盗龙",
-    period: "晚白垩纪",
-    diet: "carnivore",
-    features: {
-      length: "2米",
-      weight: "15-20千克",
-      distinctive: "镰刀爪长8厘米，羽毛覆盖，群体狩猎"
-    },
-    morphology: {
-      sickleClaw: 0.08,
-      featherCoverage: 0.9,
-      tailRigidity: true,
-      packHunter: true
-    },
-    colorBase: 0x8b4513,
-    colorVariation: 0x5d2e0c
-  },
-  {
-    id: "ANKY",
-    name: "Ankylosaurus magniventris",
-    commonName: "甲龙",
-    period: "晚白垩纪",
-    diet: "herbivore",
-    features: {
-      length: "6-8米",
-      weight: "4.8-8吨",
-      distinctive: "尾锤速度可达40m/s，骨板融合成装甲"
-    },
-    morphology: {
-      armorFusion: true,
-      clubMass: 0.5,
-      lowProfile: 0.4,
-      quadrupedal: true
-    },
-    colorBase: 0x5a5a5a,
-    colorVariation: 0x3a3a3a
-  },
-  {
-    id: "SPIN",
-    name: "Spinosaurus aegyptiacus",
-    commonName: "棘龙",
-    period: "晚白垩纪",
-    diet: "piscivore",
-    features: {
-      length: "14-15米",
-      weight: "6.4-7.5吨",
-      distinctive: "背帆高度可达2米，半水生，圆锥齿适合捕鱼"
-    },
-    morphology: {
-      sailHeight: 2.0,
-      snoutPits: true,
-      aquaticAdaptation: 0.8,
-      tailPaddle: true
-    },
-    colorBase: 0x4a3a5a,
-    colorVariation: 0x2d1f3a
-  }
-];
-
-const DEVELOPMENT_STAGES = [
-  { id: 0, name: "胚胎期", code: "EMBRYO", indicator: "🥚" },
-  { id: 1, name: "孵化期", code: "HATCHLING", indicator: "🐣" },
-  { id: 2, name: "幼年期", code: "JUVENILE", indicator: "🦎" },
-  { id: 3, name: "亚成年", code: "SUBADULT", indicator: "🦖" },
-  { id: 4, name: "成年期", code: "ADULT", indicator: "🦕" },
-  { id: 5, name: "完全体", code: "MATURE", indicator: "👑" },
-  { id: 6, name: "精英个体", code: "ELITE", indicator: "⚡" },
-  { id: 7, name: "传说形态", code: "LEGENDARY", indicator: "🔥" }
-];
-
-let specimens = [];
-let activeId = null;
-
-// ==================== 初始化 ====================
-window.onload = () => {
-  loadSystem();
-  renderGrid();
-};
-
-function loadSystem() {
-  const data = localStorage.getItem('mesozoicLab');
-  if (data) {
-    specimens = JSON.parse(data);
-  } else {
-    const researchers = ["Researcher_A","Researcher_B","Researcher_C","Researcher_D","Researcher_E","Researcher_F","Researcher_G","Researcher_H"];
-    specimens = researchers.map((name, i) => ({
-      id: i,
-      researcher: name,
-      speciesId: i % 8,
-      stage: Math.floor(Math.random() * 3),
-      growth: Math.floor(Math.random() * 50),
-      maxGrowth: 100,
-      vitality: 80,
-      discipline: 60
-    }));
-    saveSystem();
-  }
-}
-
-function saveSystem() {
-  localStorage.setItem('mesozoicLab', JSON.stringify(specimens));
-}
-
-// ==================== 科学级3D建模 ====================
-function renderSpecimen(container, specimen, fullDetail = false) {
-  while(container.firstChild) container.removeChild(container.firstChild);
-  
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(35, container.clientWidth / container.clientHeight, 0.1, 100);
-  camera.position.set(0, 1.2, 6);
-  
-  const renderer = new THREE.WebGLRenderer({alpha: true, antialias: true, powerPreference: "high-performance"});
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  container.appendChild(renderer.domElement);
-  
-  // 专业灯光设置
-  const ambient = new THREE.AmbientLight(0x404040, 0.5);
-  scene.add(ambient);
-  
-  const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
-  keyLight.position.set(5, 10, 7);
-  keyLight.castShadow = true;
-  keyLight.shadow.mapSize.width = 2048;
-  keyLight.shadow.mapSize.height = 2048;
-  scene.add(keyLight);
-  
-  const fillLight = new THREE.DirectionalLight(0x88aaff, 0.4);
-  fillLight.position.set(-5, 0, 5);
-  scene.add(fillLight);
-  
-  const rimLight = new THREE.SpotLight(0xffaa88, 0.8);
-  rimLight.position.set(0, 5, -5);
-  rimLight.lookAt(0, 0, 0);
-  scene.add(rimLight);
-  
-  const group = new THREE.Group();
-  scene.add(group);
-  
-  const species = SPECIES[specimen.speciesId];
-  const stage = fullDetail ? 7 : specimen.stage;
-  
-  // 材质系统 - 基于真实皮肤纹理
-  const skinMat = new THREE.MeshStandardMaterial({
-    color: species.colorBase,
-    roughness: 0.7,
-    metalness: 0.1,
-    flatShading: false
-  });
-  
-  const scaleMat = new THREE.MeshStandardMaterial({
-    color: species.colorVariation,
-    roughness: 0.8,
-    metalness: 0.05
-  });
-  
-  const keratinMat = new THREE.MeshStandardMaterial({
-    color: 0x1a1a1a,
-    roughness: 0.4,
-    metalness: 0.2
-  });
-  
-  // 根据物种和发育阶段构建解剖学精确模型
-  buildAnatomicallyCorrectModel(group, species, stage, skinMat, scaleMat, keratinMat);
-  
-  // 专业动画
-  let time = 0;
-  function animate() {
-    requestAnimationFrame(animate);
-    time += 0.015;
-    
-    // 呼吸节律
-    const breath = Math.sin(time) * 0.02;
-    group.scale.set(1 + breath * 0.3, 1 + breath, 1 + breath * 0.3);
-    
-    // 物种特定行为
-    if (species.diet === 'piscivore' && stage >= 4) {
-      // 水生恐龙浮动
-      group.position.y = Math.sin(time * 0.5) * 0.05;
-    } else if (species.id === 'PTER' && stage >= 3) {
-      // 翼龙呼吸起伏
-      group.rotation.z = Math.sin(time * 0.3) * 0.02;
-    } else {
-      // 陆地恐龙站立
-      group.rotation.y = Math.sin(time * 0.2) * 0.03;
-    }
-    
-    renderer.render(scene, camera);
-  }
-  animate();
-}
-
-// 解剖学精确的恐龙构建
-function buildAnatomicallyCorrectModel(group, species, stage, skinMat, scaleMat, keratinMat) {
-  
-  // 体型缩放基于发育阶段
-  const scale = 0.4 + (stage / 7) * 0.6;
-  group.scale.setScalar(scale);
-  
-  switch(species.id) {
-    case 'TREX':
-      buildTyrannosaurus(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'TRIC':
-      buildTriceratops(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'PTER':
-      buildPteranodon(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'STEG':
-      buildStegosaurus(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'BRAC':
-      buildBrachiosaurus(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'VELO':
-      buildVelociraptor(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'ANKY':
-      buildAnkylosaurus(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-    case 'SPIN':
-      buildSpinosaurus(group, stage, skinMat, scaleMat, keratinMat);
-      break;
-  }
-}
-
-// ===== 暴龙 - 解剖学精确 =====
-function buildTyrannosaurus(group, stage, skinMat, scaleMat, keratinMat) {
-  // 骨盆位置
-  const hips = new THREE.Group();
-  hips.position.y = 1.2;
-  group.add(hips);
-  
-  // 躯干 - 深胸腔
-  const torso = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.55, 0.65, 1.4, 12),
-    skinMat
-  );
-  torso.rotation.x = 0.15;
-  torso.castShadow = true;
-  hips.add(torso);
-  
-  // 颈部肌肉
-  const neck = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.35, 0.5, 0.8, 10),
-    skinMat
-  );
-  neck.position.set(0, 0.9, 0.4);
-  neck.rotation.x = -0.4;
-  neck.castShadow = true;
-  hips.add(neck);
-  
-  // 标志性大头 - 比例精确
-  const skullGroup = new THREE.Group();
-  skullGroup.position.set(0, 1.4, 0.8);
-  
-  // 上颌骨
-  const maxilla = new THREE.Mesh(
-    new THREE.BoxGeometry(0.6, 0.5, 0.9),
-    skinMat
-  );
-  maxilla.castShadow = true;
-  skullGroup.add(maxilla);
-  
-  // 下颌骨
-  const mandible = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.35, 0.8),
-    skinMat
-  );
-  mandible.position.set(0, -0.45, -0.05);
-  mandible.castShadow = true;
-  skullGroup.add(mandible);
-  
-  // 香蕉状牙齿 - 精确形态
-  for(let i=0; i<12; i++) {
-    const size = 0.08 - (i * 0.004);
-    const tooth = new THREE.Mesh(
-      new THREE.ConeGeometry(size * 0.4, size, 6),
-      keratinMat
-    );
-    tooth.position.set((i-5.5)*0.08, -0.25, 0.4);
-    tooth.rotation.x = -0.2 - (Math.abs(i-5.5)*0.05);
-    skullGroup.add(tooth);
-  }
-  
-  // 眼眶
-  const orbit = new THREE.Mesh(
-    new THREE.SphereGeometry(0.12, 16, 16),
-    new THREE.MeshBasicMaterial({color: 0x000000})
-  );
-  orbit.position.set(0.25, 0.05, 0.2);
-  const orbitL = orbit.clone();
-  orbitL.position.x = -0.25;
-  skullGroup.add(orbit, orbitL);
-  
-  hips.add(skullGroup);
-  
-  // 退化的前肢 - 科学准确的两指
-  const armGroup = new THREE.Group();
-  armGroup.position.set(0, 0.3, 0.5);
-  
-  const humerus = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.06, 0.05, 0.35, 8),
-    skinMat
-  );
-  humerus.rotation.z = 0.3;
-  humerus.rotation.x = 0.5;
-  
-  const radius = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.04, 0.03, 0.25, 6),
-    skinMat
-  );
-  radius.position.set(0.15, -0.25, 0.15);
-  radius.rotation.x = -0.3;
-  
-  armGroup.add(humerus, radius);
-  
-  const armL = armGroup.clone();
-  armL.position.x = -0.35;
-  armL.rotation.y = -0.2;
-  const armR = armGroup.clone();
-  armR.position.x = 0.35;
-  armR.rotation.y = 0.2;
-  
-  hips.add(armL, armR);
-  
-  // 强壮后肢 - 股骨和胫骨
-  const legL = buildTheropodLeg(-0.6, skinMat, keratinMat);
-  const legR = buildTheropodLeg(0.6, skinMat, keratinMat);
-  hips.add(legL, legR);
-  
-  // 平衡尾 - 基于重心计算
-  const tailCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0, -0.7),
-    new THREE.Vector3(0, 0.2, -1.5),
-    new THREE.Vector3(0, 0.1, -2.5),
-    new THREE.Vector3(0, -0.2, -3.2)
-  ]);
-  
-  const tail = new THREE.Mesh(
-    new THREE.TubeGeometry(tailCurve, 16, 0.25, 8, false),
-    skinMat
-  );
-  tail.castShadow = true;
-  hips.add(tail);
-}
-
-function buildTheropodLeg(xPos, skinMat, keratinMat) {
-  const leg = new THREE.Group();
-  leg.position.x = xPos;
-  
-  // 股骨
-  const femur = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.18, 0.6, 4, 8),
-    skinMat
-  );
-  femur.position.set(0, 0.3, 0);
-  femur.rotation.z = xPos > 0 ? -0.2 : 0.2;
-  femur.castShadow = true;
-  leg.add(femur);
-  
-  // 胫骨
-  const tibia = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.12, 0.1, 0.7, 8),
-    skinMat
-  );
-  tibia.position.set(0, -0.3, 0.2);
-  tibia.rotation.x = -0.3;
-  tibia.castShadow = true;
-  leg.add(tibia);
-  
-  // 跖骨
-  const metatarsal = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.08, 0.06, 0.4, 6),
-    skinMat
-  );
-  metatarsal.position.set(0, -0.7, 0.35);
-  metatarsal.rotation.x = 0.2;
-  leg.add(metatarsal);
-  
-  // 爪子
-  const claw = new THREE.Mesh(
-    new THREE.ConeGeometry(0.05, 0.15, 6),
-    keratinMat
-  );
-  claw.position.set(0, -0.95, 0.45);
-  claw.rotation.x = -0.5;
-  leg.add(claw);
-  
-  return leg;
-}
-
-// ===== 三角龙 =====
-function buildTriceratops(group, stage, skinMat, scaleMat, keratinMat) {
-  // 四足姿势
-  const body = new THREE.Mesh(
-    new THREE.SphereGeometry(0.7, 16, 16),
-    skinMat
-  );
-  body.position.y = 0.9;
-  body.scale.set(1.3, 1, 1.6);
-  body.castShadow = true;
-  group.add(body);
-  
-  // 颈盾 - 精确的 frill 形态
-  const frillGroup = new THREE.Group();
-  frillGroup.position.set(0, 1.3, -0.4);
-  
-  const frill = new THREE.Mesh(
-    new THREE.CylinderGeometry(1.0, 0.4, 0.15, 3),
-    scaleMat
-  );
-  frill.rotation.x = 0.2;
-  frill.castShadow = true;
-  frillGroup.add(frill);
-  
-  // 颈盾边缘骨质突起
-  for(let i=0; i<9; i++) {
-    const angle = (i / 8) * Math.PI - Math.PI/2;
-    const epoccipital = new THREE.Mesh(
-      new THREE.ConeGeometry(0.06, 0.15, 4),
-      keratinMat
-    );
-    epoccipital.position.set(
-      Math.sin(angle) * 0.9,
-      Math.cos(angle) * 0.3 + 0.1,
-      0.1
-    );
-    epoccipital.rotation.z = -angle;
-    frillGroup.add(epoccipital);
-  }
-  
-  group.add(frillGroup);
-  
-  // 头部
-  const skull = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.45, 0.6),
-    skinMat
-  );
-  skull.position.set(0, 1.2, 0.4);
-  skull.castShadow = true;
-  group.add(skull);
-  
-  // 三只角 - 精确位置
-  const hornGeo = new THREE.ConeGeometry(0.08, 0.5, 8);
-  
-  // 鼻角
-  const nasalHorn = new THREE.Mesh(hornGeo, keratinMat);
-  nasalHorn.position.set(0, 1.4, 0.8);
-  nasalHorn.rotation.x = -0.2;
-  group.add(nasalHorn);
-  
-  // 眉角
-  const browHornL = new THREE.Mesh(hornGeo, keratinMat);
-  browHornL.position.set(-0.35, 1.6, 0.3);
-  browHornL.rotation.z = 0.4;
-  browHornL.rotation.x = -0.3;
-  
-  const browHornR = new THREE.Mesh(hornGeo, keratinMat);
-  browHornR.position.set(0.35, 1.6, 0.3);
-  browHornR.rotation.z = -0.4;
-  browHornR.rotation.x = -0.3;
-  
-  group.add(browHornL, browHornR);
-  
-  // 鹦鹉嘴喙
-  const beak = new THREE.Mesh(
-    new THREE.ConeGeometry(0.15, 0.3, 8),
-    keratinMat
-  );
-  beak.position.set(0, 1.0, 0.85);
-  beak.rotation.x = -1.8;
-  group.add(beak);
-  
-  // 四足
-  const legPositions = [[-0.5, 0.45, 0.6], [0.5, 0.45, 0.6], [-0.5, 0.45, -0.5], [0.5, 0.45, -0.5]];
-  legPositions.forEach(pos => {
-    const leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.2, 0.18, 0.9, 10),
-      skinMat
-    );
-    leg.position.set(...pos);
-    leg.castShadow = true;
-    group.add(leg);
-  });
-}
-
-// ===== 其他物种构建函数（简化展示）=====
-function buildPteranodon(group, stage, skinMat, scaleMat, keratinMat) {
-  // 流线型身体
-  const body = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.25, 0.35, 0.8, 12),
-    skinMat
-  );
-  body.position.y = 0.6;
-  body.rotation.x = 0.3;
-  group.add(body);
-  
-  // 长颈椎
-  const neck = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.1, 0.15, 0.6, 8),
-    skinMat
-  );
-  neck.position.set(0, 1.0, 0.4);
-  neck.rotation.x = -0.5;
-  group.add(neck);
-  
-  // 长头骨
-  const skull = new THREE.Mesh(
-    new THREE.ConeGeometry(0.12, 0.9, 8),
-    skinMat
-  );
-  skull.position.set(0, 1.4, 0.7);
-  skull.rotation.x = -0.4;
-  group.add(skull);
-  
-  // 头冠
-  const crest = new THREE.Mesh(
-    new THREE.BoxGeometry(0.02, 0.5, 0.3),
-    new THREE.MeshStandardMaterial({color: 0x8b4513})
-  );
-  crest.position.set(0, 1.7, 0.3);
-  group.add(crest);
-  
-  // 翼膜 - 第四指支撑
-  const wingL = buildPterosaurWing(-1, skinMat);
-  const wingR = buildPterosaurWing(1, skinMat);
-  group.add(wingL, wingR);
-}
-
-function buildPterosaurWing(direction, skinMat) {
-  const wing = new THREE.Group();
-  
-  // 翼指
-  for(let i=0; i<4; i++) {
-    const phalanx = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.03, 0.025, 0.4 - i*0.05, 6),
-      new THREE.MeshStandardMaterial({color: 0x2d2d2d})
-    );
-    phalanx.position.set(direction * (0.3 + i*0.35), 0.8 - i*0.1, -0.2);
-    phalanx.rotation.z = direction * (0.3 + i*0.1);
-    wing.add(phalanx);
-  }
-  
-  // 翼膜（简化表示）
-  const membrane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.2, 0.6),
-    new THREE.MeshStandardMaterial({
-      color: 0x4a5568,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.8
-    })
-  );
-  membrane.position.set(direction * 0.8, 0.6, 0);
-  membrane.rotation.y = direction * 0.5;
-  wing.add(membrane);
-  
-  return wing;
-}
-
-function buildStegosaurus(group, stage, skinMat, scaleMat, keratinMat) {
-  // 拱形背部
-  const body = new THREE.Mesh(
-    new THREE.SphereGeometry(0.65, 16, 16),
-    skinMat
-  );
-  body.position.y = 0.8;
-  body.scale.set(1.2, 0.9, 1.8);
-  group.add(body);
-  
-  // 背板 - 交错排列，17块
-  for(let i=0; i<17; i++) {
-    const plate = new THREE.Mesh(
-      new THREE.ConeGeometry(0.12 - i*0.004, 0.5, 4),
-      new THREE.MeshStandardMaterial({color: 0xd4a574})
-    );
-    // 交错排列
-    const side = i % 2 === 0 ? 1 : -1;
-    plate.position.set(
-      side * 0.15,
-      1.3 + Math.sin(i/16 * Math.PI) * 0.2,
-      -0.6 + i * 0.18
-    );
-    plate.rotation.z = side * 0.3;
-    plate.rotation.y = side * 0.2;
-    group.add(plate);
-  }
-  
-  // 尾刺（Thagomizer）- 4根
-  for(let i=0; i<4; i++) {
-    const spike = new THREE.Mesh(
-      new THREE.ConeGeometry(0.06, 0.5, 4),
-      keratinMat
-    );
-    const angle = (i < 2 ? -1 : 1) * (0.3 + (i%2)*0.2);
-    spike.position.set(
-      Math.sin(angle) * 0.2,
-      0.7,
-      -1.6 - (i%2)*0.15
-    );
-    spike.rotation.x = -0.5;
-    spike.rotation.z = -angle;
-    group.add(spike);
-  }
-  
-  // 小头
-  const skull = new THREE.Mesh(
-    new THREE.SphereGeometry(0.2, 12, 12),
-    skinMat
-  );
-  skull.position.set(0, 0.7, 1.0);
-  group.add(skull);
-  
-  // 四足短腿
-  [[-0.4, 0.4, 0.7], [0.4, 0.4, 0.7], [-0.4, 0.4, -0.7], [0.4, 0.4, -0.7]].forEach(pos => {
-    const leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.16, 0.8, 10),
-      skinMat
-    );
-    leg.position.set(...pos);
-    group.add(leg);
-  });
-}
-
-function buildBrachiosaurus(group, stage, skinMat, scaleMat, keratinMat) {
-  // 巨大身躯
-  const body = new THREE.Mesh(
-    new THREE.SphereGeometry(0.9, 16, 16),
-    skinMat
-  );
-  body.position.y = 1.8;
-  body.scale.set(1.4, 1.2, 1.8);
-  group.add(body);
-  
-  // 极长颈部 - 基于真实颈椎数量（13节）
-  const neckCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 2.2, 0.8),
-    new THREE.Vector3(0, 3.0, 1.2),
-    new THREE.Vector3(0, 3.8, 1.4),
-    new THREE.Vector3(0, 4.5, 1.5)
-  ]);
-  
-  const neck = new THREE.Mesh(
-    new THREE.TubeGeometry(neckCurve, 12, 0.35, 10, false),
-    skinMat
-  );
-  group.add(neck);
-  
-  // 小头
-  const skull = new THREE.Mesh(
-    new THREE.SphereGeometry(0.3, 12, 12),
-    skinMat
-  );
-  skull.position.set(0, 4.8, 1.6);
-  group.add(skull);
-  
-  // 前肢显著长于后肢
-  const forelimb = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.28, 0.25, 2.0, 12),
-    skinMat
-  );
-  forelimb.position.set(0, 1.0, 0.8);
-  
-  const foreL = forelimb.clone();
-  foreL.position.x = -0.6;
-  const foreR = forelimb.clone();
-  foreR.position.x = 0.6;
-  
-  const hindlimb = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.22, 0.2, 1.6, 12),
-    skinMat
-  );
-  hindlimb.position.set(0, 0.8, -0.6);
-  
-  const hindL = hindlimb.clone();
-  hindL.position.x = -0.7;
-  const hindR = hindlimb.clone();
-  hindR.position.x = 0.7;
-  
-  group.add(foreL, foreR, hindL, hindR);
-}
-
-function buildVelociraptor(group, stage, skinMat, scaleMat, keratinMat) {
-  // 轻盈身体
-  const body = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.22, 0.28, 0.7, 10),
-    skinMat
-  );
-  body.position.y = 0.6;
-  body.rotation.x = 0.4;
-  group.add(body);
-  
-  // 长尾 - 骨质化保持刚性
-  const tail = new THREE.Mesh(
-    new THREE.ConeGeometry(0.12, 1.4, 8),
-    skinMat
-  );
-  tail.position.set(0, 0.4, -0.9);
-  tail.rotation.x = -0.2;
-  group.add(tail);
-  
-  // 镰刀爪 - 第二趾
-  const sickleClaw = new THREE.Mesh(
-    new THREE.ConeGeometry(0.05, 0.25, 6),
-    keratinMat
-  );
-  sickleClaw.position.set(0, 0.15, 0.4);
-  sickleClaw.rotation.x = -1.2;
-  sickleClaw.rotation.z = 0.2;
-  
-  // 后肢
-  const legL = buildRaptorLeg(-0.25, skinMat, sickleClaw);
-  const legR = buildRaptorLeg(0.25, skinMat, sickleClaw.clone());
-  group.add(legL, legR);
-  
-  // 羽毛 - 基于化石证据
-  for(let i=0; i<8; i++) {
-    const feather = new THREE.Mesh(
-      new THREE.PlaneGeometry(0.4, 0.15),
-      new THREE.MeshStandardMaterial({
-        color: 0x8b4513,
-        side: THREE.DoubleSide
-      })
-    );
-    feather.position.set(0, 0.5 + i*0.08, -0.5 - i*0.12);
-    feather.rotation.x = -0.4;
-    group.add(feather);
-  }
-  
-  // 头部
-  const skull = new THREE.Mesh(
-    new THREE.ConeGeometry(0.15, 0.5, 8),
-    skinMat
-  );
-  skull.position.set(0, 1.0, 0.6);
-  skull.rotation.x = -0.3;
-  group.add(skull);
-}
-
-function buildRaptorLeg(xPos, skinMat, claw) {
-  const leg = new THREE.Group();
-  leg.position.x = xPos;
-  
-  const femur = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.08, 0.35, 4, 8),
-    skinMat
-  );
-  femur.position.y = 0.4;
-  leg.add(femur);
-  
-  const tibia = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.06, 0.05, 0.45, 6),
-    skinMat
-  );
-  tibia.position.set(0, 0.05, 0.15);
-  tibia.rotation.x = -0.4;
-  leg.add(tibia);
-  
-  // 第二趾抬起，镰刀爪
-  claw.position.set(0, -0.1, 0.25);
-  leg.add(claw);
-  
-  return leg;
-}
-
-function buildAnkylosaurus(group, stage, skinMat, scaleMat, keratinMat) {
-  // 扁平身体
-  const body = new THREE.Mesh(
-    new THREE.SphereGeometry(0.7, 16, 16),
-    skinMat
-  );
-  body.position.y = 0.6;
-  body.scale.set(1.4, 0.7, 1.6);
-  group.add(body);
-  
-  // 骨甲 - 六边形镶嵌
-  for(let i=0; i<20; i++) {
-    const osteoderm = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.1, 0.06, 6),
-      scaleMat
-    );
-    osteoderm.position.set(
-      (Math.random()-0.5)*1.0,
-      0.95,
-      (Math.random()-0.5)*1.2
-    );
-    group.add(osteoderm);
-  }
-  
-  // 尾锤 - 骨质融合
-  const club = new THREE.Mesh(
-    new THREE.SphereGeometry(0.4, 12, 12),
-    new THREE.MeshStandardMaterial({color: 0x3d3d3d})
-  );
-  club.position.set(0, 0.5, -1.4);
-  club.scale.set(1, 0.8, 1.3);
-  group.add(club);
-  
-  // 连接尾
-  const tail = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.2, 0.35, 0.8, 8),
-    skinMat
-  );
-  tail.position.set(0, 0.5, -0.9);
-  tail.rotation.x = -0.1;
-  group.add(tail);
-  
-  // 四足短腿
-  [[-0.5, 0.3, 0.7], [0.5, 0.3, 0.7], [-0.5, 0.3, -0.6], [0.5, 0.3, -0.6]].forEach(pos => {
-    const leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.16, 0.6, 10),
-      skinMat
-    );
-    leg.position.set(...pos);
-    group.add(leg);
-  });
-  
-  // 小头
-  const skull = new THREE.Mesh(
-    new THREE.SphereGeometry(0.22, 12, 12),
-    skinMat
-  );
-  skull.position.set(0, 0.55, 0.9);
-  group.add(skull);
-}
-
-function buildSpinosaurus(group, stage, skinMat, scaleMat, keratinMat) {
-  // 修长身体
-  const body = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.35, 0.45, 1.2, 12),
-    skinMat
-  );
-  body.position.y = 0.8;
-  body.rotation.x = 0.2;
-  group.add(body);
-  
-  // 背帆 - 神经棘延伸
-  const sailGroup = new THREE.Group();
-  
-  for(let i=0; i<12; i++) {
-    const neuralSpine = new THREE.Mesh(
-      new THREE.BoxGeometry(0.03, 0.4 + Math.sin(i/11*Math.PI)*0.6, 0.08),
-      new THREE.MeshStandardMaterial({color: 0x6b4c7a})
-    );
-    neuralSpine.position.set(0, 1.4 + Math.sin(i/11*Math.PI)*0.4, -0.5 + i*0.1);
-    sailGroup.add(neuralSpine);
-  }
-  
-  // 帆膜
-  const sailMembrane = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.8, 1.2),
-    new THREE.MeshStandardMaterial({
-      color: 0x8b6b9b,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.9
-    })
-  );
-  sailMembrane.position.set(0, 1.6, 0.1);
-  sailMembrane.rotation.x = -0.2;
-  sailGroup.add(sailMembrane);
-  
-  group.add(sailGroup);
-  
-  // 长头骨 - 适合捕鱼
-  const skull = new THREE.Mesh(
-    new THREE.ConeGeometry(0.18, 1.0, 8),
-    skinMat
-  );
-  skull.position.set(0, 1.3, 0.9);
-  skull.rotation.x = -0.4;
-  group.add(skull);
-  
-  // 圆锥齿
-  for(let i=0; i<10; i++) {
-    const tooth = new THREE.Mesh(
-      new THREE.ConeGeometry(0.025, 0.08, 6),
-      keratinMat
-    );
-    tooth.position.set((i-4.5)*0.08, 0.9, 1.3 + i*0.03);
-    tooth.rotation.x = -0.3;
-    group.add(tooth);
-  }
-  
-  // 鼻孔位置靠上（半水生）
-  const nostril = new THREE.Mesh(
-    new THREE.SphereGeometry(0.04, 8, 8),
-    new THREE.MeshBasicMaterial({color: 0x000000})
-  );
-  nostril.position.set(0, 1.5, 0.6);
-  group.add(nostril);
-  
-  // 船桨尾
-  const tail = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.3, 0.15, 1.4, 10),
-    skinMat
-  );
-  tail.position.set(0, 0.5, -1.2);
-  tail.rotation.x = -0.1;
-  tail.scale.z = 0.4; // 压扁
-  group.add(tail);
-  
-  // 腿
-  [[-0.35, 0.4, 0.4], [0.35, 0.4, 0.4], [-0.35, 0.4, -0.3], [0.35, 0.4, -0.3]].forEach(pos => {
-    const leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.15, 0.12, 0.8, 8),
-      skinMat
-    );
-    leg.position.set(...pos);
-    group.add(leg);
-  });
-}
-
-// ==================== 渲染与交互 ====================
-function renderGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  
-  specimens.forEach((spec, idx) => {
-    const species = SPECIES[spec.speciesId];
-    const stage = DEVELOPMENT_STAGES[spec.stage];
-    
-    const card = document.createElement('div');
-    card.className = 'specimen-card';
-    card.dataset.id = spec.id;
-    
-    card.innerHTML = `
-      <div class="specimen-view" id="view-${spec.id}"></div>
-      <div class="specimen-data">
-        <div class="data-primary">
-          <span class="species-name">${species.commonName}</span>
-          <span class="species-stage">${stage.code}</span>
-        </div>
-        <div class="data-secondary">
-          <span>${spec.researcher}</span>
-          <div class="growth-track">
-            <div class="growth-bar" style="width:${(spec.growth/spec.maxGrowth)*100}%"></div>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    card.addEventListener('click', () => selectSpecimen(spec.id));
-    grid.appendChild(card);
-    
-    setTimeout(() => {
-      const container = document.getElementById(`view-${spec.id}`);
-      if (container) renderSpecimen(container, spec);
-    }, idx * 80);
-  });
-}
-
-function selectSpecimen(id) {
-  activeId = id;
-  
-  document.querySelectorAll('.specimen-card').forEach(card => {
-    card.classList.toggle('selected', parseInt(card.dataset.id) === id);
-  });
-  
-  updatePanel();
-}
-
-function updatePanel() {
-  const panel = document.getElementById('subjectPanel');
-  
-  if (!activeId) {
-    panel.classList.remove('active');
-    panel.innerHTML = `
-      <div class="subject-id">NO SPECIMEN SELECTED</div>
-      <div class="subject-name">等待选择</div>
-      <div class="subject-meta">
-        <div class="meta-item"><span class="meta-label">Growth</span><span class="meta-value">--</span></div>
-        <div class="meta-item"><span class="meta-label">Stage</span><span class="meta-value">--</span></div>
-      </div>
-    `;
-    return;
-  }
-  
-  const spec = specimens.find(s => s.id === activeId);
-  const species = SPECIES[spec.speciesId];
-  const stage = DEVELOPMENT_STAGES[spec.stage];
-  
-  panel.classList.add('active');
-  panel.innerHTML = `
-    <div class="subject-id">SPECIMEN #${String(spec.id).padStart(3, '0')} // ${species.id}</div>
-    <div class="subject-name">${spec.researcher}的${species.commonName}</div>
-    <div class="subject-meta">
-      <div class="meta-item">
-        <span class="meta-label">Growth</span>
-        <span class="meta-value" style="color:var(--jade);">${spec.growth}/${spec.maxGrowth}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Stage</span>
-        <span class="meta-value" style="color:var(--amber);">${stage.name}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Vitality</span>
-        <span class="meta-value">${spec.vitality}%</span>
-      </div>
-    </div>
-  `;
-}
-
-function interact(type) {
-  if (!activeId) {
-    showNotification('请先选择实验样本');
-    return;
-  }
-  
-  const spec = specimens.find(s => s.id === activeId);
-  
-  const actions = {
-    feed: { val: 12, icon: '🌿', color: '#00b894', label: 'NUTRIENT +12' },
-    exercise: { val: 10, icon: '💪', color: '#00b894', label: 'PHYSICAL +10' },
-    study: { val: 8, icon: '🔬', color: '#ff9f43', label: 'DATA +8' },
-    groom: { val: 6, icon: '✨', color: '#74b9ff', label: 'CARE +6' },
-    discipline: { val: -5, icon: '⚠️', color: '#d63031', label: 'CORRECTION -5' }
-  };
-  
-  const action = actions[type];
-  
-  if (type === 'discipline') {
-    spec.discipline = Math.min(100, spec.discipline + 10);
-    spec.growth = Math.max(0, spec.growth + action.val);
-  } else {
-    spec.growth = Math.min(spec.maxGrowth, spec.growth + action.val);
-    spec.vitality = Math.min(100, spec.vitality + 5);
-  }
-  
-  showFloat(action.label, event.clientX, event.clientY, action.color);
-  
-  checkEvolution(spec);
-  saveSystem();
-  renderGrid();
-  updatePanel();
-}
-
-function checkEvolution(spec) {
-  if (spec.growth >= spec.maxGrowth && spec.stage < 7) {
-    spec.stage++;
-    spec.growth = 0;
-    spec.maxGrowth = Math.floor(spec.maxGrowth * 1.3);
-    spec.vitality = 100;
-    
-    const notice = document.getElementById('evolutionNotice');
-    notice.querySelector('.notice-text').textContent = `${SPECIES[spec.speciesId].commonName} 进化`;
-    notice.querySelector('.notice-sub').textContent = `Stage ${DEVELOPMENT_STAGES[spec.stage].code} Achieved`;
-    notice.classList.add('show');
-    
-    setTimeout(() => notice.classList.remove('show'), 2500);
-    saveSystem();
-  }
-}
-
-function triggerEvolution() {
-  if (!activeId) return;
-  
-  const spec = specimens.find(s => s.id === activeId);
-  
-  if (spec.stage < 7) {
-    alert(`样本尚未达到进化阈值\n当前阶段: ${DEVELOPMENT_STAGES[spec.stage].name}\n成长进度: ${spec.growth}/${spec.maxGrowth}`);
-    return;
-  }
-  
-  spec.stage = 7;
-  spec.fossils++;
-  
-  const notice = document.getElementById('evolutionNotice');
-  notice.querySelector('.notice-text').textContent = 'LEGENDARY FORM';
-  notice.querySelector('.notice-sub').textContent = `${SPECIES[spec.speciesId].commonName} 传说形态觉醒`;
-  notice.classList.add('show');
-  
-  setTimeout(() => notice.classList.remove('show'), 3000);
-  saveSystem();
-  renderGrid();
-  updatePanel();
-}
-
-function showFloat(text, x, y, color) {
-  const el = document.createElement('div');
-  el.className = 'data-float';
-  el.textContent = text;
-  el.style.color = color;
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1200);
-}
-
-function showNotification(msg) {
-  alert(msg);
-}
-
-// ==================== 模态框 ====================
-function openArchive() {
-  const grid = document.getElementById('archiveGrid');
-  grid.innerHTML = '';
-  
-  SPECIES.forEach((sp, i) => {
-    const div = document.createElement('div');
-    div.style.cssText = 'background:var(--obsidian);border:1px solid var(--graphite);border-radius:8px;overflow:hidden;';
-    div.innerHTML = `
-      <div id="arc-${i}" style="height:160px;background:radial-gradient(ellipse at center,#1e272e 0%,var(--obsidian) 100%);"></div>
-      <div style="padding:16px;">
-        <div style="font-size:0.75rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">${sp.id}</div>
-        <div style="font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:8px;">${sp.commonName}</div>
-        <div style="font-size:0.8125rem;color:#b2bec3;line-height:1.5;">
-          <div style="margin-bottom:4px;"><span style="color:#636e72;">Period:</span> ${sp.period}</div>
-          <div style="margin-bottom:4px;"><span style="color:#636e72;">Size:</span> ${sp.features.length} / ${sp.features.weight}</div>
-          <div>${sp.features.distinctive}</div>
-        </div>
-      </div>
-    `;
-    grid.appendChild(div);
-    
-    setTimeout(() => {
-      const container = document.getElementById(`arc-${i}`);
-      const fakeSpec = {id: 999+i, speciesId: i, stage: 7, fossils: 1};
-      renderSpecimen(container, fakeSpec, true);
-    }, 100);
-  });
-  
-  document.getElementById('archiveModal').classList.add('show');
-}
-
-function openSettings() {
-  const data = localStorage.getItem('mesozoicLab');
-  const specimens = data ? JSON.parse(data) : [];
-  const researchers = specimens.map(s => s.researcher).join('\n');
-  document.getElementById('researcherList').value = researchers;
-  document.getElementById('settingsModal').classList.add('show');
-}
-
-function closeModals() {
-  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
-}
-
-function saveResearchers() {
-  const list = document.getElementById('researcherList').value.split('\n').filter(n => n.trim());
-  if (list.length === 0) {
-    alert('研究员名单不能为空');
-    return;
-  }
-  
-  specimens = list.map((name, i) => {
-    const old = specimens[i];
-    return {
-      id: i,
-      researcher: name.trim(),
-      speciesId: old ? old.speciesId : Math.floor(Math.random() * 8),
-      stage: old ? old.stage : Math.floor(Math.random() * 3),
-      growth: old ? old.growth : Math.floor(Math.random() * 50),
-      maxGrowth: old ? old.maxGrowth : 100,
-      vitality: old ? old.vitality : 80,
-      discipline: old ? old.discipline : 60
-    };
-  });
-  
-  saveSystem();
-  renderGrid();
-  closeModals();
-  showNotification('研究员配置已更新');
-}
-
-function resetSystem() {
-  if (!confirm('确定要重置整个实验室系统吗？所有数据将被清除！')) return;
-  
-  localStorage.removeItem('mesozoicLab');
-  location.reload();
-}
-
-// ==================== 键盘快捷键 ====================
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModals();
-  
-  if (!activeId) return;
-  
-  switch(e.key) {
-    case '1': interact('feed'); break;
-    case '2': interact('exercise'); break;
-    case '3': interact('study'); break;
-    case '4': interact('groom'); break;
-    case '5': interact('discipline'); break;
-    case 'e': triggerEvolution(); break;
-  }
-});
-
-// ==================== 自动保存 ====================
-setInterval(() => {
-  if (specimens.length > 0) saveSystem();
-}, 30000);
-
-// ==================== 初始化完成提示 ====================
-console.log('%c Mesozoic BioLab v2.0 ', 'background: #ff9f43; color: #0a0a0f; font-size: 20px; font-weight: bold; padding: 10px 20px; border-radius: 4px;');
-console.log('%c 系统已就绪 | 8种中生代物种 | 8个发育阶段 | 解剖学精确建模 ', 'color: #636e72; font-size: 12px;');
-</script>
-
-</body>
-</html>
-
-
-
+.equip-slot.equipped {
+  border-color: var(--success);
