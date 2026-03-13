@@ -1,845 +1,2701 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI驱动的银耳成长系统</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-            color: white;
-            text-align: center;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.3"/><circle cx="50" cy="50" r="1" fill="white" opacity="0.5"/><circle cx="80" cy="20" r="1.5" fill="white" opacity="0.4"/></svg>');
-            background-size: 100px 100px;
-        }
-        
-        .header h1 {
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .main-content {
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-        
-        .character-section {
-            flex: 1;
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-        }
-        
-        .character-display {
-            width: 250px;
-            height: 300px;
-            margin: 0 auto 20px;
-            background: white;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8em;
-            border: 8px solid #ffecd2;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s ease;
-        }
-        
-        .character-display::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
-            z-index: 1;
-        }
-        
-        .character-name {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-        }
-        
-        .character-stats {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            text-align: left;
-        }
-        
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            padding: 5px 0;
-            border-bottom: 1px dashed #ddd;
-        }
-        
-        .progress-section {
-            flex: 2;
-            padding: 20px;
-        }
-        
-        .progress-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .progress-title {
-            font-size: 1.5em;
-            color: #667eea;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .progress-bars {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        
-        .progress-bar-group {
-            margin-bottom: 15px;
-        }
-        
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .progress-bar {
-            height: 25px;
-            background: #e9ecef;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00b09b, #96c93d);
-            border-radius: 12px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        
-        .actions-section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .btn {
-            padding: 15px 25px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-listen { 
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4); 
-            color: #333; 
-        }
-        .btn-clean { 
-            background: linear-gradient(45deg, #a8edea, #fed6e3); 
-            color: #333; 
-        }
-        .btn-help { 
-            background: linear-gradient(45deg, #ffecd2, #fcb69f); 
-            color: #333; 
-        }
-        .btn-special { 
-            background: linear-gradient(45deg, #667eea, #764ba2); 
-            color: white; 
-        }
-        .btn-reset { 
-            background: linear-gradient(45deg, #ff9a9e, #fecfef); 
-            color: white; 
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .log-section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        
-        .log-title {
-            font-size: 1.5em;
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-        
-        .log-entries {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        
-        .log-entry {
-            padding: 10px;
-            margin: 8px 0;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #00b09b;
-            animation: slideIn 0.5s ease;
-            font-size: 0.9em;
-        }
-        
-        @keyframes slideIn {
-            from { 
-                opacity: 0; 
-                transform: translateX(-20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateX(0); 
-            }
-        }
-        
-        .shop-section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        
-        .shop-title {
-            font-size: 1.5em;
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-        
-        .shop-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-        }
-        
-        .shop-item {
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .shop-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            transition: left 0.5s;
-        }
-        
-        .shop-item:hover::before {
-            left: 100%;
-        }
-        
-        .shop-item:hover {
-            transform: scale(1.05);
-            border-color: #00b09b;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        .shop-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        .shop-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        .shop-price {
-            color: #e74c3c;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        
-        .equipped {
-            border-color: #27ae60 !important;
-            background: linear-gradient(45deg, #e8f5e8, #d4edda);
-        }
-        
-        .ai-dialogue {
-            background: #f0f8ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 4px solid #4a90e2;
-            font-style: italic;
-            color: #2c3e50;
-        }
-        
-        .ai-avatar {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            background: #4a90e2;
-            border-radius: 50%;
-            color: white;
-            text-align: center;
-            line-height: 30px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .character-display {
-                width: 200px;
-                height: 250px;
-                font-size: 6em;
-            }
-            
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .character-animation {
-            animation: breathe 3s ease-in-out infinite;
-        }
-        
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🥚 蛋仔派对：欢乐互动管理器</title>
+<style>
+  /* ==================== 蛋仔派对主题全局样式 ==================== */
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif; }
+  
+  body { 
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    overflow: hidden; height: 100vh; width: 100vw;
+    position: relative;
+  }
+  
+  /* 动态背景星星 */
+  .stars-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background: radial-gradient(1px 1px at 20px 30px, white, transparent),
+                radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(2px 2px at 160px 120px, white, transparent);
+    background-size: 200px 200px;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+  /* ==================== 蛋仔派对主题顶部导航 ==================== */
+  header {
+    position: absolute; top: 0; left: 0; right: 0; height: 80px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
+    backdrop-filter: blur(20px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 30px; z-index: 100;
+    border-bottom: 3px solid transparent;
+    background-clip: padding-box;
+    animation: headerGlow 3s ease-in-out infinite;
+  }
+  @keyframes headerGlow {
+    0%, 100% { border-image: linear-gradient(90deg, #ff9a9e, #fecfef, #fad0c4, #a1c4fd, #c2e9fb) 1; }
+    50% { border-image: linear-gradient(90deg, #fecfef, #fad0c4, #a1c4fd, #c2e9fb, #ff9a9e) 1; }
+  }
+  
+  .title-area { display: flex; align-items: center; gap: 20px; }
+  .logo { 
+    font-size: 3rem; 
+    filter: drop-shadow(0 0 20px rgba(255,154,158,0.8));
+    animation: logoFloat 3s ease-in-out infinite;
+  }
+  @keyframes logoFloat { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
+  
+  .class-name-input {
+    font-size: 1.8rem; font-weight: bold; color: #ff6b6b;
+    border: none; border-bottom: 3px solid transparent;
+    background: transparent; outline: none; width: 350px;
+    text-shadow: 0 0 30px rgba(255,107,107,0.8);
+    background: linear-gradient(90deg, #ff9a9e, #fecfef, #fad0c4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .header-btns { display: flex; gap: 12px; }
+  .btn {
+    padding: 10px 20px; border: none; border-radius: 25px;
+    font-weight: bold; cursor: pointer; color: white;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem; position: relative; overflow: hidden;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .btn::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+  .btn:hover::before { left: 100%; }
+  .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  
+  .btn-pk { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+  .btn-set { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+  .btn-gallery { background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%); }
+  .btn-shop { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+  .btn-effect { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+  .btn-action { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+  .btn-skill { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+
+  /* ==================== 蛋仔派对主题主网格 ==================== */
+  #petGrid {
+    display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);
+    gap: 12px; padding: 20px;
+    height: calc(100vh - 230px); width: 100%;
+    position: absolute; top: 80px; left: 0; z-index: 1;
+  }
+  
+  .pet-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 20px; position: relative;
+    cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255,255,255,0.1);
+    overflow: hidden; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+  }
+  .pet-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent 60%);
+    pointer-events: none;
+  }
+  .pet-card:hover { 
+    transform: translateY(-8px) scale(1.05); 
+    z-index: 10;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255, 107, 107, 0.3);
+  }
+  .pet-card.selected {
+    border-color: #ffd166; 
+    transform: translateY(-10px) scale(1.08); 
+    z-index: 20;
+    box-shadow: 0 0 0 4px rgba(255, 209, 102, 0.3), 0 0 60px rgba(255, 209, 102, 0.5),
+                0 25px 80px rgba(0,0,0,0.5);
+    animation: selectedPulse 2s ease-in-out infinite;
+  }
+  @keyframes selectedPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(255, 209, 102, 0.3), 0 0 60px rgba(255, 209, 102, 0.5); }
+    50% { box-shadow: 0 0 0 8px rgba(255, 209, 102, 0.5), 0 0 80px rgba(255, 209, 102, 0.7); }
+  }
+
+  /* 队伍颜色 */
+  .team-red { border-bottom: 5px solid #ef476f; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(239, 71, 111, 0.3); }
+  .team-blue { border-bottom: 5px solid #118ab2; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(17, 138, 178, 0.3); }
+  .team-yellow { border-bottom: 5px solid #ffd166; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255, 209, 102, 0.3); }
+  .team-green { border-bottom: 5px solid #06d6a0; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(6, 214, 160, 0.3); }
+  .team-purple { border-bottom: 5px solid #8ac926; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(138, 201, 38, 0.3); }
+
+  .canvas-container { 
+    width: 100%; height: 62%; 
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+    position: relative; border-radius: 15px 15px 0 0;
+  }
+  
+  .info-area {
+    height: 38%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.4) 100%);
+    padding: 8px; border-radius: 0 0 17px 17px;
+  }
+  .pet-name { 
+    font-weight: bold; font-size: 1rem; color: #ff6b6b; 
+    margin-bottom: 3px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; width: 90%; text-align: center;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  .pet-role { 
+    font-size: 0.75rem; color: rgba(255,107,107,0.8); 
+    background: rgba(255,255,255,0.1); padding: 3px 10px; 
+    border-radius: 10px; backdrop-filter: blur(5px);
+  }
+  .level-badge {
+    position: absolute; top: 8px; right: 8px;
+    background: linear-gradient(135deg, #ffd166 0%, #ff9e6d 100%);
+    color: white; font-size: 0.75rem; font-weight: bold;
+    padding: 4px 10px; border-radius: 15px; z-index: 5;
+    box-shadow: 0 4px 15px rgba(255, 209, 102, 0.5);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .xp-bar { width: 85%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, #06d6a0, #118ab2); width: 0%; transition: width 0.5s; border-radius: 3px; box-shadow: 0 0 10px rgba(6, 214, 160, 0.5); }
+
+  /* ==================== 蛋仔派对主题底部控制台 ==================== */
+  footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 150px; 
+    background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.95) 100%);
+    backdrop-filter: blur(20px);
+    border-top: 2px solid rgba(255, 107, 107, 0.3);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 25px; z-index: 100;
+  }
+
+  .selected-panel {
+    width: 200px; padding: 15px;
+    background: linear-gradient(145deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 107, 107, 0.1) 100%);
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    border-radius: 15px; text-align: center;
+    backdrop-filter: blur(10px);
+  }
+  .selected-panel h3 { font-size: 1.2rem; color: #ff6b6b; margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .selected-panel p { font-size: 0.85rem; color: rgba(255,107,107,0.7); }
+
+  .score-buttons {
+    display: flex; gap: 10px; flex: 1; justify-content: center;
+    overflow-x: auto; padding: 10px;
+  }
+  .s-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 75px; height: 85px;
+    border: 2px solid rgba(255,255,255,0.2); border-radius: 15px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    cursor: pointer; position: relative;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .s-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .s-btn:active { transform: translateY(0) scale(0.95); }
+  .s-btn.plus { border-color: rgba(6, 214, 160, 0.5); background: linear-gradient(145deg, rgba(6, 214, 160, 0.2) 0%, rgba(6, 214, 160, 0.1) 100%); }
+  .s-btn.minus { border-color: rgba(239, 71, 111, 0.5); background: linear-gradient(145deg, rgba(239, 71, 111, 0.2) 0%, rgba(239, 71, 111, 0.1) 100%); }
+  .s-icon { font-size: 1.8rem; margin-bottom: 3px; }
+  .s-label { font-size: 0.7rem; font-weight: bold; text-align: center; color: rgba(255,107,107,0.9); }
+  .s-val {
+    position: absolute; top: -8px; right: -8px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ef476f 100%);
+    color: white; border: none;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 0.7rem; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+  }
+
+  .action-area {
+    display: flex; gap: 12px; padding: 0 20px;
+    border-left: 2px solid rgba(255,255,255,0.1); border-right: 2px solid rgba(255,255,255,0.1);
+  }
+  .act-btn {
+    padding: 10px 18px; border: none; border-radius: 25px;
+    font-weight: bold; color: white; cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+  }
+  .act-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+  .act-btn:active { transform: translateY(0) scale(0.95); }
+
+  /* ==================== 蛋仔派对主题状态栏 ==================== */
+  .status-bar {
+    position: absolute; top: 95px; right: 25px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%);
+    padding: 15px 20px; border-radius: 20px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px); z-index: 50;
+    border: 1px solid rgba(255,107,107,0.1);
+  }
+  .status-item { 
+    display: flex; align-items: center; gap: 8px; 
+    margin-bottom: 8px; font-size: 0.9rem; color: #ff6b6b; 
+  }
+  .status-item:last-child { margin-bottom: 0; }
+  .status-icon { font-size: 1.4rem; }
+  .status-value { 
+    font-weight: bold; 
+    text-shadow: 0 0 20px currentColor;
+  }
+  
+  /* ==================== 快捷动作 ==================== */
+  .quick-actions {
+    position: absolute; top: 95px; left: 25px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%);
+    padding: 12px; border-radius: 20px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    backdrop-filter: blur(15px); z-index: 50; 
+    display: flex; gap: 10px;
+    border: 1px solid rgba(255,107,107,0.1);
+  }
+  .quick-btn {
+    width: 45px; height: 45px; border-radius: 50%;
+    border: 2px solid rgba(255, 107, 107, 0.5); 
+    background: linear-gradient(145deg, rgba(255, 107, 107, 0.3) 0%, rgba(255, 107, 107, 0.1) 100%);
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: center; font-size: 1.4rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .quick-btn:hover { 
+    transform: scale(1.15) rotate(10deg); 
+    box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+  }
+
+  /* ==================== 蛋仔派对主题模态框 ==================== */
+  .modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+    z-index: 1000; display: none; justify-content: center; align-items: center;
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal.show { display: flex; }
+  .modal-content {
+    background: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.98) 100%);
+    border-radius: 25px; padding: 30px;
+    width: 95%; max-width: 1000px; max-height: 92vh; overflow-y: auto;
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    position: relative;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .close-modal {
+    position: absolute; top: 15px; right: 25px;
+    font-size: 2.5rem; cursor: pointer; color: rgba(255,107,107,0.6);
+    transition: all 0.3s; text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  .close-modal:hover { color: #ef476f; transform: rotate(90deg); }
+
+  /* ==================== 展示馆终极形态样式 ==================== */
+  .ultimate-showcase {
+    background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.9) 100%);
+    border-radius: 20px; padding: 20px; margin-top: 20px;
+    border: 2px solid rgba(255, 209, 102, 0.3);
+    box-shadow: 0 0 50px rgba(255, 209, 102, 0.2);
+  }
+  .ultimate-title {
+    text-align: center; font-size: 2rem; color: #ffd166;
+    text-shadow: 0 0 30px rgba(255, 209, 102, 0.5);
+    margin-bottom: 20px; animation: titleGlow 2s ease-in-out infinite;
+  }
+  @keyframes titleGlow { 0%, 100% { text-shadow: 0 0 30px rgba(255, 209, 102, 0.5); } 50% { text-shadow: 0 0 50px rgba(255, 209, 102, 0.8); } }
+  
+  .ultimate-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;
+  }
+  .ultimate-card {
+    background: linear-gradient(145deg, rgba(255, 209, 102, 0.1) 0%, rgba(255,255,255,0.5) 100%);
+    border-radius: 20px; padding: 20px; text-align: center;
+    border: 2px solid rgba(255, 209, 102, 0.3);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative; overflow: hidden;
+  }
+  .ultimate-card::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255, 209, 102, 0.1), transparent 30%);
+    animation: ultimateRotate 4s linear infinite;
+  }
+  @keyframes ultimateRotate { to { transform: rotate(360deg); } }
+  .ultimate-card:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(255, 209, 102, 0.4); }
+  .ultimate-canvas { width: 150px; height: 150px; margin: 0 auto; position: relative; z-index: 1; }
+  .ultimate-info { position: relative; z-index: 1; margin-top: 15px; }
+  .ultimate-name { font-size: 1.3rem; color: #ff6b6b; font-weight: bold; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+  .ultimate-level { 
+    display: inline-block; margin-top: 8px; padding: 5px 20px;
+    background: linear-gradient(135deg, #ffd166 0%, #ff9e6d 100%);
+    border-radius: 20px; color: #fff; font-weight: bold;
+    box-shadow: 0 5px 20px rgba(255, 209, 102, 0.4);
+  }
+
+  .group-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 15px; }
+  .g-col { background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 10px; min-height: 90px; }
+  .g-red { border-color: rgba(239, 71, 111, 0.5); background: rgba(239, 71, 111, 0.1); }
+  .g-blue { border-color: rgba(17, 138, 178, 0.5); background: rgba(17, 138, 178, 0.1); }
+  .g-yellow { border-color: rgba(255, 209, 102, 0.5); background: rgba(255, 209, 102, 0.1); }
+  .g-green { border-color: rgba(6, 214, 160, 0.5); background: rgba(6, 214, 160, 0.1); }
+  .g-purple { border-color: rgba(138, 201, 38, 0.5); background: rgba(138, 201, 38, 0.1); }
+  
+  .student-chip {
+    background: rgba(255,255,255,0.1); padding: 5px 10px; margin: 3px 0;
+    border-radius: 8px; font-size: 0.85rem; font-weight: bold; color: #ff6b6b;
+    cursor: pointer; display: flex; justify-content: space-between;
+    backdrop-filter: blur(5px);
+  }
+  .student-chip button {
+    background: #ef476f; color: white; border: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    font-size: 11px; cursor: pointer;
+  }
+
+  .config-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+  .cfg-label { width: 80px; font-weight: bold; font-size: 0.95rem; color: #ff6b6b; }
+  .cfg-input { flex: 1; padding: 6px; border: 1px solid rgba(255,107,107,0.2); border-radius: 6px; background: rgba(255,255,255,0.1); color: #ff6b6b; }
+  .cfg-score { width: 60px; padding: 6px; border: 1px solid rgba(255,107,107,0.2); border-radius: 6px; text-align: center; background: rgba(255,255,255,0.1); color: #ff6b6b; }
+
+  .float-text {
+    position: absolute; font-weight: bold; font-size: 1.4rem;
+    pointer-events: none; animation: floatUp 1s forwards;
+    z-index: 2000; text-shadow: 0 0 20px currentColor, 0 4px 0 rgba(0,0,0,0.3);
+  }
+  @keyframes floatUp { to { transform: translateY(-80px) scale(1.2); opacity: 0; } }
+
+  #captain-preview { width: 140px; height: 140px; margin: 0 auto; background: rgba(255, 107, 107, 0.1); border-radius: 50%; border: 4px solid rgba(255, 107, 107, 0.5); box-shadow: 0 0 40px rgba(255, 107, 107, 0.3); }
+  .custom-input { position: absolute; width: 40px; text-align: center; font-weight: bold; border: 2px solid #ff6b6b; border-radius: 8px; z-index: 3000; display: none; font-size: 0.8rem; background: rgba(255,255,255,0.9); color: #ff6b6b; }
+
+  /* 商店样式 */
+  .shop-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-height: 55vh; overflow-y: auto; padding: 10px; }
+  .shop-item {
+    background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border: 2px solid rgba(255,255,255,0.15); border-radius: 15px;
+    padding: 12px; text-align: center; cursor: pointer;
+    transition: all 0.3s; position: relative; backdrop-filter: blur(10px);
+  }
+  .shop-item:hover { border-color: #ff6b6b; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+  .shop-item.equipped { border-color: #06d6a0; background: rgba(6, 214, 160, 0.2); box-shadow: 0 0 30px rgba(6, 214, 160, 0.3); }
+  .shop-item.locked { opacity: 0.4; cursor: not-allowed; }
+  .item-preview { width: 60px; height: 60px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+  .item-name { font-weight: bold; font-size: 0.85rem; color: #ff6b6b; margin-bottom: 4px; }
+  .item-desc { font-size: 0.7rem; color: rgba(255,107,107,0.6); }
+  .item-price { font-size: 0.8rem; color: #ffd166; font-weight: bold; margin-top: 6px; }
+  
+  .category-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 8px 16px; border: none; border-radius: 20px;
+    background: rgba(255,255,255,0.1); cursor: pointer; font-size: 0.85rem; color: #ff6b6b;
+    transition: all 0.3s; backdrop-filter: blur(5px);
+  }
+  .tab-btn.active { background: linear-gradient(135deg, #ff6b6b 0%, #ef476f 100%); color: white; box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4); }
+  .tab-btn:hover { background: rgba(255, 107, 107, 0.3); }
+
+  /* 技能面板 */
+  .skill-panel {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;
+  }
+  .skill-card {
+    background: linear-gradient(145deg, rgba(6, 214, 160, 0.2) 0%, rgba(255,255,255,0.3) 100%);
+    border: 2px solid rgba(6, 214, 160, 0.3);
+    border-radius: 15px; padding: 15px; text-align: center;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .skill-card:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(6, 214, 160, 0.4); }
+  .skill-card.active { border-color: #06d6a0; box-shadow: 0 0 50px rgba(6, 214, 160, 0.5); }
+  .skill-icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .skill-name { font-size: 1rem; color: #ff6b6b; font-weight: bold; margin-bottom: 5px; }
+  .skill-desc { font-size: 0.75rem; color: rgba(255,107,107,0.7); }
+  .skill-cooldown { 
+    margin-top: 8px; padding: 4px 12px;
+    background: rgba(255,255,255,0.3); border-radius: 10px;
+    font-size: 0.7rem; color: #ffd166;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🤖 AI驱动的银耳成长系统</h1>
-            <p>让虚拟人物更像真人，见证每一份努力与成长</p>
-        </div>
-        
-        <div class="main-content">
-            <div class="character-section">
-                <div class="character-display character-animation">
-                    👶
-                </div>
-                <div class="character-name">银耳</div>
-                <div class="character-stats">
-                    <div class="stat-row">
-                        <span>当前阶段：</span>
-                        <span id="current-stage">婴儿阶段</span>
-                    </div>
-                    <div class="stat-row">
-                        <span>成长等级：</span>
-                        <span id="level">1</span>
-                    </div>
-                    <div class="stat-row">
-                        <span>总积分：</span>
-                        <span id="total-points">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span>装备道具：</span>
-                        <span id="equipped-count">0</span>
-                    </div>
-                </div>
-                
-                <div class="ai-dialogue">
-                    <span class="ai-avatar">AI</span>
-                    <span id="ai-message">你好！我是银耳，正在开始我的成长之旅。每天认真学习、帮助他人，让我变得越来越好！</span>
-                </div>
-            </div>
-            
-            <div class="progress-section">
-                <div class="progress-container">
-                    <div class="progress-title">📊 成长进度追踪</div>
-                    <div class="progress-bars">
-                        <div class="progress-bar-group">
-                            <div class="progress-label">
-                                <span>总成长进度</span>
-                                <span><span id="total-progress-percent">0</span>%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="total-progress" style="width: 0%">0%</div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-bar-group">
-                            <div class="progress-label">
-                                <span>听课积分</span>
-                                <span><span id="listen-points">0</span>/300</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="listen-progress" style="width: 0%">0%</div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-bar-group">
-                            <div class="progress-label">
-                                <span>卫生积分</span>
-                                <span><span id="clean-points">0</span>/300</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="clean-progress" style="width: 0%">0%</div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-bar-group">
-                            <div class="progress-label">
-                                <span>助人积分</span>
-                                <span><span id="help-points">0</span>/400</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="help-progress" style="width: 0%">0%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="actions-section">
-                    <h3>💪 日常成长行动</h3>
-                    <div class="action-buttons">
-                        <button class="btn btn-listen" onclick="performAction('listen')">
-                            👂 认真听课 (+10积分)
-                        </button>
-                        <button class="btn btn-clean" onclick="performAction('clean')">
-                            🧹 主动清洁 (+15积分)
-                        </button>
-                        <button class="btn btn-help" onclick="performAction('help')">
-                            🤝 热心助人 (+20积分)
-                        </button>
-                        <button class="btn btn-special" onclick="performSpecialAction()">
-                            ⭐ 特殊任务 (+30积分)
-                        </button>
-                        <button class="btn btn-reset" onclick="resetGame()">
-                            🔄 重新开始
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="shop-section">
-                    <div class="shop-title">🛍️ 个性化装扮商城</div>
-                    <div class="shop-items" id="shop-items">
-                        <!-- Shop items will be generated by JavaScript -->
-                    </div>
-                </div>
-                
-                <div class="log-section">
-                    <div class="log-title">📝 成长日志</div>
-                    <div class="log-entries" id="activity-log">
-                        <div class="log-entry">欢迎来到AI驱动的银耳成长系统！开始你的成长之旅吧！</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="stars-bg"></div>
+<header>
+  <div class="title-area">
+    <div class="logo">🥚</div>
+    <input id="classNameInput" class="class-name-input" value="蛋仔派对·欢乐乐园" onchange="updateClassName()">
+  </div>
+  <div class="header-btns">
+    <button class="btn btn-effect" onclick="openEffectsModal()">✨ 特效</button>
+    <button class="btn btn-action" onclick="openActionsModal()">🎭 动作</button>
+    <button class="btn btn-skill" onclick="openSkillsModal()">⚡ 技能</button>
+    <button class="btn btn-shop" onclick="openShop()">🛒 装备店</button>
+    <button class="btn btn-pk" onclick="showPK()">🏆 PK榜</button>
+    <button class="btn btn-gallery" onclick="showGallery()">🖼️ 终极展示</button>
+    <button class="btn btn-set" onclick="openSettings()">⚙️ 指挥中心</button>
+  </div>
+</header>
+
+<!-- 状态栏 -->
+<div class="status-bar">
+  <div class="status-item">
+    <span class="status-icon">💎</span>
+    <span>金币：<span class="status-value" id="goldDisplay" style="color:#ffd166;">0</span></span>
+  </div>
+  <div class="status-item">
+    <span class="status-icon">⭐</span>
+    <span>总分：<span class="status-value" id="totalPoints" style="color:#ff6b6b;">0</span></span>
+  </div>
+  <div class="status-item">
+    <span class="status-icon">⚡</span>
+    <span>能量：<span class="status-value" id="energyDisplay" style="color:#06d6a0;">100</span></span>
+  </div>
+</div>
+
+<!-- 快捷动作 -->
+<div class="quick-actions">
+  <button class="quick-btn" onclick="randomEffect()" title="随机特效">🎲</button>
+  <button class="quick-btn" onclick="randomAction()" title="随机动作">💫</button>
+  <button class="quick-btn" onclick="randomEquipment()" title="随机装备">🎁</button>
+  <button class="quick-btn" onclick="activateUltimate()" title="终极技能">🌟</button>
+</div>
+
+<main id="petGrid"></main>
+
+<footer>
+  <div class="selected-panel" id="selPanel" style="display:none;">
+    <h3 id="selName">未选择</h3>
+    <p id="selGroup">未分组</p>
+    <p style="margin-top:5px; color:#ffd166; font-weight:bold;">积分：<span id="selPoints">0</span></p>
+    <div style="margin-top:8px; font-size:0.8rem; color:rgba(255,107,107,0.8);">
+      <span id="selEffect" style="color:#8ac926;">特效：无</span><br>
+      <span id="selAction" style="color:#118ab2;">动作：站立</span><br>
+      <span id="selEquip" style="color:#ef476f;">装备：无</span>
     </div>
+  </div>
 
-    <script>
-        // 游戏状态
-        let gameState = {
-            totalPoints: 0,
-            listenPoints: 0,
-            cleanPoints: 0,
-            helpPoints: 0,
-            level: 1,
-            currentStage: '婴儿',
-            characterEmoji: '👶',
-            equippedItems: [],
-            experience: 0,
-            maxExperience: 100
-        };
+  <div class="score-buttons">
+    <!-- 加分 -->
+    <div class="s-btn plus" onclick="handleScore('labor')">
+      <div class="s-icon">🧹</div><div class="s-label" id="lbl-labor">爱劳动</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'labor')">5</div>
+    </div>
+    <div class="s-btn plus" onclick="handleScore('study')">
+      <div class="s-icon">📚</div><div class="s-label" id="lbl-study">勤学习</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'study')">5</div>
+    </div>
+    <div class="s-btn plus" onclick="handleScore('eat')">
+      <div class="s-icon">🍚</div><div class="s-label" id="lbl-eat">光盘</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'eat')">5</div>
+    </div>
+    <div class="s-btn plus" onclick="handleScore('sleep')">
+      <div class="s-icon">😴</div><div class="s-label" id="lbl-sleep">午睡</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'sleep')">5</div>
+    </div>
+    
+    <div style="width:2px; background:rgba(255,255,255,0.2); margin:0 8px;"></div>
 
-        // 成长阶段配置
-        const stages = [
-            { 
-                name: '婴儿', 
-                emoji: '👶', 
-                minLevel: 1, 
-                maxLevel: 3, 
-                desc: '需要呵护的小婴儿，从基础积分开始累积',
-                aiMessage: '我还在学习如何更好地成长呢！'
-            },
-            { 
-                name: '幼儿', 
-                emoji: '🧒', 
-                minLevel: 4, 
-                maxLevel: 6, 
-                desc: '活泼可爱的幼儿，积分获取更加丰富',
-                aiMessage: '我已经学会了很多新本领！'
-            },
-            { 
-                name: '少年', 
-                emoji: '👦', 
-                minLevel: 7, 
-                maxLevel: 9, 
-                desc: '天真烂漫的少年，可以兑换专属服装道具',
-                aiMessage: '我正在努力成为更好的自己！'
-            },
-            { 
-                name: '青年', 
-                emoji: '👨', 
-                minLevel: 10, 
-                maxLevel: 10, 
-                desc: '独立自信的青年，持续积累成长积分',
-                aiMessage: '我已经成长为一个独立自信的人了！'
-            }
-        ];
+    <!-- 减分 -->
+    <div class="s-btn minus" onclick="handleScore('listen')">
+      <div class="s-icon">🙉</div><div class="s-label" id="lbl-listen">走神</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'listen')">-5</div>
+    </div>
+    <div class="s-btn minus" onclick="handleScore('talk')">
+      <div class="s-icon">🗣️</div><div class="s-label" id="lbl-talk">说话</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'talk')">-5</div>
+    </div>
+    <div class="s-btn minus" onclick="handleScore('manner')">
+      <div class="s-icon">🙅</div><div class="s-label" id="lbl-manner">礼貌</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'manner')">-5</div>
+    </div>
+    <div class="s-btn minus" onclick="handleScore('clean')">
+      <div class="s-icon">🧼</div><div class="s-label" id="lbl-clean">卫生</div>
+      <div class="s-val" onclick="event.stopPropagation(); showCustomInput(this, 'clean')">-5</div>
+    </div>
+  </div>
 
-        // 商城商品
-        const shopItems = [
-            { id: 1, name: '智慧眼镜', icon: '👓', price: 100, category: 'glasses', effect: '听课效率+10%' },
-            { id: 2, name: '爱心徽章', icon: '❤️', price: 150, category: 'badge', effect: '助人积分+15%' },
-            { id: 3, name: '环保书包', icon: '🎒', price: 200, category: 'bag', effect: '卫生积分+20%' },
-            { id: 4, name: '运动鞋', icon: '👟', price: 250, category: 'shoes', effect: '行动效率+15%' },
-            { id: 5, name: '魔法棒', icon: '✨', price: 300, category: 'tool', effect: '特殊任务奖励+25%' },
-            { id: 6, name: '智慧王冠', icon: '👑', price: 500, category: 'crown', effect: '全属性+10%' }
-        ];
+  <div class="action-area">
+    <button class="act-btn btn-skill" onclick="useSkill()">⚡ 技能</button>
+    <button class="act-btn btn-effect" onclick="openEffectsModal()">✨ 特效</button>
+    <button class="act-btn btn-action" onclick="openActionsModal()">🎭 动作</button>
+    <button class="act-btn btn-shop" onclick="useItem()">✨ 道具</button>
+  </div>
+</footer>
 
-        // AI对话库
-        const aiMessages = [
-            "今天我学会了新的知识，感觉很充实！",
-            "帮助别人让我感到很快乐！",
-            "保持教室整洁是我的责任。",
-            "我要继续努力，让自己变得更好！",
-            "和同学们一起学习真开心！",
-            "我相信坚持就是胜利！",
-            "每天进步一点点，积累起来就是大进步！",
-            "困难面前我不怕，勇敢面对挑战！"
-        ];
+<input type="number" id="customInput" class="custom-input" min="1" max="20" onchange="applyCustomScore()">
 
-        // 初始化游戏
-        function initGame() {
-            updateDisplay();
-            renderShopItems();
-            addLogEntry('AI驱动的银耳成长系统已启动！');
-            startAIPeriodicUpdates();
+<!-- 设置模态框 -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('settingsModal')">&times;</span>
+    <h2 style="text-align:center; color:#ff6b6b; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(255,107,107,0.5);">🥚 蛋仔派对指挥中心</h2>
+    
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:25px;">
+      <div style="text-align:center;">
+        <div id="captain-preview"></div>
+        <p style="margin-top:15px; font-weight:bold; color:#ff6b6b;">蛋仔派对队长</p>
+      </div>
+      
+      <div>
+        <!-- 规则配置 -->
+        <div style="background:rgba(255, 209, 102,0.1); padding:15px; border-radius:15px; margin-bottom:20px; border:1px solid rgba(255, 209, 102,0.3);">
+          <h3 style="font-size:1.1rem; margin-bottom:12px; color:#ffd166;">⚙️ 积分规则 (1-20 分)</h3>
+          <div id="configList"></div>
+          <button onclick="saveConfig()" style="width:100%; margin-top:12px; padding:10px; background:linear-gradient(135deg, #ffd166 0%, #ff9e6d 100%); border:none; border-radius:10px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 5px 20px rgba(255,209,102,0.3);">💾 保存规则</button>
+        </div>
+
+        <!-- 分组 -->
+        <div style="background:rgba(6,214,160,0.1); padding:15px; border-radius:15px; border:1px solid rgba(6,214,160,0.3);">
+          <h3 style="font-size:1.1rem; margin-bottom:12px; color:#06d6a0;">🚩 小队分组</h3>
+          <div class="group-grid">
+            <div class="g-col g-red" id="g-red"><div style="text-align:center;font-weight:bold;color:#ef476f;font-size:0.85rem;">🔴红队</div><div id="list-red"></div></div>
+            <div class="g-col g-blue" id="g-blue"><div style="text-align:center;font-weight:bold;color:#118ab2;font-size:0.85rem;">🔵蓝队</div><div id="list-blue"></div></div>
+            <div class="g-col g-yellow" id="g-yellow"><div style="text-align:center;font-weight:bold;color:#ffd166;font-size:0.85rem;">🟡黄队</div><div id="list-yellow"></div></div>
+            <div class="g-col g-green" id="g-green"><div style="text-align:center;font-weight:bold;color:#06d6a0;font-size:0.85rem;">🟢绿队</div><div id="list-green"></div></div>
+            <div class="g-col g-purple" id="g-purple"><div style="text-align:center;font-weight:bold;color:#8ac926;font-size:0.85rem;">🟣紫队</div><div id="list-purple"></div></div>
+          </div>
+          <div id="ungrouped" style="margin-top:12px; padding:8px; background:rgba(255,255,255,0.05); border-radius:10px; min-height:50px; border:1px dashed rgba(255,255,255,0.2);">
+            <div style="text-align:center;font-size:0.75rem;color:rgba(255,107,107,0.5);">待分配 (点击加入红队)</div>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:12px;">
+            <button onclick="autoBalance()" style="flex:1; padding:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; cursor:pointer; color:#ff6b6b;">⚖️ 平衡</button>
+            <button onclick="clearGroups()" style="flex:1; padding:8px; background:rgba(239,71,111,0.2); border:1px solid rgba(239,71,111,0.3); border-radius:10px; cursor:pointer; color:#ff6b6b;">❌ 清空</button>
+          </div>
+        </div>
+
+        <!-- 名单 -->
+        <div style="margin-top:20px;">
+          <h3 style="font-size:1.1rem; margin-bottom:10px; color:#ff6b6b;">📝 蛋仔名单</h3>
+          <textarea id="studentList" style="width:100%; height:90px; padding:10px; border:1px solid rgba(255,107,107,0.2); border-radius:10px; background:rgba(255,255,255,0.3); color:#ff6b6b; resize:none;"></textarea>
+          <div style="margin-top:10px; display:flex; gap:12px;">
+            <button onclick="saveStudents()" style="flex:1; padding:10px; background:linear-gradient(135deg, #06d6a0 0%, #118ab2 100%); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; box-shadow:0 5px 20px rgba(6,214,160,0.3);">💾 生成蛋仔</button>
+            <button onclick="resetAll()" style="padding:10px; background:linear-gradient(135deg, #ef476f 0%, #d90429 100%); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; box-shadow:0 5px 20px rgba(239,71,111,0.3);">⚠️ 重置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PK 模态框 -->
+<div id="pkModal" class="modal">
+  <div class="modal-content" style="max-width:650px; text-align:center;">
+    <span class="close-modal" onclick="closeModal('pkModal')">&times;</span>
+    <h2 style="color:#ff6b6b; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(255,107,107,0.5);">🏆 蛋仔派对 PK 榜</h2>
+    <div id="pkList"></div>
+  </div>
+</div>
+
+<!-- 终极展示馆模态框 -->
+<div id="galleryModal" class="modal">
+  <div class="modal-content" style="max-width:98%; max-height:95vh;">
+    <span class="close-modal" onclick="closeModal('galleryModal')">&times;</span>
+    <h2 style="text-align:center; color:#ffd166; margin-bottom:25px; font-size:2rem; text-shadow:0 0 40px rgba(255,209,102,0.6);">🥚 蛋仔终极形态展示馆</h2>
+    
+    <div class="category-tabs" style="justify-content:center;">
+      <button class="tab-btn active" onclick="showGalleryTab('all')">全部蛋仔</button>
+      <button class="tab-btn" onclick="showGalleryTab('ultimate')">终极形态</button>
+      <button class="tab-btn" onclick="showGalleryTab('max')">满级精英</button>
+      <button class="tab-btn" onclick="showGalleryTab('team')">队伍展示</button>
+    </div>
+    
+    <div id="galleryContent"></div>
+    
+    <!-- 终极形态展示区 -->
+    <div class="ultimate-showcase" id="ultimateShowcase">
+      <div class="ultimate-title">🌟 蛋仔终极觉醒形态 🌟</div>
+      <div class="ultimate-grid" id="ultimateGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 特效模态框 -->
+<div id="effectsModal" class="modal">
+  <div class="modal-content" style="max-width:95%; max-height:90vh;">
+    <span class="close-modal" onclick="closeModal('effectsModal')">&times;</span>
+    <h2 style="text-align:center; color:#8ac926; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(138,201,38,0.5);">✨ 蛋仔派对特效库 (50种)</h2>
+    <div class="category-tabs" id="effectTabs"></div>
+    <div id="effectsList" class="shop-grid"></div>
+  </div>
+</div>
+
+<!-- 动作模态框 -->
+<div id="actionsModal" class="modal">
+  <div class="modal-content" style="max-width:95%; max-height:90vh;">
+    <span class="close-modal" onclick="closeModal('actionsModal')">&times;</span>
+    <h2 style="text-align:center; color:#118ab2; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(17,138,178,0.5);">🎭 蛋仔派对动作库 (100种)</h2>
+    <div class="category-tabs" id="actionTabs"></div>
+    <div id="actionsList" class="shop-grid"></div>
+  </div>
+</div>
+
+<!-- 技能模态框 -->
+<div id="skillsModal" class="modal">
+  <div class="modal-content" style="max-width:95%; max-height:90vh;">
+    <span class="close-modal" onclick="closeModal('skillsModal')">&times;</span>
+    <h2 style="text-align:center; color:#06d6a0; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(6,214,160,0.5);">⚡ 蛋仔派对专属技能</h2>
+    <div id="skillsContent"></div>
+  </div>
+</div>
+
+<!-- 商店模态框 -->
+<div id="shopModal" class="modal">
+  <div class="modal-content" style="max-width:95%; max-height:90vh;">
+    <span class="close-modal" onclick="closeModal('shopModal')">&times;</span>
+    <h2 style="text-align:center; color:#ef476f; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(239,71,111,0.5);">🛒 蛋仔派对装备商店 (60件)</h2>
+    <div class="category-tabs" id="shopTabs"></div>
+    <div id="shopList" class="shop-grid"></div>
+  </div>
+</div>
+<script>
+// ==================== 蛋仔派对主题数据配置 ====================
+const PET_TYPES = [
+  { name: "粉蛋仔", role: "派对", color: "#ff9a9e", sub: "pink", ultimate: "粉蛋觉醒", skill: "粉色狂欢" },
+  { name: "蓝蛋仔", role: "探险", color: "#a1c4fd", sub: "blue", ultimate: "蓝蛋觉醒", skill: "蓝色冒险" },
+  { name: "黄蛋仔", role: "阳光", color: "#fad0c4", sub: "yellow", ultimate: "黄蛋觉醒", skill: "阳光闪耀" },
+  { name: "绿蛋仔", role: "自然", color: "#c2e9fb", sub: "green", ultimate: "绿蛋觉醒", skill: "绿色生机" },
+  { name: "紫蛋仔", role: "神秘", color: "#d4fc79", sub: "purple", ultimate: "紫蛋觉醒", skill: "紫色幻境" },
+  { name: "橙蛋仔", role: "活力", color: "#fa709a", sub: "orange", ultimate: "橙蛋觉醒", skill: "橙色能量" }
+];
+
+// ==================== 50种蛋仔派对特效 ====================
+const EFFECTS_DATA = [
+  // 粒子特效 (15个)
+  { id: 'e1', name: '彩球飘扬', icon: '🎈', category: '粒子', color: '#ffd166', particles: true, type: 'balls', intensity: 1 },
+  { id: 'e2', name: '爱心风暴', icon: '💕', category: '粒子', color: '#ef476f', particles: true, type: 'hearts', intensity: 1.2 },
+  { id: 'e3', name: '气泡涌动', icon: '🫧', category: '粒子', color: '#118ab2', particles: true, type: 'bubbles', intensity: 0.8 },
+  { id: 'e4', name: '雪花飞舞', icon: '❄️', category: '粒子', color: '#a1c4fd', particles: true, type: 'snow', intensity: 1 },
+  { id: 'e5', name: '星星闪烁', icon: '✨', category: '粒子', color: '#ffd166', particles: true, type: 'sparks', intensity: 1.5 },
+  { id: 'e6', name: '花朵绽放', icon: '🌸', category: '粒子', color: '#fad0c4', particles: true, type: 'flowers', intensity: 0.9 },
+  { id: 'e7', name: '音符跳跃', icon: '🎵', category: '粒子', color: '#8ac926', particles: true, type: 'notes', intensity: 1.1 },
+  { id: 'e8', name: '金币雨', icon: '💰', category: '粒子', color: '#ffd166', particles: true, type: 'coins', intensity: 1.3 },
+  { id: 'e9', name: '钻石闪烁', icon: '💎', category: '粒子', color: '#a1c4fd', particles: true, type: 'diamonds', intensity: 1.2 },
+  { id: 'e10', name: '糖果风暴', icon: '🍬', category: '粒子', color: '#ff6b6b', particles: true, type: 'candy', intensity: 1 },
+  { id: 'e11', name: '彩虹泡泡', icon: '🌈', category: '粒子', color: '#ff6b6b', particles: true, type: 'rainbow_bubbles', intensity: 1.5 },
+  { id: 'e12', name: '闪电链', icon: '⚡', category: '粒子', color: '#ffd166', particles: true, type: 'lightning', intensity: 1.8 },
+  { id: 'e13', name: '火焰燃烧', icon: '🔥', category: '粒子', color: '#ef476f', particles: true, type: 'flame', intensity: 2 },
+  { id: 'e14', name: '水波荡漾', icon: '💧', category: '粒子', color: '#118ab2', particles: true, type: 'water', intensity: 0.9 },
+  { id: 'e15', name: '彩带庆典', icon: '🎊', category: '粒子', color: '#8ac926', particles: true, type: 'confetti', intensity: 1.5 },
+  
+  // 光环特效 (15个) - 蛋仔派对主题
+  { id: 'e16', name: '粉色光环', icon: '💖', category: '光环', color: '#ff9a9e', ring: true, type: 'pink_ring', intensity: 1.5 },
+  { id: 'e17', name: '蓝色光环', icon: '💙', category: '光环', color: '#a1c4fd', ring: true, type: 'blue_ring', intensity: 1.8 },
+  { id: 'e18', name: '黄色光环', icon: '💛', category: '光环', color: '#fad0c4', ring: true, type: 'yellow_ring', intensity: 1.3 },
+  { id: 'e19', name: '绿色光环', icon: '💚', category: '光环', color: '#c2e9fb', ring: true, type: 'green_ring', intensity: 1.7 },
+  { id: 'e20', name: '紫色光环', icon: '💜', category: '光环', color: '#d4fc79', ring: true, type: 'purple_ring', intensity: 1.6 },
+  { id: 'e21', name: '橙色光环', icon: '🧡', category: '光环', color: '#fa709a', ring: true, type: 'orange_ring', intensity: 2.2 },
+  { id: 'e22', name: '彩虹光环', icon: '🌈', category: '光环', color: '#ff6b6b', ring: true, type: 'rainbow_ring', intensity: 2 },
+  { id: 'e23', name: '爱心光环', icon: '💝', category: '光环', color: '#ef476f', ring: true, type: 'heart_ring', intensity: 1.4 },
+  { id: 'e24', name: '星星光环', icon: '⭐', category: '光环', color: '#ffd166', ring: true, type: 'star_ring', intensity: 2 },
+  { id: 'e25', name: '月亮光环', icon: '🌙', category: '光环', color: '#a1c4fd', ring: true, type: 'moon_ring', intensity: 1.8 },
+  { id: 'e26', name: '太阳光环', icon: '☀️', category: '光环', color: '#fad0c4', ring: true, type: 'sun_ring', intensity: 2.5 },
+  { id: 'e27', name: '云朵光环', icon: '☁️', category: '光环', color: '#c2e9fb', ring: true, type: 'cloud_ring', intensity: 1.5 },
+  { id: 'e28', name: '雨滴光环', icon: '🌧️', category: '光环', color: '#118ab2', ring: true, type: 'rain_ring', intensity: 1.4 },
+  { id: 'e29', name: '雪花光环', icon: '❄️', category: '光环', color: '#a1c4fd', ring: true, type: 'snow_ring', intensity: 1.3 },
+  { id: 'e30', name: '烟花光环', icon: '🎆', category: '光环', color: '#ff6b6b', ring: true, type: 'fireworks_ring', intensity: 2.8 },
+  
+  // 动画特效 (20个) - 蛋仔派对主题
+  { id: 'e31', name: '闪烁光辉', icon: '✨', category: '动画', color: '#ffd166', animation: 'blink', intensity: 1 },
+  { id: 'e32', name: '脉冲冲击', icon: '💓', category: '动画', color: '#ef476f', animation: 'pulse', intensity: 1.2 },
+  { id: 'e33', name: '旋风旋转', icon: '🔄', category: '动画', color: '#118ab2', animation: 'spin', intensity: 1.5 },
+  { id: 'e34', name: '摇摆舞动', icon: '👋', category: '动画', color: '#06d6a0', animation: 'swing', intensity: 0.9 },
+  { id: 'e35', name: '弹跳能量', icon: '⬆️', category: '动画', color: '#ffd166', animation: 'bounce', intensity: 1.3 },
+  { id: 'e36', name: '呼吸韵律', icon: '😮', category: '动画', color: '#8ac926', animation: 'breathe', intensity: 0.8 },
+  { id: 'e37', name: '波浪涌动', icon: '🌊', category: '动画', color: '#118ab2', animation: 'wave', intensity: 1.1 },
+  { id: 'e38', name: '震动冲击', icon: '📳', category: '动画', color: '#ef476f', animation: 'shake', intensity: 1.8 },
+  { id: 'e39', name: '缩放聚焦', icon: '🔍', category: '动画', color: '#06d6a0', animation: 'scale', intensity: 1 },
+  { id: 'e40', name: '漂浮升空', icon: '🎈', category: '动画', color: '#ffd166', animation: 'float', intensity: 1.2 },
+  { id: 'e41', name: '彩虹渐变', icon: '🌟', category: '动画', color: '#ff6b6b', animation: 'gradient_blink', intensity: 1.5 },
+  { id: 'e42', name: '螺旋风暴', icon: '🌀', category: '动画', color: '#8ac926', animation: 'spiral', intensity: 2 },
+  { id: 'e43', name: '电流震动', icon: '⚡', category: '动画', color: '#ffd166', animation: 'vibrate', intensity: 1.6 },
+  { id: 'e44', name: '弹性弹跳', icon: '🏀', category: '动画', color: '#ef476f', animation: 'pop', intensity: 1.4 },
+  { id: 'e45', name: '摇晃舞步', icon: '🎭', category: '动画', color: '#118ab2', animation: 'wobble', intensity: 1.1 },
+  { id: 'e46', name: '闪烁弹跳', icon: '💫', category: '动画', color: '#ff6b6b', animation: 'bounce_blink', intensity: 1.7 },
+  { id: 'e47', name: '涟漪扩散', icon: '💧', category: '动画', color: '#118ab2', animation: 'ripple', intensity: 1.3 },
+  { id: 'e48', name: '爆炸冲击', icon: '💥', category: '动画', color: '#ef476f', animation: 'explode', intensity: 2.5 },
+  { id: 'e49', name: '星光闪烁', icon: '⭐', category: '动画', color: '#ffd166', animation: 'star_blink', intensity: 1.2 },
+  { id: 'e50', name: '彩虹闪光', icon: '🌈', category: '动画', color: '#8ac926', animation: 'rainbow_flash', intensity: 2 }
+];
+
+// ==================== 100种蛋仔派对动作 ====================
+const ACTIONS_DATA = [
+  // 基础动作 (20个)
+  { id: 'a1', name: '站立', icon: '🧍', category: '基础', duration: 1000, ease: 'linear' },
+  { id: 'a2', name: '行走', icon: '🚶', category: '基础', duration: 1000, ease: 'swing' },
+  { id: 'a3', name: '跑步', icon: '🏃', category: '基础', duration: 800, ease: 'fast' },
+  { id: 'a4', name: '跳跃', icon: '🦘', category: '基础', duration: 600, ease: 'bounce' },
+  { id: 'a5', name: '坐下', icon: '🪑', category: '基础', duration: 1000, ease: 'smooth' },
+  { id: 'a6', name: '躺下', icon: '🛏️', category: '基础', duration: 1000, ease: 'smooth' },
+  { id: 'a7', name: '蹲下', icon: '🧎', category: '基础', duration: 1000, ease: 'smooth' },
+  { id: 'a8', name: '转身', icon: '🔄', category: '基础', duration: 500, ease: 'spin' },
+  { id: 'a9', name: '抬头', icon: '👆', category: '基础', duration: 500, ease: 'smooth' },
+  { id: 'a10', name: '低头', icon: '👇', category: '基础', duration: 500, ease: 'smooth' },
+  { id: 'a11', name: '点头', icon: '😊', category: '基础', duration: 500, ease: 'bounce' },
+  { id: 'a12', name: '摇头', icon: '🙄', category: '基础', duration: 600, ease: 'swing' },
+  { id: 'a13', name: '挥手', icon: '👋', category: '基础', duration: 800, ease: 'wave' },
+  { id: 'a14', name: '举手', icon: '🙋', category: '基础', duration: 600, ease: 'smooth' },
+  { id: 'a15', name: '鼓掌', icon: '👏', category: '基础', duration: 800, ease: 'pulse' },
+  { id: 'a16', name: '伸懒腰', icon: '🥱', category: '基础', duration: 1000, ease: 'stretch' },
+  { id: 'a17', name: '打哈欠', icon: '😴', category: '基础', duration: 1000, ease: 'smooth' },
+  { id: 'a18', name: '眨眼', icon: '😉', category: '基础', duration: 300, ease: 'fast' },
+  { id: 'a19', name: '敬礼', icon: '🫡', category: '基础', duration: 800, ease: 'sharp' },
+  { id: 'a20', name: '鞠躬', icon: '🙇', category: '基础', duration: 800, ease: 'smooth' },
+  
+  // 情绪表情 (25个)
+  { id: 'a21', name: '开心', icon: '😄', category: '情绪', duration: 1000, ease: 'bounce' },
+  { id: 'a22', name: '大笑', icon: '🤣', category: '情绪', duration: 1000, ease: 'shake' },
+  { id: 'a23', name: '微笑', icon: '😊', category: '情绪', duration: 1000, ease: 'smooth' },
+  { id: 'a24', name: '害羞', icon: '😳', category: '情绪', duration: 1000, ease: 'wobble' },
+  { id: 'a25', name: '悲伤', icon: '😢', category: '情绪', duration: 1000, ease: 'droop' },
+  { id: 'a26', name: '哭泣', icon: '😭', category: '情绪', duration: 1200, ease: 'shake' },
+  { id: 'a27', name: '愤怒', icon: '😠', category: '情绪', duration: 1000, ease: 'tense' },
+  { id: 'a28', name: '生气', icon: '😡', category: '情绪', duration: 1000, ease: 'shake' },
+  { id: 'a29', name: '惊讶', icon: '😲', category: '情绪', duration: 800, ease: 'pop' },
+  { id: 'a30', name: '震惊', icon: '😱', category: '情绪', duration: 1000, ease: 'explode' },
+  { id: 'a31', name: '害怕', icon: '😨', category: '情绪', duration: 1000, ease: 'shake' },
+  { id: 'a32', name: '紧张', icon: '😬', category: '情绪', duration: 1000, ease: 'wobble' },
+  { id: 'a33', name: '思考', icon: '🤔', category: '情绪', duration: 1000, ease: 'smooth' },
+  { id: 'a34', name: '困惑', icon: '😕', category: '情绪', duration: 1000, ease: 'wobble' },
+  { id: 'a35', name: '得意', icon: '😎', category: '情绪', duration: 1000, ease: 'bounce' },
+  { id: 'a36', name: '骄傲', icon: '😏', category: '情绪', duration: 1000, ease: 'smooth' },
+  { id: 'a37', name: '无聊', icon: '😑', category: '情绪', duration: 1000, ease: 'droop' },
+  { id: 'a38', name: '困倦', icon: '😴', category: '情绪', duration: 1000, ease: 'smooth' },
+  { id: 'a39', name: '兴奋', icon: '🤩', category: '情绪', duration: 1000, ease: 'bounce' },
+  { id: 'a40', name: '期待', icon: '🥺', category: '情绪', duration: 1000, ease: 'pulse' },
+  { id: 'a41', name: '感动', icon: '🥹', category: '情绪', duration: 1000, ease: 'smooth' },
+  { id: 'a42', name: '安心', icon: '😌', category: '情绪', duration: 1000, ease: 'smooth' },
+  { id: 'a43', name: '焦虑', icon: '😰', category: '情绪', duration: 1000, ease: 'shake' },
+  { id: 'a44', name: '失望', icon: '😞', category: '情绪', duration: 1000, ease: 'droop' },
+  { id: 'a45', name: '满足', icon: '😌', category: '情绪', duration: 1000, ease: 'smooth' },
+  
+  // 特殊动作 (30个) - 蛋仔派对主题
+  { id: 'a46', name: '街舞', icon: '💃', category: '特殊', duration: 2000, ease: 'complex' },
+  { id: 'a47', name: '迪斯科', icon: '🕺', category: '特殊', duration: 2000, ease: 'complex' },
+  { id: 'a48', name: '旋转舞', icon: '👯', category: '特殊', duration: 2000, ease: 'spin' },
+  { id: 'a49', name: '欢呼', icon: '🎉', category: '特殊', duration: 1000, ease: 'bounce' },
+  { id: 'a50', name: '庆祝', icon: '🎊', category: '特殊', duration: 1500, ease: 'explode' },
+  { id: 'a51', name: '胜利', icon: '🏆', category: '特殊', duration: 1000, ease: 'bounce' },
+  { id: 'a52', name: '成功', icon: '✅', category: '特殊', duration: 1000, ease: 'pop' },
+  { id: 'a53', name: '失败', icon: '❌', category: '特殊', duration: 1000, ease: 'droop' },
+  { id: 'a54', name: '加油', icon: '💪', category: '特殊', duration: 1000, ease: 'pulse' },
+  { id: 'a55', name: '燃烧', icon: '🔥', category: '特殊', duration: 1000, ease: 'shake' },
+  { id: 'a56', name: '读书', icon: '📖', category: '特殊', duration: 1000, ease: 'smooth' },
+  { id: 'a57', name: '写作', icon: '✍️', category: '特殊', duration: 1000, ease: 'smooth' },
+  { id: 'a58', name: '深思', icon: '💭', category: '特殊', duration: 1500, ease: 'float' },
+  { id: 'a59', name: '发明', icon: '💡', category: '特殊', duration: 1000, ease: 'pop' },
+  { id: 'a60', name: '魔法', icon: '✨', category: '特殊', duration: 1500, ease: 'complex' },
+  { id: 'a61', name: '变身', icon: '🌟', category: '特殊', duration: 2000, ease: 'explode' },
+  { id: 'a62', name: '召唤', icon: '🔮', category: '特殊', duration: 1500, ease: 'pulse' },
+  { id: 'a63', name: '攻击', icon: '⚔️', category: '特殊', duration: 800, ease: 'sharp' },
+  { id: 'a64', name: '防御', icon: '🛡️', category: '特殊', duration: 800, ease: 'tense' },
+  { id: 'a65', name: '闪避', icon: '💨', category: '特殊', duration: 600, ease: 'fast' },
+  { id: 'a66', name: '冲刺', icon: '⚡', category: '特殊', duration: 500, ease: 'fast' },
+  { id: 'a67', name: '飞行', icon: '🦸', category: '特殊', duration: 2000, ease: 'float' },
+  { id: 'a68', name: '游泳', icon: '🏊', category: '特殊', duration: 2000, ease: 'wave' },
+  { id: 'a69', name: '攀爬', icon: '🧗', category: '特殊', duration: 1500, ease: 'smooth' },
+  { id: 'a70', name: '滑行', icon: '⛷️', category: '特殊', duration: 1500, ease: 'smooth' },
+  { id: 'a71', name: '翻滚', icon: '🤸', category: '特殊', duration: 1000, ease: 'spin' },
+  { id: 'a72', name: '空翻', icon: '🤸‍♂️', category: '特殊', duration: 1000, ease: 'spin' },
+  { id: 'a73', name: '踢腿', icon: '🦵', category: '特殊', duration: 600, ease: 'sharp' },
+  { id: 'a74', name: '出拳', icon: '👊', category: '特殊', duration: 500, ease: 'sharp' },
+  { id: 'a75', name: '格挡', icon: '🛡️', category: '特殊', duration: 800, ease: 'tense' },
+  
+  // 组合动作 (25个)
+  { id: 'a76', name: '打招呼', icon: '🙋‍♂️', category: '组合', duration: 1000, ease: 'wave' },
+  { id: 'a77', name: '问好', icon: '🤝', category: '组合', duration: 1000, ease: 'smooth' },
+  { id: 'a78', name: '拥抱', icon: '🤗', category: '组合', duration: 1000, ease: 'pulse' },
+  { id: 'a79', name: '亲吻', icon: '😘', category: '组合', duration: 800, ease: 'smooth' },
+  { id: 'a80', name: '安慰', icon: '🤲', category: '组合', duration: 1000, ease: 'smooth' },
+  { id: 'a81', name: '鼓励', icon: '👏', category: '组合', duration: 1000, ease: 'pulse' },
+  { id: 'a82', name: '感谢', icon: '🙏', category: '组合', duration: 1000, ease: 'smooth' },
+  { id: 'a83', name: '道歉', icon: '🙏', category: '组合', duration: 1000, ease: 'droop' },
+  { id: 'a84', name: '请求', icon: '🥺', category: '组合', duration: 1000, ease: 'pulse' },
+  { id: 'a85', name: '拒绝', icon: '🙅', category: '组合', duration: 800, ease: 'shake' },
+  { id: 'a86', name: '同意', icon: '🙆', category: '组合', duration: 800, ease: 'bounce' },
+  { id: 'a87', name: '决定', icon: '🤔', category: '组合', duration: 1500, ease: 'complex' },
+  { id: 'a88', name: '看表', icon: '⌚', category: '组合', duration: 800, ease: 'smooth' },
+  { id: 'a89', name: '看手机', icon: '📱', category: '组合', duration: 1000, ease: 'smooth' },
+  { id: 'a90', name: '看书', icon: '📚', category: '组合', duration: 1500, ease: 'smooth' },
+  { id: 'a91', name: '画画', icon: '🎨', category: '组合', duration: 1500, ease: 'smooth' },
+  { id: 'a92', name: '弹琴', icon: '🎹', category: '组合', duration: 2000, ease: 'wave' },
+  { id: 'a93', name: '唱歌', icon: '🎤', category: '组合', duration: 2000, ease: 'wave' },
+  { id: 'a94', name: '运动', icon: '🏃‍♂️', category: '组合', duration: 2000, ease: 'fast' },
+  { id: 'a95', name: '游戏', icon: '🎮', category: '组合', duration: 2000, ease: 'complex' },
+  { id: 'a96', name: '电影', icon: '🎬', category: '组合', duration: 2000, ease: 'smooth' },
+  { id: 'a97', name: '旅行', icon: '✈️', category: '组合', duration: 2000, ease: 'float' },
+  { id: 'a98', name: '野餐', icon: '🧺', category: '组合', duration: 2000, ease: 'smooth' },
+  { id: 'a99', name: '派对', icon: '🎉', category: '组合', duration: 2000, ease: 'complex' },
+  { id: 'a100', name: '休息', icon: '😴', category: '组合', duration: 2000, ease: 'smooth' }
+];
+
+// ==================== 蛋仔派对专属技能 ====================
+const SKILLS_DATA = [
+  // 粉蛋仔技能
+  { id: 'sk1', name: '粉色狂欢', icon: '💖', petType: 'pink', desc: '粉色能量，积分+10', effect: 'points', value: 10, cooldown: 30 },
+  { id: 'sk2', name: '爱心传递', icon: '💝', petType: 'pink', desc: '传递爱心，全队+5分', effect: 'team_points', value: 5, cooldown: 60 },
+  { id: 'sk3', name: '终极觉醒', icon: '🌟', petType: 'pink', desc: '粉色觉醒形态', effect: 'ultimate', value: 0, cooldown: 120 },
+  
+  // 蓝蛋仔技能
+  { id: 'sk4', name: '蓝色冒险', icon: '💙', petType: 'blue', desc: '蓝色冒险，积分+10', effect: 'points', value: 10, cooldown: 30 },
+  { id: 'sk5', name: '水波护盾', icon: '💧', petType: 'blue', desc: '保护队友，减半扣分', effect: 'shield', value: 0.5, cooldown: 60 },
+  { id: 'sk6', name: '海洋觉醒', icon: '🌊', petType: 'blue', desc: '蓝色觉醒形态', effect: 'ultimate', value: 0, cooldown: 120 },
+  
+  // 黄蛋仔技能
+  { id: 'sk7', name: '阳光闪耀', icon: '☀️', petType: 'yellow', desc: '阳光普照，积分+10', effect: 'points', value: 10, cooldown: 30 },
+  { id: 'sk8', name: '金色光辉', icon: '✨', petType: 'yellow', desc: '全队金币+20', effect: 'team_gold', value: 20, cooldown: 60 },
+  { id: 'sk9', name: '阳光觉醒', icon: '🌟', petType: 'yellow', desc: '黄色觉醒形态', effect: 'ultimate', value: 0, cooldown: 120 },
+  
+  // 绿蛋仔技能
+  { id: 'sk10', name: '绿色生机', icon: '🌿', petType: 'green', desc: '生机勃勃，积分+10', effect: 'points', value: 10, cooldown: 30 },
+  { id: 'sk11', name: '自然护盾', icon: '🌱', petType: 'green', desc: '自然之力，全队金币+30', effect: 'team_gold', value: 30, cooldown: 60 },
+  { id: 'sk12', name: '自然觉醒', icon: '🌳', petType: 'green', desc: '绿色觉醒形态', effect: 'ultimate', value: 0, cooldown: 120 },
+  
+  // 紫蛋仔技能
+  { id: 'sk13', name: '紫色幻境', icon: '🔮', petType: 'purple', desc: '幻境之力，积分+10', effect: 'points', value: 10, cooldown: 30 },
+  { id: 'sk14', name: '神秘护盾', icon: '🌌', petType: 'purple', desc: '神秘之力，全队金币+30', effect: 'team_gold', value: 30, cooldown: 60 },
+  { id: 'sk15', name: '神秘觉醒', icon: '🌟', petType: 'purple', desc: '紫色觉醒形态', effect: 'ultimate', value: 0, cooldown: 120 },
+  
+  // 橙蛋仔技能
+  { id: 'sk16', name: '橙色能量', icon: '🍊', petType: 'orange', desc: '能量爆发，积分+10', effect: 'points', value: 10, cooldown: 30 },
+  { id: 'sk17', name: '活力冲击', icon: '⚡', petType: 'orange', desc: '活力四射，全队+6分', effect: 'team_points', value: 6, cooldown: 60 },
+  { id: 'sk18', name: '活力觉醒', icon: '🌟', petType: 'orange', desc: '橙色觉醒形态', effect: 'ultimate', value: 0, cooldown: 120 },
+  
+  // 通用终极技能
+  { id: 'sk19', name: '蛋仔派对', icon: '🥚', petType: 'all', desc: '召集全队，全员+15分', effect: 'all_points', value: 15, cooldown: 180 },
+  { id: 'sk20', name: '终极觉醒', icon: '🌟', petType: 'all', desc: '全员觉醒形态', effect: 'all_ultimate', value: 0, cooldown: 300 }
+];
+
+// ==================== 60件蛋仔派对装备 ====================
+const EQUIPMENT_DATA = [
+  // 武器类 (15件)
+  { id: 'w1', name: '木质棒棒', icon: '棍', category: '武器', color: '#8B4513', bonus: 1, price: 10, slot: 'weapon', rarity: '普通' },
+  { id: 'w2', name: '铁质棒棒', icon: '⚔️', category: '武器', color: '#708090', bonus: 2, price: 30, slot: 'weapon', rarity: '普通' },
+  { id: 'w3', name: '银光棒棒', icon: '🗡️', category: '武器', color: '#C0C0C0', bonus: 3, price: 60, slot: 'weapon', rarity: '稀有' },
+  { id: 'w4', name: '金光棒棒', icon: '✨', category: '武器', color: '#FFD700', bonus: 5, price: 100, slot: 'weapon', rarity: '稀有' },
+  { id: 'w5', name: '钻石棒棒', icon: '💎', category: '武器', color: '#00CED1', bonus: 8, price: 200, slot: 'weapon', rarity: '史诗' },
+  { id: 'w6', name: '火焰棒棒', icon: '🔥', category: '武器', color: '#FF4500', bonus: 10, price: 300, slot: 'weapon', rarity: '史诗' },
+  { id: 'w7', name: '冰霜棒棒', icon: '❄️', category: '武器', color: '#00BFFF', bonus: 10, price: 300, slot: 'weapon', rarity: '史诗' },
+  { id: 'w8', name: '雷电棒棒', icon: '⚡', category: '武器', color: '#FFD700', bonus: 12, price: 400, slot: 'weapon', rarity: '史诗' },
+  { id: 'w9', name: '圣光棒棒', icon: '🌟', category: '武器', color: '#FFFACD', bonus: 15, price: 500, slot: 'weapon', rarity: '传说' },
+  { id: 'w10', name: '暗影棒棒', icon: '🌑', category: '武器', color: '#2C3E50', bonus: 15, price: 500, slot: 'weapon', rarity: '传说' },
+  { id: 'w11', name: '龙牙棒棒', icon: '🐉', category: '武器', color: '#8B0000', bonus: 18, price: 700, slot: 'weapon', rarity: '传说' },
+  { id: 'w12', name: '星辰棒棒', icon: '⭐', category: '武器', color: '#9B59B6', bonus: 20, price: 900, slot: 'weapon', rarity: '传说' },
+  { id: 'w13', name: '彩虹棒棒', icon: '🌈', category: '武器', color: '#FF69B4', bonus: 25, price: 1200, slot: 'weapon', rarity: '神话' },
+  { id: 'w14', name: '传说棒棒', icon: '👑', category: '武器', color: '#FFD700', bonus: 30, price: 1500, slot: 'weapon', rarity: '神话' },
+  { id: 'w15', name: '神话棒棒', icon: '🌟', category: '武器', color: '#FFD700', bonus: 40, price: 2000, slot: 'weapon', rarity: '神话' },
+  
+  // 防具类 (15件)
+  { id: 'd1', name: '布制外套', icon: '👕', category: '防具', color: '#DEB887', bonus: 1, price: 10, slot: 'armor', rarity: '普通' },
+  { id: 'd2', name: '皮质护甲', icon: '🧥', category: '防具', color: '#8B4513', bonus: 2, price: 30, slot: 'armor', rarity: '普通' },
+  { id: 'd3', name: '锁子甲', icon: '🛡️', category: '防具', color: '#708090', bonus: 3, price: 60, slot: 'armor', rarity: '稀有' },
+  { id: 'd4', name: '铁制护甲', icon: '⚔️', category: '防具', color: '#2C3E50', bonus: 5, price: 100, slot: 'armor', rarity: '稀有' },
+  { id: 'd5', name: '银光护甲', icon: '🛡️', category: '防具', color: '#C0C0C0', bonus: 7, price: 150, slot: 'armor', rarity: '稀有' },
+  { id: 'd6', name: '金光护甲', icon: '✨', category: '防具', color: '#FFD700', bonus: 10, price: 250, slot: 'armor', rarity: '史诗' },
+  { id: 'd7', name: '钻石护甲', icon: '💎', category: '防具', color: '#00CED1', bonus: 13, price: 400, slot: 'armor', rarity: '史诗' },
+  { id: 'd8', name: '火焰护甲', icon: '🔥', category: '防具', color: '#FF4500', bonus: 15, price: 500, slot: 'armor', rarity: '史诗' },
+  { id: 'd9', name: '冰霜护甲', icon: '❄️', category: '防具', color: '#00BFFF', bonus: 15, price: 500, slot: 'armor', rarity: '史诗' },
+  { id: 'd10', name: '雷电护甲', icon: '⚡', category: '防具', color: '#FFD700', bonus: 18, price: 700, slot: 'armor', rarity: '传说' },
+  { id: 'd11', name: '圣光护甲', icon: '🌟', category: '防具', color: '#FFFACD', bonus: 20, price: 800, slot: 'armor', rarity: '传说' },
+  { id: 'd12', name: '暗影护甲', icon: '🌑', category: '防具', color: '#2C3E50', bonus: 20, price: 800, slot: 'armor', rarity: '传说' },
+  { id: 'd13', name: '龙鳞护甲', icon: '🐉', category: '防具', color: '#8B0000', bonus: 25, price: 1000, slot: 'armor', rarity: '传说' },
+  { id: 'd14', name: '传说护甲', icon: '👑', category: '防具', color: '#FFD700', bonus: 30, price: 1500, slot: 'armor', rarity: '神话' },
+  { id: 'd15', name: '神话护甲', icon: '🌟', category: '防具', color: '#FFD700', bonus: 40, price: 2000, slot: 'armor', rarity: '神话' },
+  
+  // 头盔类 (10件)
+  { id: 'h1', name: '布帽', icon: '🎩', category: '头盔', color: '#DEB887', bonus: 1, price: 10, slot: 'helmet', rarity: '普通' },
+  { id: 'h2', name: '铁盔', icon: '⛑️', category: '头盔', color: '#708090', bonus: 2, price: 40, slot: 'helmet', rarity: '普通' },
+  { id: 'h3', name: '银光头盔', icon: '🪖', category: '头盔', color: '#C0C0C0', bonus: 3, price: 80, slot: 'helmet', rarity: '稀有' },
+  { id: 'h4', name: '金光头盔', icon: '✨', category: '头盔', color: '#FFD700', bonus: 5, price: 150, slot: 'helmet', rarity: '稀有' },
+  { id: 'h5', name: '钻石头盔', icon: '💎', category: '头盔', color: '#00CED1', bonus: 7, price: 300, slot: 'helmet', rarity: '史诗' },
+  { id: 'h6', name: '火焰头盔', icon: '🔥', category: '头盔', color: '#FF4500', bonus: 10, price: 500, slot: 'helmet', rarity: '史诗' },
+  { id: 'h7', name: '冰霜头盔', icon: '❄️', category: '头盔', color: '#00BFFF', bonus: 10, price: 500, slot: 'helmet', rarity: '史诗' },
+  { id: 'h8', name: '龙角头盔', icon: '🐉', category: '头盔', color: '#8B0000', bonus: 15, price: 800, slot: 'helmet', rarity: '传说' },
+  { id: 'h9', name: '传说头盔', icon: '👑', category: '头盔', color: '#FFD700', bonus: 20, price: 1200, slot: 'helmet', rarity: '神话' },
+  { id: 'h10', name: '神话头盔', icon: '🌟', category: '头盔', color: '#FFD700', bonus: 25, price: 1600, slot: 'helmet', rarity: '神话' },
+  
+  // 饰品类 (10件)
+  { id: 'acc1', name: '力量戒指', icon: '💍', category: '饰品', color: '#E74C3C', bonus: 2, price: 50, slot: 'accessory', rarity: '稀有' },
+  { id: 'acc2', name: '敏捷戒指', icon: '💍', category: '饰品', color: '#3498DB', bonus: 2, price: 50, slot: 'accessory', rarity: '稀有' },
+  { id: 'acc3', name: '智慧项链', icon: '📿', category: '饰品', color: '#9B59B6', bonus: 3, price: 80, slot: 'accessory', rarity: '稀有' },
+  { id: 'acc4', name: '生命项链', icon: '💚', category: '饰品', color: '#2ECC71', bonus: 3, price: 80, slot: 'accessory', rarity: '稀有' },
+  { id: 'acc5', name: '幸运徽章', icon: '🍀', category: '饰品', color: '#2ECC71', bonus: 5, price: 150, slot: 'accessory', rarity: '史诗' },
+  { id: 'acc6', name: '勇气徽章', icon: '🦁', category: '饰品', color: '#F39C12', bonus: 5, price: 150, slot: 'accessory', rarity: '史诗' },
+  { id: 'acc7', name: '守护护符', icon: '🛡️', category: '饰品', color: '#3498DB', bonus: 8, price: 300, slot: 'accessory', rarity: '史诗' },
+  { id: 'acc8', name: '龙心宝石', icon: '❤️', category: '饰品', color: '#E74C3C', bonus: 10, price: 500, slot: 'accessory', rarity: '传说' },
+  { id: 'acc9', name: '传说宝石', icon: '💎', category: '饰品', color: '#FFD700', bonus: 15, price: 800, slot: 'accessory', rarity: '神话' },
+  { id: 'acc10', name: '神话宝石', icon: '🌟', category: '饰品', color: '#FFD700', bonus: 20, price: 1200, slot: 'accessory', rarity: '神话' },
+  
+  // 特殊装备 (10件) - 蛋仔派对主题
+  { id: 's1', name: '粉色翅膀', icon: '🪽', category: '特殊', color: '#ff9a9e', bonus: 5, price: 200, slot: 'special', rarity: '史诗' },
+  { id: 's2', name: '蓝色翅膀', icon: '🦋', category: '特殊', color: '#a1c4fd', bonus: 5, price: 200, slot: 'special', rarity: '史诗' },
+  { id: 's3', name: '彩虹翅膀', icon: '🌈', category: '特殊', color: '#ff69b4', bonus: 8, price: 400, slot: 'special', rarity: '传说' },
+  { id: 's4', name: '火焰光环', icon: '🔥', category: '特殊', color: '#FF4500', bonus: 10, price: 500, slot: 'special', rarity: '传说' },
+  { id: 's5', name: '冰霜光环', icon: '❄️', category: '特殊', color: '#00BFFF', bonus: 10, price: 500, slot: 'special', rarity: '传说' },
+  { id: 's6', name: '雷电光环', icon: '⚡', category: '特殊', color: '#FFD700', bonus: 12, price: 600, slot: 'special', rarity: '传说' },
+  { id: 's7', name: '圣光光环', icon: '✨', category: '特殊', color: '#FFFACD', bonus: 15, price: 800, slot: 'special', rarity: '神话' },
+  { id: 's8', name: '暗影光环', icon: '🌑', category: '特殊', color: '#2C3E50', bonus: 15, price: 800, slot: 'special', rarity: '神话' },
+  { id: 's9', name: '龙魂印记', icon: '🐉', category: '特殊', color: '#8B0000', bonus: 20, price: 1000, slot: 'special', rarity: '神话' },
+  { id: 's10', name: '神话光环', icon: '🌟', category: '特殊', color: '#FFD700', bonus: 30, price: 1500, slot: 'special', rarity: '神话' }
+];
+
+// ==================== 应用程序状态 ====================
+let appState = {
+  className: "蛋仔派对·欢乐乐园",
+  students: [],
+  selectedId: null,
+  groups: { red:[], blue:[], yellow:[], green:[], purple:[] },
+  gold: 100,
+  energy: 100,
+  config: {
+    labor: { label: "爱劳动", score: 5 },
+    study: { label: "勤学习", score: 5 },
+    eat: { label: "光盘", score: 5 },
+    sleep: { label: "午睡", score: 5 },
+    listen: { label: "走神", score: -5 },
+    talk: { label: "说话", score: -5 },
+    manner: { label: "礼貌", score: -5 },
+    clean: { label: "卫生", score: -5 }
+  },
+  unlockedEffects: ['e1', 'e2', 'e3', 'e4', 'e5'],
+  unlockedActions: ['a1', 'a2', 'a3', 'a4', 'a5'],
+  unlockedEquipment: [],
+  unlockedSkills: ['sk1', 'sk4', 'sk7', 'sk10', 'sk13', 'sk16'],
+  equippedEffects: {},
+  equippedActions: {},
+  equippedGear: {},
+  skillCooldowns: {},
+  ultimateForms: {} // 终极形态状态
+};
+
+// ==================== 初始化 ====================
+window.onload = function() {
+  loadData();
+  applyConfig();
+  document.getElementById('classNameInput').value = appState.className;
+  updateStatusDisplay();
+  renderGrid();
+  drawCaptain();
+  
+  window.addEventListener('resize', () => {
+    renderGrid();
+    drawCaptain();
+  });
+
+  document.addEventListener('click', e => {
+    if(!e.target.closest('.s-val')) document.getElementById('customInput').style.display = 'none';
+  });
+  
+  // 能量恢复
+  setInterval(() => {
+    if(appState.energy < 100) {
+      appState.energy = Math.min(100, appState.energy + 1);
+      updateStatusDisplay();
+    }
+  }, 3000);
+};
+
+function loadData() {
+  const d = localStorage.getItem('egg_party_v1');
+  if(d) {
+    const p = JSON.parse(d);
+    appState = { ...appState, ...p };
+  } else {
+    appState.students = ["蛋蛋","小圆","胖胖","圆圆","萌萌","可可"].map((n,i)=>createStudent(n,i));
+    saveData();
+  }
+}
+
+function saveData() {
+  localStorage.setItem('egg_party_v1', JSON.stringify(appState));
+}
+
+function createStudent(name, idx) {
+  return {
+    id: 's_'+Date.now()+'_'+idx,
+    name: name,
+    petIdx: Math.floor(Math.random() * PET_TYPES.length),
+    level: 1, xp: 0, maxXp: 100, points: 0,
+    group: null, hasItem: false,
+    isUltimate: false // 是否终极形态
+  };
+}
+
+function updateStatusDisplay() {
+  document.getElementById('goldDisplay').innerText = appState.gold;
+  document.getElementById('energyDisplay').innerText = appState.energy;
+  const total = appState.students.reduce((sum, s) => sum + s.points, 0);
+  document.getElementById('totalPoints').innerText = total;
+}
+
+// ==================== 蛋仔派对主题绘图引擎 ====================
+
+class EggPartyParticleSystem {
+  constructor(ctx, type, color, w, h, intensity = 1) {
+    this.ctx = ctx;
+    this.type = type;
+    this.color = color;
+    this.w = w;
+    this.h = h;
+    this.intensity = intensity;
+    this.particles = [];
+    this.init();
+  }
+  
+  init() {
+    const count = Math.floor((20 + Math.random() * 15) * this.intensity);
+    for(let i = 0; i < count; i++) {
+      this.particles.push(this.createParticle());
+    }
+  }
+  
+  createParticle() {
+    return {
+      x: Math.random() * this.w,
+      y: Math.random() * this.h,
+      vx: (Math.random() - 0.5) * 3 * this.intensity,
+      vy: -Math.random() * 3 * this.intensity - 1,
+      size: Math.random() * 5 + 3,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.015,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.1
+    };
+  }
+  
+  update() {
+    this.particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy -= 0.02; // 重力
+      p.life -= p.decay;
+      p.rotation += p.rotSpeed;
+      if(p.life <= 0) Object.assign(p, this.createParticle());
+    });
+  }
+  
+  draw() {
+    const icons = {
+      'balls': '🎈', 'hearts': '💕', 'bubbles': '🫧', 'snow': '❄️',
+      'sparks': '✨', 'flowers': '🌸', 'notes': '🎵', 'coins': '💰',
+      'diamonds': '💎', 'candy': '🍬', 'lightning': '⚡',
+      'flame': '🔥', 'water': '💧', 'confetti': '🎊', 'rainbow_bubbles': '🌈'
+    };
+    
+    this.particles.forEach(p => {
+      this.ctx.save();
+      this.ctx.globalAlpha = p.life * 0.9;
+      this.ctx.translate(p.x, p.y);
+      this.ctx.rotate(p.rotation);
+      this.ctx.font = `${p.size * 4}px Arial`;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      
+      // 发光效果
+      this.ctx.shadowColor = this.color;
+      this.ctx.shadowBlur = 15 * this.intensity;
+      this.ctx.fillText(icons[this.type] || '🥚', 0, 0);
+      
+      this.ctx.restore();
+    });
+  }
+}
+
+class EggPartyEffectRenderer {
+  constructor(ctx, effectData, w, h) {
+    this.ctx = ctx;
+    this.effect = effectData;
+    this.w = w;
+    this.h = h;
+    this.frame = 0;
+    this.particles = null;
+    
+    if(effectData.particles) {
+      this.particles = new EggPartyParticleSystem(ctx, effectData.type, effectData.color, w, h, effectData.intensity);
+    }
+  }
+  
+  render() {
+    this.frame++;
+    const ctx = this.ctx;
+    const cx = this.w / 2;
+    const cy = this.h / 2;
+    
+    if(this.particles) {
+      this.particles.update();
+      this.particles.draw();
+    }
+    
+    if(this.effect.ring) {
+      ctx.save();
+      const ringType = this.effect.type;
+      const intensity = this.effect.intensity || 1;
+      
+      // 蛋仔派对主题光环效果
+      if(ringType.includes('rainbow')) {
+        for(let i = 0; i < 8; i++) {
+          ctx.beginPath();
+          ctx.strokeStyle = `hsla(${(this.frame * 3 + i * 45) % 360}, 80%, 60%, ${0.6 - i * 0.05})`;
+          ctx.lineWidth = 4 - i * 0.3;
+          ctx.arc(cx, cy, 50 + i * 6 + Math.sin(this.frame * 0.08) * 3, 0, Math.PI * 2);
+          ctx.stroke();
         }
-
-        // 执行行动
-        function performAction(type) {
-            let pointsToAdd = 0;
-            let actionName = '';
-            
-            switch(type) {
-                case 'listen':
-                    pointsToAdd = Math.floor(Math.random() * 10) + 5; // 5-15积分
-                    actionName = '听课';
-                    gameState.listenPoints += pointsToAdd;
-                    break;
-                case 'clean':
-                    pointsToAdd = Math.floor(Math.random() * 10) + 10; // 10-20积分
-                    actionName = '清洁';
-                    gameState.cleanPoints += pointsToAdd;
-                    break;
-                case 'help':
-                    pointsToAdd = Math.floor(Math.random() * 15) + 10; // 10-25积分
-                    actionName = '助人';
-                    gameState.helpPoints += pointsToAdd;
-                    break;
-            }
-            
-            gameState.totalPoints += pointsToAdd;
-            updateLevel();
-            updateDisplay();
-            addLogEntry(`✅ ${actionName}行动成功！获得 ${pointsToAdd} 积分`);
-            
-            // 随机AI反应
-            if (Math.random() > 0.7) {
-                showRandomAIMessage();
-            }
+      } else if(ringType.includes('heart') || ringType.includes('pink')) {
+        // 爱心/粉色光环
+        for(let i = 0; i < 12; i++) {
+          const angle = (this.frame * 0.03 + i * Math.PI / 6);
+          const r = 55 + Math.sin(this.frame * 0.15 + i) * 8;
+          const x = cx + Math.cos(angle) * r;
+          const y = cy + Math.sin(angle) * r;
+          
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${330 + Math.sin(this.frame * 0.2 + i) * 20}, 100%, ${60 + i * 2}%, ${0.8 - i * 0.05})`;
+          ctx.font = '20px Arial';
+          ctx.fillText('💕', x, y);
         }
-
-        // 执行特殊行动
-        function performSpecialAction() {
-            const specialPoints = Math.floor(Math.random() * 20) + 20; // 20-40积分
-            gameState.totalPoints += specialPoints;
-            updateLevel();
-            updateDisplay();
-            addLogEntry(`⭐ 完成特殊任务！获得 ${specialPoints} 积分`);
-            showAIMessage('我完成了特殊任务，感觉自己变得更强大了！');
+        
+        // 内部光晕
+        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, 60);
+        gradient.addColorStop(0, 'rgba(255, 154, 158, 0.3)');
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, this.w, this.h);
+      } else if(ringType.includes('blue') || ringType.includes('water')) {
+        // 蓝色/水波光环
+        for(let i = 0; i < 16; i++) {
+          const angle = i * Math.PI / 8 + this.frame * 0.02;
+          const r = 55 + Math.sin(this.frame * 0.1 + i * 0.5) * 5;
+          
+          ctx.beginPath();
+          ctx.strokeStyle = `hsla(200, 80%, ${60 + i}%, ${0.7 - i * 0.03})`;
+          ctx.lineWidth = 3;
+          ctx.arc(cx, cy, r, angle, angle + Math.PI / 10);
+          ctx.stroke();
         }
-
-        // 更新等级
-        function updateLevel() {
-            const newLevel = Math.min(Math.floor(gameState.totalPoints / 100) + 1, 10);
-            if (newLevel !== gameState.level) {
-                gameState.level = newLevel;
-                updateCharacterStage();
-                addLogEntry(`🎉 恭喜升级到第 ${newLevel} 级！`);
-            }
+        
+        // 波纹效果
+        for(let i = 0; i < 8; i++) {
+          const angle = i * Math.PI / 4 + this.frame * 0.01;
+          const x = cx + Math.cos(angle) * 50;
+          const y = cy + Math.sin(angle) * 50;
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(angle);
+          ctx.fillStyle = 'rgba(255,255,255,0.6)';
+          ctx.beginPath();
+          ctx.moveTo(0, -8);
+          ctx.lineTo(3, 0);
+          ctx.lineTo(0, 8);
+          ctx.lineTo(-3, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
         }
-
-        // 更新角色阶段
-        function updateCharacterStage() {
-            const stage = stages.find(s => gameState.level >= s.minLevel && gameState.level <= s.maxLevel);
-            if (stage && stage.name !== gameState.currentStage) {
-                gameState.currentStage = stage.name;
-                gameState.characterEmoji = stage.emoji;
-                showAIMessage(stage.aiMessage);
-                updateDisplay();
-            }
+      } else if(ringType.includes('yellow') || ringType.includes('sun')) {
+        // 黄色/阳光光环
+        ctx.strokeStyle = '#ffd166';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#ffd166';
+        ctx.shadowBlur = 20;
+        
+        for(let i = 0; i < 6; i++) {
+          const startAngle = this.frame * 0.05 + i * Math.PI / 3;
+          const endAngle = startAngle + Math.PI / 6;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 55 + Math.random() * 5, startAngle, endAngle);
+          ctx.stroke();
         }
-
-        // 购买商品
-        function buyItem(itemId) {
-            const item = shopItems.find(i => i.id === itemId);
-            if (!item) return;
-            
-            if (gameState.totalPoints >= item.price) {
-                gameState.totalPoints -= item.price;
-                gameState.equippedItems.push(item.id);
-                updateLevel(); // 重新计算等级
-                updateDisplay();
-                addLogEntry(`🛍️ 成功购买 ${item.name}！花费 ${item.price} 积分`);
-                showAIMessage(`我用积分换到了${item.name}，真是太棒了！`);
-            } else {
-                addLogEntry(`❌ 积分不足，无法购买 ${item.name}（需要 ${item.price} 积分）`);
-                showAIMessage(`我还差一些积分才能买到${item.name}，加油努力！`);
-            }
+        
+        // 阳光
+        if(this.frame % 10 < 3) {
+          ctx.strokeStyle = '#FFF';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(cx - 50, cy - 30);
+          ctx.lineTo(cx - 30, cy);
+          ctx.lineTo(cx - 50, cy + 10);
+          ctx.lineTo(cx - 20, cy + 30);
+          ctx.stroke();
         }
-
-        // 更新显示
-        function updateDisplay() {
-            document.getElementById('total-points').textContent = gameState.totalPoints;
-            document.getElementById('listen-points').textContent = gameState.listenPoints;
-            document.getElementById('clean-points').textContent = gameState.cleanPoints;
-            document.getElementById('help-points').textContent = gameState.helpPoints;
-            document.getElementById('level').textContent = gameState.level;
-            document.getElementById('current-stage').textContent = `${gameState.characterEmoji} ${gameState.currentStage}阶段`;
-            document.getElementById('equipped-count').textContent = gameState.equippedItems.length;
-            
-            // 更新角色显示
-            document.querySelector('.character-display').textContent = gameState.characterEmoji;
-            
-            // 更新进度条
-            const totalProgressPercent = Math.min((gameState.totalPoints / 1000) * 100, 100);
-            document.getElementById('total-progress').style.width = totalProgressPercent + '%';
-            document.getElementById('total-progress').textContent = Math.round(totalProgressPercent) + '%';
-            document.getElementById('total-progress-percent').textContent = Math.round(totalProgressPercent);
-            
-            // 更新各类型进度
-            document.getElementById('listen-progress').style.width = Math.min((gameState.listenPoints / 300) * 100, 100) + '%';
-            document.getElementById('listen-progress').textContent = Math.round(Math.min((gameState.listenPoints / 300) * 100, 100)) + '%';
-            
-            document.getElementById('clean-progress').style.width = Math.min((gameState.cleanPoints / 300) * 100, 100) + '%';
-            document.getElementById('clean-progress').textContent = Math.round(Math.min((gameState.cleanPoints / 300) * 100, 100)) + '%';
-            
-            document.getElementById('help-progress').style.width = Math.min((gameState.helpPoints / 400) * 100, 100) + '%';
-            document.getElementById('help-progress').textContent = Math.round(Math.min((gameState.helpPoints / 400) * 100, 100)) + '%';
-            
-            // 更新商城显示
-            updateShopDisplay();
+      } else if(ringType.includes('green') || ringType.includes('star')) {
+        // 绿色/星星光环
+        const gradient = ctx.createRadialGradient(cx, cy, 40, cx, cy, 80);
+        gradient.addColorStop(0, 'transparent');
+        gradient.addColorStop(0.5, `${this.effect.color}40`);
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, this.w, this.h);
+        
+        // 光芒
+        for(let i = 0; i < 12; i++) {
+          const angle = i * Math.PI / 6 + this.frame * 0.02;
+          ctx.beginPath();
+          ctx.strokeStyle = this.effect.color;
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = 0.5 + Math.sin(this.frame * 0.1 + i) * 0.3;
+          ctx.moveTo(cx + Math.cos(angle) * 45, cy + Math.sin(angle) * 45);
+          ctx.lineTo(cx + Math.cos(angle) * 70, cy + Math.sin(angle) * 70);
+          ctx.stroke();
         }
+        ctx.globalAlpha = 1;
+      } else {
+        // 默认光环
+        ctx.strokeStyle = this.effect.color;
+        ctx.lineWidth = 3;
+        ctx.globalAlpha = 0.5 + Math.sin(this.frame * 0.1) * 0.3;
+        ctx.shadowColor = this.effect.color;
+        ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 55 + Math.sin(this.frame * 0.1) * 5, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, cy, 62 + Math.cos(this.frame * 0.08) * 5, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      
+      ctx.restore();
+    }
+    
+    if(this.effect.animation) {
+      ctx.save();
+      const animType = this.effect.animation;
+      
+      switch(animType) {
+        case 'blink':
+          ctx.globalAlpha = 0.4 + Math.sin(this.frame * 0.2) * 0.6;
+          break;
+        case 'pulse':
+          const scale = 1 + Math.sin(this.frame * 0.08) * 0.15;
+          ctx.translate(cx, cy);
+          ctx.scale(scale, scale);
+          ctx.translate(-cx, -cy);
+          break;
+        case 'spin':
+          ctx.translate(cx, cy);
+          ctx.rotate(this.frame * 0.03);
+          ctx.translate(-cx, -cy);
+          break;
+        case 'wave':
+          ctx.translate(0, Math.sin(this.frame * 0.08) * 8);
+          break;
+        case 'shake':
+          ctx.translate(Math.sin(this.frame * 0.4) * 4 * intensity, Math.cos(this.frame * 0.4) * 2 * intensity);
+          break;
+        case 'explode':
+          const pulse = Math.sin(this.frame * 0.15) * 0.2;
+          ctx.translate(cx, cy);
+          ctx.scale(1 + pulse, 1 + pulse);
+          ctx.translate(-cx, -cy);
+          break;
+        case 'rainbow_flash':
+          ctx.fillStyle = `hsla(${(this.frame * 2) % 360}, 70%, 50%, 0.15)`;
+          ctx.fillRect(0, 0, this.w, this.h);
+          break;
+        case 'ripple':
+          ctx.strokeStyle = this.effect.color;
+          ctx.lineWidth = 2;
+          for(let i = 0; i < 3; i++) {
+            const r = ((this.frame * 2 + i * 30) % 80);
+            ctx.globalAlpha = 1 - r / 80;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r + 30, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          break;
+      }
+      ctx.restore();
+    }
+  }
+}
 
-        // 更新商城显示
-        function updateShopDisplay() {
-            const shopContainer = document.getElementById('shop-items');
-            shopContainer.innerHTML = '';
-            
-            shopItems.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'shop-item';
-                if (gameState.equippedItems.includes(item.id)) {
-                    itemElement.classList.add('equipped');
-                }
-                
-                itemElement.innerHTML = `
-                    <div class="shop-icon">${item.icon}</div>
-                    <div class="shop-name">${item.name}</div>
-                    <div class="shop-price">${item.price} 积分</div>
-                    <div style="font-size: 0.8em; color: #666;">${item.effect}</div>
-                `;
-                
-                itemElement.onclick = () => buyItem(item.id);
-                shopContainer.appendChild(itemElement);
-            });
+class EggPartyActionRenderer {
+  constructor(actionData) {
+    this.action = actionData;
+    this.frame = 0;
+  }
+  
+  getTransform() {
+    this.frame++;
+    const anim = this.action.id;
+    let offsetY = 0, rotation = 0, scale = 1, shakeX = 0;
+    
+    // 基础动作
+    if(anim === 'a4') offsetY = -Math.abs(Math.sin(this.frame * 0.12)) * 25;
+    else if(anim === 'a3') { offsetY = Math.sin(this.frame * 0.25) * 4; shakeX = Math.sin(this.frame * 0.5) * 2; }
+    else if(anim === 'a13' || anim === 'a76') rotation = Math.sin(this.frame * 0.15) * 0.4;
+    else if(anim === 'a12') rotation = Math.sin(this.frame * 0.18) * 0.25;
+    else if(anim === 'a11') offsetY = Math.sin(this.frame * 0.2) * 3;
+    else if(anim === 'a15') scale = 1 + Math.abs(Math.sin(this.frame * 0.3)) * 0.08;
+    
+    // 情绪表情
+    else if(anim === 'a22') { scale = 1 + Math.sin(this.frame * 0.25) * 0.08; offsetY = Math.sin(this.frame * 0.2) * 3; }
+    else if(anim === 'a26') { offsetY = Math.sin(this.frame * 0.15) * 3; shakeX = Math.sin(this.frame * 0.3) * 2; }
+    else if(anim === 'a28') { scale = 1 + Math.sin(this.frame * 0.35) * 0.1; rotation = Math.sin(this.frame * 0.2) * 0.1; }
+    else if(anim === 'a29' || anim === 'a30') scale = 1 + Math.sin(this.frame * 0.2) * 0.12;
+    else if(anim === 'a39') { scale = 1 + Math.sin(this.frame * 0.3) * 0.1; offsetY = -Math.abs(Math.sin(this.frame * 0.15)) * 10; }
+    
+    // 特殊动作
+    else if(anim === 'a46' || anim === 'a47') { rotation = Math.sin(this.frame * 0.12) * 0.35; offsetY = Math.sin(this.frame * 0.25) * 8; }
+    else if(anim === 'a49' || anim === 'a50') { offsetY = -Math.abs(Math.sin(this.frame * 0.12)) * 20; scale = 1 + Math.sin(this.frame * 0.2) * 0.15; }
+    else if(anim === 'a51' || anim === 'a52') { offsetY = -Math.abs(Math.sin(this.frame * 0.15)) * 15; scale = 1 + Math.abs(Math.sin(this.frame * 0.2)) * 0.12; }
+    else if(anim === 'a60' || anim === 'a61') { scale = 1 + Math.sin(this.frame * 0.15) * 0.2; rotation = Math.sin(this.frame * 0.1) * 0.3; }
+    else if(anim === 'a67') offsetY = -15 - Math.sin(this.frame * 0.08) * 8;
+    else if(anim === 'a68') { offsetY = Math.sin(this.frame * 0.15) * 10; rotation = Math.sin(this.frame * 0.12) * 0.25; }
+    else if(anim === 'a71' || anim === 'a72') rotation = this.frame * 0.15;
+    else if(anim === 'a63' || anim === 'a74') { shakeX = Math.sin(this.frame * 0.5) * 8; scale = 1 + Math.abs(Math.sin(this.frame * 0.3)) * 0.1; }
+    
+    return { offsetY, rotation, scale, shakeX };
+  }
+}
+
+class EggPartyEquipmentRenderer {
+  constructor(ctx, equipment, frame) {
+    this.ctx = ctx;
+    this.equipment = equipment;
+    this.frame = frame;
+  }
+  
+  render() {
+    const ctx = this.ctx;
+    const equip = this.equipment;
+    if(!equip) return;
+    
+    ctx.save();
+    const slot = equip.slot;
+    const color = equip.color;
+    
+    // 发光效果
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 15;
+    
+    if(slot === 'weapon') {
+      ctx.fillStyle = color;
+      ctx.font = '24px Arial';
+      ctx.fillText(equip.icon, 55, 15);
+    } else if(slot === 'armor') {
+      ctx.globalAlpha = 0.4;
+      ctx.fillStyle = color;
+      ctx.fillRect(-20, -5, 80, 55);
+      ctx.globalAlpha = 1;
+      // 护甲纹理
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      for(let i = 0; i < 4; i++) {
+        ctx.beginPath();
+        ctx.moveTo(-15 + i * 18, 0);
+        ctx.lineTo(-15 + i * 18, 45);
+        ctx.stroke();
+      }
+    } else if(slot === 'helmet') {
+      ctx.font = '22px Arial';
+      ctx.fillText(equip.icon, 10, -40);
+    } else if(slot === 'accessory') {
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.6 + Math.sin(this.frame * 0.1) * 0.4;
+      ctx.beginPath();
+      ctx.arc(55, 5, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(55, -5, 6, 0, Math.PI * 2);
+      ctx.fill();
+    } else if(slot === 'special') {
+      // 翅膀动画
+      if(equip.icon.includes('🪽') || equip.icon.includes('🦋') || equip.icon.includes('🌈')) {
+        const wingFlap = Math.sin(this.frame * 0.1) * 0.3;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.8;
+        
+        // 左翅膀
+        ctx.save();
+        ctx.translate(-25, 10);
+        ctx.rotate(-0.5 + wingFlap);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 30, 18, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        
+        // 右翅膀
+        ctx.save();
+        ctx.translate(65, 10);
+        ctx.rotate(0.5 - wingFlap);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 30, 18, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      } else {
+        // 光环效果
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 4;
+        ctx.globalAlpha = 0.6 + Math.sin(this.frame * 0.1) * 0.3;
+        ctx.beginPath();
+        ctx.ellipse(20, -55, 35, 12, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // 光芒
+        ctx.globalAlpha = 0.4;
+        for(let i = 0; i < 8; i++) {
+          const angle = i * Math.PI / 4 + this.frame * 0.02;
+          ctx.beginPath();
+          ctx.moveTo(20 + Math.cos(angle) * 35, -55 + Math.sin(angle) * 12);
+          ctx.lineTo(20 + Math.cos(angle) * 50, -55 + Math.sin(angle) * 18);
+          ctx.stroke();
         }
+      }
+    }
+    
+    ctx.restore();
+  }
+}
 
-        // 渲染商城商品
-        function renderShopItems() {
-            updateShopDisplay();
+// ==================== 蛋仔派对主题宠物绘图函数 ====================
+function drawPet(container, student, isCaptain) {
+  container.innerHTML = '';
+  const canvas = document.createElement('canvas');
+  canvas.width = container.clientWidth || 120;
+  canvas.height = container.clientHeight || 100;
+  container.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  const cx = w/2;
+  const cy = h/2 + 12;
+
+  const petData = PET_TYPES[student.petIdx];
+  const color = isCaptain ? '#ef476f' : petData.color;
+  const lvl = student.level;
+  const sub = isCaptain ? 'captain' : petData.sub;
+  const isUltimate = student.isUltimate || appState.ultimateForms[student.id];
+
+  // 获取效果
+  const effectId = appState.equippedEffects[student.id];
+  const actionId = appState.equippedActions[student.id] || 'a1';
+  const gear = appState.equippedGear[student.id] || {};
+  
+  const effect = effectId ? EFFECTS_DATA.find(e => e.id === effectId) : null;
+  const action = ACTIONS_DATA.find(a => a.id === actionId) || ACTIONS_DATA[0];
+  
+  let effectRenderer = effect ? new EggPartyEffectRenderer(ctx, effect, w, h) : null;
+  let actionRenderer = new EggPartyActionRenderer(action);
+  
+  let frame = 0;
+  function animate() {
+    frame++;
+    ctx.clearRect(0, 0, w, h);
+    
+    // 渲染特效背景
+    if(effectRenderer) effectRenderer.render();
+    
+    const actionTransform = actionRenderer.getTransform();
+    const bounce = Math.sin(frame * 0.08) * 3 + actionTransform.offsetY;
+    const baseShake = lvl > 6 ? Math.sin(frame * 0.15) * 1.5 : 0;
+
+    ctx.save();
+    ctx.translate(cx + actionTransform.shakeX, cy + bounce);
+    if(baseShake) ctx.rotate(baseShake * 0.015);
+    ctx.rotate(actionTransform.rotation);
+    ctx.scale(actionTransform.scale, actionTransform.scale);
+
+    // ==================== 蛋仔派对主题模型 ====================
+    
+    // 终极形态光晕
+    if(isUltimate) {
+      const gradient = ctx.createRadialGradient(20, 0, 0, 20, 0, 80);
+      gradient.addColorStop(0, `${color}60`);
+      gradient.addColorStop(0.5, `${color}30`);
+      gradient.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(-60, -60, 160, 120);
+    }
+    
+    // 1. 阴影 (更真实)
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(0, 50, 40, 12, 0, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 2. 蛋仔身体 (圆润可爱)
+    const bodyGrad = ctx.createRadialGradient(0, 10, 0, 0, 20, 40);
+    bodyGrad.addColorStop(0, lightenColor(color, 30));
+    bodyGrad.addColorStop(0.5, color);
+    bodyGrad.addColorStop(1, darkenColor(color, 20));
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.arc(0, 20, 38, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 身体高光
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(-10, 5, 25, 15, -0.3, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 3. 蛋仔头部 (圆润可爱)
+    const headGrad = ctx.createRadialGradient(0, -30, 0, 0, -10, 30);
+    headGrad.addColorStop(0, lightenColor(color, 40));
+    headGrad.addColorStop(0.4, lightenColor(color, 15));
+    headGrad.addColorStop(1, color);
+    ctx.fillStyle = headGrad;
+    ctx.beginPath();
+    ctx.arc(0, -10, 30, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 头部高光
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(-5, -25, 15, 10, -0.4, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 4. 耳朵 (动态)
+    ctx.fillStyle = color;
+    // 左耳
+    ctx.save();
+    ctx.translate(-15, -35);
+    ctx.rotate(0.3 + Math.sin(frame * 0.08) * 0.1);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 10, 18, 0.2, 0, Math.PI*2);
+    ctx.fill();
+    // 内耳
+    ctx.fillStyle = '#ffb6c1';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, 5, 10, 0.2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+    
+    // 右耳
+    ctx.fillStyle = color;
+    ctx.save();
+    ctx.translate(15, -35);
+    ctx.rotate(-0.3 - Math.sin(frame * 0.08) * 0.1);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 10, 18, -0.2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#ffb6c1';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, 5, 10, -0.2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+    
+    // 5. 脸部花纹 (品种特征)
+    if(sub === 'pink' || isCaptain) {
+      // 粉色蛋仔：可爱脸颊
+      ctx.fillStyle = darkenColor(color, 30);
+      ctx.beginPath();
+      ctx.arc(-12, -5, 6, 0, Math.PI*2);
+      ctx.arc(12, -5, 6, 0, Math.PI*2);
+      ctx.fill();
+    } else if(sub === 'blue') {
+      // 蓝色蛋仔：酷炫条纹
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(-20, -15, 40, 5);
+    } else if(sub === 'yellow') {
+      // 黄色蛋仔：笑脸
+      ctx.fillStyle = '#2c3e50';
+      ctx.beginPath();
+      ctx.arc(0, 5, 8, 0, Math.PI);
+      ctx.stroke();
+    }
+    
+    // 6. 眼睛 (蛋仔派对主题动画)
+    const eyeAction = action.id;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.ellipse(-8, -15, 7, 8, 0, 0, Math.PI*2);
+    ctx.ellipse(8, -15, 7, 8, 0, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 瞳孔
+    ctx.fillStyle = '#2c3e50';
+    if(eyeAction === 'a22') { // 大笑 - 眯眼
+      ctx.strokeStyle = '#2c3e50';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(-8, -15, 5, 0.3, Math.PI - 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(8, -15, 5, 0.3, Math.PI - 0.3);
+      ctx.stroke();
+    } else if(eyeAction === 'a25' || eyeAction === 'a26') { // 悲伤/哭泣
+      ctx.beginPath();
+      ctx.ellipse(-8, -13, 4, 5, 0, 0, Math.PI*2);
+      ctx.ellipse(8, -13, 4, 5, 0, 0, Math.PI*2);
+      ctx.fill();
+      // 眼泪
+      ctx.fillStyle = '#3498db';
+      const tearY = Math.sin(frame * 0.1) * 3;
+      ctx.beginPath();
+      ctx.ellipse(-8, -5 + tearY, 2, 4, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(8, -5 + tearY, 2, 4, 0, 0, Math.PI*2);
+      ctx.fill();
+    } else if(eyeAction === 'a27' || eyeAction === 'a28') { // 愤怒
+      ctx.beginPath();
+      ctx.ellipse(-8, -13, 5, 6, 0, 0, Math.PI*2);
+      ctx.ellipse(8, -13, 5, 6, 0, 0, Math.PI*2);
+      ctx.fill();
+      // 愤怒眉毛
+      ctx.strokeStyle = darkenColor(color, 40);
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-15, -22);
+      ctx.lineTo(-3, -18);
+      ctx.moveTo(15, -22);
+      ctx.lineTo(3, -18);
+      ctx.stroke();
+    } else if(eyeAction === 'a29' || eyeAction === 'a30') { // 惊讶
+      ctx.beginPath();
+      ctx.arc(-8, -15, 5, 0, Math.PI*2);
+      ctx.arc(8, -15, 5, 0, Math.PI*2);
+      ctx.fill();
+    } else if(eyeAction === 'a38') { // 困倦
+      ctx.strokeStyle = '#2c3e50';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-12, -15);
+      ctx.quadraticCurveTo(-8, -12, -4, -15);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(4, -15);
+      ctx.quadraticCurveTo(8, -12, 12, -15);
+      ctx.stroke();
+    } else {
+      // 正常眼睛
+      ctx.beginPath();
+      ctx.arc(-10, -15, 4, 0, Math.PI*2);
+      ctx.arc(10, -15, 4, 0, Math.PI*2);
+      ctx.fill();
+      
+      // 高光
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(-9, -17, 1.5, 0, Math.PI*2);
+      ctx.arc(11, -17, 1.5, 0, Math.PI*2);
+      ctx.fill();
+      
+      // 眼睛跟随动作
+      if(eyeAction === 'a11' || eyeAction === 'a9') { // 点头/抬头
+        ctx.fillStyle = '#2c3e50';
+        ctx.beginPath();
+        ctx.arc(-10, -13, 4, 0, Math.PI*2);
+        ctx.arc(10, -13, 4, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+    
+    // 7. 嘴巴
+    ctx.strokeStyle = '#2c3e50';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    
+    const mouthAction = action.id;
+    if(mouthAction === 'a22') { // 大笑
+      ctx.beginPath();
+      ctx.arc(0, -5, 8, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+      // 舌头
+      ctx.fillStyle = '#e74c3c';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 5, 3, 0, 0, Math.PI*2);
+      ctx.fill();
+    } else if(mouthAction === 'a25' || mouthAction === 'a26') { // 悲伤
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, Math.PI + 0.3, -0.3);
+      ctx.stroke();
+    } else if(mouthAction === 'a27' || mouthAction === 'a28') { // 愤怒
+      ctx.beginPath();
+      ctx.moveTo(-8, -2);
+      ctx.lineTo(8, -2);
+      ctx.stroke();
+    } else if(mouthAction === 'a29' || mouthAction === 'a30') { // 惊讶
+      ctx.beginPath();
+      ctx.arc(0, -5, 4, 0, Math.PI*2);
+      ctx.stroke();
+    } else {
+      // 微笑
+      ctx.beginPath();
+      ctx.arc(0, -7, 5, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+    }
+    
+    // 8. 装备渲染
+    if(lvl >= 1 || isCaptain) {
+      // 项圈
+      ctx.strokeStyle = '#ffd166';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(0, 25, 30, 0.3, Math.PI - 0.3);
+      ctx.stroke();
+      
+      // 徽章
+      ctx.fillStyle = '#ffd166';
+      ctx.beginPath();
+      ctx.arc(0, 35, 6, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = darkenColor('#ffd166', 20);
+      ctx.font = 'bold 8px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('⭐', 0, 38);
+    }
+    
+    if(lvl >= 3 || isCaptain) {
+      // 头饰
+      let hatColor = '#ffd166';
+      if(sub === 'pink' || isCaptain) hatColor = '#ff9a9e';
+      else if(sub === 'blue') hatColor = '#a1c4fd';
+      else if(sub === 'yellow') hatColor = '#fad0c4';
+      
+      ctx.fillStyle = hatColor;
+      ctx.beginPath();
+      ctx.arc(0, -40, 25, Math.PI, 0);
+      ctx.fill();
+      
+      // 帽檐
+      if(sub === 'pink' || isCaptain) {
+        ctx.fillStyle = darkenColor(hatColor, 20);
+        ctx.fillRect(-20, -40, 40, 5);
+        // 粉色蛋仔标志
+        ctx.fillStyle = '#ffd166';
+        ctx.beginPath();
+        ctx.moveTo(0, -50);
+        ctx.lineTo(5, -40);
+        ctx.lineTo(15, -40);
+        ctx.lineTo(7, -35);
+        ctx.lineTo(10, -25);
+        ctx.lineTo(0, -30);
+        ctx.lineTo(-10, -25);
+        ctx.lineTo(-7, -35);
+        ctx.lineTo(-15, -40);
+        ctx.lineTo(-5, -40);
+        ctx.closePath();
+        ctx.fill();
+      } else if(sub === 'blue') {
+        // 蓝色蛋仔帽子
+        ctx.fillStyle = '#ffd166';
+        ctx.fillRect(-5, -50, 10, 5);
+      } else if(sub === 'yellow') {
+        // 黄色蛋仔帽子
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(0, -50, 10, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#ffd166';
+        ctx.beginPath();
+        ctx.arc(0, -55, 6, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+    
+    if(lvl >= 5 || isUltimate) {
+      // 大型装备
+      if(sub === 'green') {
+        // 绿色蛋仔植物
+        ctx.fillStyle = '#2ecc71';
+        ctx.beginPath();
+        ctx.ellipse(-20, 15, 20, 12, 0.5 + Math.sin(frame * 0.08) * 0.2, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(40, 15, 20, 12, -0.5 - Math.sin(frame * 0.08) * 0.2, 0, Math.PI*2);
+        ctx.fill();
+      } else if(sub === 'orange') {
+        // 橙色蛋仔火焰
+        ctx.fillStyle = '#f39c12';
+        ctx.fillRect(40, -10, 20, 10);
+        ctx.fillStyle = '#e74c3c';
+        if(Math.random() > 0.7) {
+          ctx.beginPath();
+          ctx.arc(60, -5, 2 + Math.random() * 4, 0, Math.PI*2);
+          ctx.fill();
         }
+      } else if(sub === 'purple') {
+        // 紫色蛋仔魔法棒
+        ctx.fillStyle = '#9b59b6';
+        ctx.beginPath();
+        ctx.moveTo(40, 0);
+        ctx.lineTo(60, 10);
+        ctx.lineTo(40, 20);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        // 背包
+        ctx.fillStyle = '#95a5a6';
+        ctx.fillRect(-40, -5, 20, 40);
+        ctx.fillStyle = darkenColor('#95a5a6', 20);
+        ctx.fillRect(-40, 5, 20, 8);
+        ctx.fillRect(-40, 25, 20, 8);
+      }
+    }
+    
+    if(lvl >= 7 || isUltimate) {
+      // 光环
+      ctx.strokeStyle = isUltimate ? '#ffd166' : color;
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 3]);
+      ctx.globalAlpha = 0.7;
+      ctx.beginPath();
+      ctx.arc(0, 0, 60, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+      
+      // 徽章
+      ctx.fillStyle = '#ffd166';
+      ctx.shadowColor = '#ffd166';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.moveTo(15, 15);
+      ctx.lineTo(20, 30); ctx.lineTo(37, 30);
+      ctx.lineTo(25, 42); ctx.lineTo(30, 60);
+      ctx.lineTo(15, 48); ctx.lineTo(0, 60);
+      ctx.lineTo(5, 42); ctx.lineTo(-8, 30);
+      ctx.lineTo(10, 30);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    
+    // 渲染装备
+    Object.values(gear).forEach(equipId => {
+      const equip = EQUIPMENT_DATA.find(e => e.id === equipId);
+      if(equip) {
+        const equipRenderer = new EggPartyEquipmentRenderer(ctx, equip, frame);
+        equipRenderer.render();
+      }
+    });
+    
+    // 终极形态特效
+    if(isUltimate) {
+      ctx.save();
+      ctx.globalAlpha = 0.3 + Math.sin(frame * 0.1) * 0.2;
+      const grad = ctx.createRadialGradient(0, 10, 0, 0, 10, 70);
+      grad.addColorStop(0, color);
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(-50, -50, 140, 120);
+      ctx.restore();
+    }
 
-        // 添加日志
-        function addLogEntry(message) {
-            const logContainer = document.getElementById('activity-log');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            logContainer.insertBefore(entry, logContainer.firstChild);
-            
-            // 限制日志数量
-            if (logContainer.children.length > 15) {
-                logContainer.removeChild(logContainer.lastChild);
-            }
-            
-            // 滚动到底部
-            logContainer.scrollTop = 0;
+    ctx.restore();
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// 颜色辅助函数
+function lightenColor(color, percent) {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = Math.min(255, (num >> 16) + amt);
+  const G = Math.min(255, ((num >> 8) & 0x00FF) + amt);
+  const B = Math.min(255, (num & 0x0000FF) + amt);
+  return `#${(0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1)}`;
+}
+
+function darkenColor(color, percent) {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = Math.max(0, (num >> 16) - amt);
+  const G = Math.max(0, ((num >> 8) & 0x00FF) - amt);
+  const B = Math.max(0, (num & 0x0000FF) - amt);
+  return `#${(0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1)}`;
+}
+
+function drawCaptain() {
+  const container = document.getElementById('captain-preview');
+  if(container) {
+    drawPet(container, {petIdx:0, level:8, hasItem:true, id:'captain', isUltimate:true}, true);
+  }
+}
+
+// ==================== 业务逻辑 ====================
+
+function renderGrid() {
+  const grid = document.getElementById('petGrid');
+  grid.innerHTML = '';
+  const list = appState.students.slice(0, 36);
+
+  list.forEach(s => {
+    const card = document.createElement('div');
+    card.className = `pet-card ${appState.selectedId === s.id ? 'selected' : ''}`;
+    if(s.group) card.classList.add(`team-${s.group}`);
+    if(s.isUltimate || appState.ultimateForms[s.id]) card.style.boxShadow = '0 0 40px rgba(255, 209, 102, 0.5)';
+    card.onclick = () => select(s.id, card);
+
+    const canvasDiv = document.createElement('div');
+    canvasDiv.className = 'canvas-container';
+    card.appendChild(canvasDiv);
+
+    const info = document.createElement('div');
+    info.className = 'info-area';
+    const pData = PET_TYPES[s.petIdx];
+    const isUlt = s.isUltimate || appState.ultimateForms[s.id];
+    info.innerHTML = `
+      <div class="level-badge" style="${isUlt ? 'background:linear-gradient(135deg,#ffd166,#ff9e6d);box-shadow:0 0 20px rgba(255,209,102,0.8);' : ''}">${isUlt ? '⭐' : ''}Lv.${s.level}</div>
+      <div class="pet-name">${s.name}</div>
+      <div class="pet-role">${pData.role} • ${pData.name}${isUlt ? ' ★' : ''}</div>
+      <div class="xp-bar"><div class="xp-fill" style="width:${(s.xp/s.maxXp)*100}%"></div></div>
+    `;
+    card.appendChild(info);
+    grid.appendChild(card);
+
+    setTimeout(() => drawPet(canvasDiv, s, false), 10);
+  });
+}
+
+function select(id, card) {
+  appState.selectedId = id;
+  document.querySelectorAll('.pet-card').forEach(c=>c.classList.remove('selected'));
+  if(card) card.classList.add('selected');
+  
+  const s = appState.students.find(x=>x.id===id);
+  const panel = document.getElementById('selPanel');
+  panel.style.display = 'block';
+  document.getElementById('selName').innerText = s.name;
+  const gMap = {red:'🔴红队',blue:'🔵蓝队',yellow:'🟡黄队',green:'🟢绿队',purple:'🟣紫队'};
+  document.getElementById('selGroup').innerText = s.group ? gMap[s.group] : '未分组';
+  document.getElementById('selPoints').innerText = s.points;
+  
+  const effectId = appState.equippedEffects[id];
+  const actionId = appState.equippedActions[id] || 'a1';
+  const gear = appState.equippedGear[id] || {};
+  
+  const effect = effectId ? EFFECTS_DATA.find(e => e.id === effectId) : null;
+  const action = ACTIONS_DATA.find(a => a.id === actionId);
+  
+  document.getElementById('selEffect').innerText = `特效：${effect ? effect.name : '无'}`;
+  document.getElementById('selAction').innerText = `动作：${action ? action.name : '站立'}`;
+  
+  const gearNames = Object.values(gear).map(gid => {
+    const g = EQUIPMENT_DATA.find(e => e.id === gid);
+    return g ? g.name : '';
+  }).filter(n => n).join(', ');
+  document.getElementById('selEquip').innerText = `装备：${gearNames || '无'}`;
+}
+
+let tempKey = null, tempTarget = null;
+function showCustomInput(el, key) {
+  event.stopPropagation();
+  tempKey = key; tempTarget = el;
+  const val = Math.abs(appState.config[key].score);
+  const inp = document.getElementById('customInput');
+  const r = el.getBoundingClientRect();
+  inp.value = val;
+  inp.style.display = 'block';
+  inp.style.top = (r.top - 35) + 'px';
+  inp.style.left = r.left + 'px';
+  inp.focus();
+}
+
+function applyCustomScore() {
+  if(tempKey && tempTarget) {
+    const v = parseInt(document.getElementById('customInput').value);
+    if(v>=1 && v<=20) {
+      const isNeg = appState.config[tempKey].score < 0 ? -1 : 1;
+      appState.config[tempKey].score = isNeg * v;
+      tempTarget.innerText = isNeg ? '-'+v : v;
+      saveData();
+    }
+  }
+  document.getElementById('customInput').style.display = 'none';
+}
+
+function handleScore(key) {
+  if(!appState.selectedId) { alert("请先点击一个蛋仔！"); return; }
+  const s = appState.students.find(x=>x.id===appState.selectedId);
+  const score = appState.config[key].score;
+  s.points += score;
+  
+  if(score > 0) {
+    s.xp += score;
+    appState.gold += Math.floor(score / 2);
+    appState.energy = Math.min(100, appState.energy + 2);
+    showFloat(`+${score}⭐ +${Math.floor(score/2)}💎`, event.clientX, event.clientY, "#06d6a0");
+  } else {
+    s.xp = Math.max(0, s.xp+score);
+    showFloat(`${score}⚠️`, event.clientX, event.clientY, "#ef476f");
+  }
+
+  checkLevelUp(s);
+  saveData();
+  updateStatusDisplay();
+  renderGrid();
+  select(s.id, document.querySelector('.pet-card.selected'));
+}
+
+function useItem() {
+  if(!appState.selectedId) return;
+  const s = appState.students.find(x=>x.id===appState.selectedId);
+  s.hasItem = !s.hasItem;
+  showFloat(s.hasItem?"✨ 装备道具!":"❌ 卸下", event.clientX, event.clientY, "#ffd166");
+  saveData(); renderGrid(); select(s.id, document.querySelector('.pet-card.selected'));
+}
+
+function checkLevelUp(s) {
+  if(s.xp >= s.maxXp && s.level < 10) {
+    s.level++; s.xp=0; s.maxXp = Math.floor(s.maxXp*1.4);
+    appState.gold += s.level * 15;
+    showFloat(`🎉 升级 Lv.${s.level}! +${s.level*15}💎`, window.innerWidth/2, window.innerHeight/2, "#ffd166");
+    
+    // 解锁奖励
+    if(s.level === 2) {
+      appState.unlockedEffects.push('e6', 'e7');
+      appState.unlockedActions.push('a6', 'a7', 'a8');
+    }
+    if(s.level === 3) {
+      appState.unlockedEffects.push('e16', 'e17');
+      appState.unlockedActions.push('a21', 'a22', 'a23');
+    }
+    if(s.level === 5) {
+      appState.unlockedEffects.push('e31', 'e32', 'e33');
+      appState.unlockedActions.push('a46', 'a47', 'a48');
+    }
+    if(s.level === 7) {
+      appState.unlockedEffects.push('e48', 'e49', 'e50');
+      appState.unlockedActions.push('a60', 'a61', 'a62');
+    }
+    if(s.level === 10) {
+      // 终极形态解锁
+      appState.ultimateForms[s.id] = true;
+      s.isUltimate = true;
+      showFloat(`🌟 终极觉醒!`, window.innerWidth/2, window.innerHeight/2 + 50, "#ffd166");
+    }
+    
+    updateStatusDisplay();
+    renderGrid(); 
+    select(s.id, document.querySelector('.pet-card.selected'));
+  }
+}
+
+function showFloat(txt, x, y, color) {
+  const el = document.createElement('div');
+  el.className = 'float-text';
+  el.innerText = txt;
+  el.style.left = x+'px';
+  el.style.top = y+'px';
+  el.style.color = color;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1000);
+}
+
+// ==================== 技能系统 ====================
+
+function useSkill() {
+  if(!appState.selectedId) {
+    alert("请先选择一个蛋仔！");
+    return;
+  }
+  openSkillsModal();
+}
+
+function openSkillsModal() {
+  renderSkillsList();
+  document.getElementById('skillsModal').classList.add('show');
+}
+
+function renderSkillsList() {
+  const content = document.getElementById('skillsContent');
+  const student = appState.students.find(s => s.id === appState.selectedId);
+  const petType = student ? PET_TYPES[student.petIdx].sub : null;
+  
+  // 获取可用技能
+  const availableSkills = SKILLS_DATA.filter(sk => 
+    sk.petType === 'all' || sk.petType === petType
+  );
+  
+  content.innerHTML = `
+    <p style="text-align:center; color:rgba(255,107,107,0.7); margin-bottom:20px;">
+      当前蛋仔：${student ? PET_TYPES[student.petIdx].name : '未选择'}
+    </p>
+    <div class="skill-panel">
+      ${availableSkills.map(sk => {
+        const unlocked = appState.unlockedSkills.includes(sk.id);
+        const cooldown = appState.skillCooldowns[sk.id] || 0;
+        const canUse = unlocked && cooldown <= 0 && appState.energy >= 20;
+        
+        return `
+          <div class="skill-card ${canUse ? '' : 'locked'}" 
+               onclick="${canUse ? `activateSkill('${sk.id}')` : ''}">
+            <div class="skill-icon">${sk.icon}</div>
+            <div class="skill-name">${sk.name}</div>
+            <div class="skill-desc">${sk.desc}</div>
+            <div class="skill-cooldown">
+              ${!unlocked ? '🔒 未解锁' : cooldown > 0 ? `⏳ ${cooldown}s` : '✅ 可用'}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function activateSkill(skillId) {
+  const skill = SKILLS_DATA.find(sk => sk.id === skillId);
+  if(!skill) return;
+  
+  if(appState.energy < 20) {
+    showFloat("能量不足！", window.innerWidth/2, window.innerHeight/2, "#ef476f");
+    return;
+  }
+  
+  appState.energy -= 20;
+  appState.skillCooldowns[skillId] = skill.cooldown;
+  
+  // 技能效果
+  switch(skill.effect) {
+    case 'points':
+      if(appState.selectedId) {
+        const s = appState.students.find(x => x.id === appState.selectedId);
+        s.points += skill.value;
+        s.xp += skill.value;
+        showFloat(`⚡ ${skill.name}! +${skill.value}⭐`, window.innerWidth/2, window.innerHeight/2, "#06d6a0");
+      }
+      break;
+    case 'team_points':
+      const group = appState.students.find(x => x.id === appState.selectedId)?.group;
+      if(group) {
+        appState.students.filter(s => s.group === group).forEach(s => {
+          s.points += skill.value;
+          s.xp += skill.value;
+        });
+        showFloat(`⚡ ${skill.name}! 全队+${skill.value}⭐`, window.innerWidth/2, window.innerHeight/2, "#118ab2");
+      }
+      break;
+    case 'team_gold':
+      appState.gold += skill.value;
+      showFloat(`⚡ ${skill.name}! +${skill.value}💎`, window.innerWidth/2, window.innerHeight/2, "#ffd166");
+      break;
+    case 'ultimate':
+      if(appState.selectedId) {
+        appState.ultimateForms[appState.selectedId] = true;
+        const s = appState.students.find(x => x.id === appState.selectedId);
+        if(s) s.isUltimate = true;
+        showFloat(`🌟 终极觉醒!`, window.innerWidth/2, window.innerHeight/2, "#ffd166");
+      }
+      break;
+    case 'all_points':
+      appState.students.forEach(s => {
+        s.points += skill.value;
+        s.xp += skill.value;
+      });
+      showFloat(`⚡ 蛋仔派对! 全员+${skill.value}⭐`, window.innerWidth/2, window.innerHeight/2, "#ef476f");
+      break;
+    case 'all_ultimate':
+      appState.students.forEach(s => {
+        appState.ultimateForms[s.id] = true;
+        s.isUltimate = true;
+      });
+      showFloat(`🌟 全员终极觉醒!`, window.innerWidth/2, window.innerHeight/2, "#ffd166");
+      break;
+  }
+  
+  // 启动冷却计时器
+  const timer = setInterval(() => {
+    if(appState.skillCooldowns[skillId] > 0) {
+      appState.skillCooldowns[skillId]--;
+    } else {
+      clearInterval(timer);
+    }
+  }, 1000);
+  
+  saveData();
+  updateStatusDisplay();
+  renderGrid();
+  renderSkillsList();
+}
+
+function activateUltimate() {
+  if(!appState.selectedId) {
+    alert("请先选择一个蛋仔！");
+    return;
+  }
+  
+  if(appState.energy < 50) {
+    showFloat("能量不足！需要50能量", window.innerWidth/2, window.innerHeight/2, "#ef476f");
+    return;
+  }
+  
+  appState.energy -= 50;
+  appState.ultimateForms[appState.selectedId] = true;
+  const s = appState.students.find(x => x.id === appState.selectedId);
+  if(s) s.isUltimate = true;
+  
+  showFloat(`🌟 终极觉醒!`, window.innerWidth/2, window.innerHeight/2, "#ffd166");
+  
+  saveData();
+  updateStatusDisplay();
+  renderGrid();
+  select(appState.selectedId, document.querySelector('.pet-card.selected'));
+}
+
+// ==================== 模态框功能 ====================
+
+function openEffectsModal() {
+  renderEffectsList();
+  document.getElementById('effectsModal').classList.add('show');
+}
+
+function openActionsModal() {
+  renderActionsList();
+  document.getElementById('actionsModal').classList.add('show');
+}
+
+function openShop() {
+  renderShopList();
+  document.getElementById('shopModal').classList.add('show');
+}
+
+function renderEffectsList(category = null) {
+  const tabs = document.getElementById('effectTabs');
+  const list = document.getElementById('effectsList');
+  
+  const categories = ['全部', '粒子', '光环', '动画'];
+  tabs.innerHTML = categories.map(c => 
+    `<button class="tab-btn ${c === category || (!category && c === '全部') ? 'active' : ''}" 
+            onclick="renderEffectsList('${c}')">${c}</button>`
+  ).join('');
+  
+  let effects = EFFECTS_DATA;
+  if(category && category !== '全部') {
+    effects = effects.filter(e => e.category === category);
+  }
+  
+  list.innerHTML = effects.map(e => {
+    const unlocked = appState.unlockedEffects.includes(e.id);
+    const equipped = appState.selectedId && appState.equippedEffects[appState.selectedId] === e.id;
+    return `
+      <div class="shop-item ${equipped ? 'equipped' : ''} ${!unlocked ? 'locked' : ''}" 
+           onclick="${unlocked ? `equipEffect('${e.id}')` : ''}">
+        <div class="item-preview" style="font-size:2rem;">${e.icon}</div>
+        <div class="item-name">${e.name}</div>
+        <div class="item-desc">${e.category}</div>
+        ${!unlocked ? '<div class="item-price" style="color:#999;">🔒 未解锁</div>' : ''}
+        ${equipped ? '<div class="item-price" style="color:#06d6a0;">✓ 已装备</div>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderActionsList(category = null) {
+  const tabs = document.getElementById('actionTabs');
+  const list = document.getElementById('actionsList');
+  
+  const categories = ['全部', '基础', '情绪', '特殊', '组合'];
+  tabs.innerHTML = categories.map(c => 
+    `<button class="tab-btn ${c === category || (!category && c === '全部') ? 'active' : ''}" 
+            onclick="renderActionsList('${c}')">${c}</button>`
+  ).join('');
+  
+  let actions = ACTIONS_DATA;
+  if(category && category !== '全部') {
+    actions = actions.filter(a => a.category === category);
+  }
+  
+  list.innerHTML = actions.map(a => {
+    const unlocked = appState.unlockedActions.includes(a.id);
+    const equipped = appState.selectedId && appState.equippedActions[appState.selectedId] === a.id;
+    return `
+      <div class="shop-item ${equipped ? 'equipped' : ''} ${!unlocked ? 'locked' : ''}" 
+           onclick="${unlocked ? `equipAction('${a.id}')` : ''}">
+        <div class="item-preview" style="font-size:2rem;">${a.icon}</div>
+        <div class="item-name">${a.name}</div>
+        <div class="item-desc">${a.category}</div>
+        ${!unlocked ? '<div class="item-price" style="color:#999;">🔒 未解锁</div>' : ''}
+        ${equipped ? '<div class="item-price" style="color:#06d6a0;">✓ 已装备</div>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderShopList(category = null) {
+  const tabs = document.getElementById('shopTabs');
+  const list = document.getElementById('shopList');
+  
+  const categories = ['全部', '武器', '防具', '头盔', '饰品', '特殊'];
+  tabs.innerHTML = categories.map(c => 
+    `<button class="tab-btn ${c === category || (!category && c === '全部') ? 'active' : ''}" 
+            onclick="renderShopList('${c}')">${c}</button>`
+  ).join('');
+  
+  let equipment = EQUIPMENT_DATA;
+  if(category && category !== '全部') {
+    equipment = equipment.filter(e => e.category === category);
+  }
+  
+  const rarityColors = {
+    '普通': '#bdc3c7',
+    '稀有': '#3498db',
+    '史诗': '#9b59b6',
+    '传说': '#f39c12',
+    '神话': '#e74c3c'
+  };
+  
+  list.innerHTML = equipment.map(e => {
+    const owned = appState.unlockedEquipment.includes(e.id);
+    const gear = appState.equippedGear[appState.selectedId] || {};
+    const equipped = gear[e.slot] === e.id;
+    const canBuy = appState.gold >= e.price;
+    
+    return `
+      <div class="shop-item ${equipped ? 'equipped' : ''} ${!owned && !canBuy ? 'locked' : ''}">
+        <div class="item-preview" style="background:${e.color}30; color:${rarityColors[e.rarity]}; display:flex; align-items:center; justify-content:center; font-size:2rem;">${e.icon}</div>
+        <div class="item-name" style="color:${rarityColors[e.rarity]}">${e.name}</div>
+        <div class="item-desc">+${e.bonus} ${e.rarity}</div>
+        ${owned ? 
+          (equipped ? 
+            '<div class="item-price" style="color:#06d6a0;">✓ 已装备</div>' : 
+            `<button onclick="equipGear('${e.id}')" style="width:100%; margin-top:5px; padding:4px; background:linear-gradient(135deg,#118ab2,#06d6a0); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">装备</button>`
+          ) : 
+          `<button onclick="buyEquipment('${e.id}')" style="width:100%; margin-top:5px; padding:4px; background:${canBuy ? 'linear-gradient(135deg,#06d6a0,#118ab2)' : 'rgba(255,255,255,0.1)'}; color:white; border:none; border-radius:8px; cursor:${canBuy ? 'pointer' : 'not-allowed'}; font-weight:bold;">💎 ${e.price}</button>`
         }
+      </div>
+    `;
+  }).join('');
+}
 
-        // 显示AI消息
-        function showAIMessage(message) {
-            document.getElementById('ai-message').textContent = message;
-        }
+function equipEffect(effectId) {
+  if(!appState.selectedId) { alert("请先选择一个蛋仔！"); return; }
+  if(!appState.unlockedEffects.includes(effectId)) { alert("此特效尚未解锁！"); return; }
+  
+  appState.equippedEffects[appState.selectedId] = effectId;
+  saveData();
+  renderEffectsList();
+  renderGrid();
+  select(appState.selectedId, document.querySelector('.pet-card.selected'));
+  showFloat("✨ 特效已装备!", window.innerWidth/2, window.innerHeight/2, "#8ac926");
+}
 
-        // 显示随机AI消息
-        function showRandomAIMessage() {
-            const randomMessage = aiMessages[Math.floor(Math.random() * aiMessages.length)];
-            showAIMessage(randomMessage);
-        }
+function equipAction(actionId) {
+  if(!appState.selectedId) { alert("请先选择一个蛋仔！"); return; }
+  if(!appState.unlockedActions.includes(actionId)) { alert("此动作尚未解锁！"); return; }
+  
+  appState.equippedActions[appState.selectedId] = actionId;
+  saveData();
+  renderActionsList();
+  renderGrid();
+  select(appState.selectedId, document.querySelector('.pet-card.selected'));
+  showFloat("🎭 动作已装备!", window.innerWidth/2, window.innerHeight/2, "#118ab2");
+}
 
-        // 启动AI定期更新
-        function startAIPeriodicUpdates() {
-            setInterval(() => {
-                if (Math.random() > 0.8) { // 20%概率触发
-                    showRandomAIMessage();
-                }
-            }, 8000); // 每8秒检查一次
-        }
+function buyEquipment(equipId) {
+  const equip = EQUIPMENT_DATA.find(e => e.id === equipId);
+  if(!equip) return;
+  
+  if(appState.gold < equip.price) { alert("金币不足！"); return; }
+  if(appState.unlockedEquipment.includes(equipId)) { alert("已拥有此装备！"); return; }
+  
+  appState.gold -= equip.price;
+  appState.unlockedEquipment.push(equipId);
+  saveData();
+  updateStatusDisplay();
+  renderShopList();
+  showFloat(`🛒 购买成功! -${equip.price}💎`, window.innerWidth/2, window.innerHeight/2, "#06d6a0");
+}
 
-        // 重置游戏
-        function resetGame() {
-            if (confirm('确定要重新开始吗？所有进度将被重置。')) {
-                gameState = {
-                    totalPoints: 0,
-                    listenPoints: 0,
-                    cleanPoints: 0,
-                    helpPoints: 0,
-                    level: 1,
-                    currentStage: '婴儿',
-                    characterEmoji: '👶',
-                    equippedItems: [],
-                    experience: 0,
-                    maxExperience: 100
-                };
-                
-                updateDisplay();
-                addLogEntry('游戏已重置，重新开始成长之旅！');
-                showAIMessage('让我们重新开始，创造新的美好回忆！');
-            }
-        }
+function equipGear(equipId) {
+  if(!appState.selectedId) { alert("请先选择一个蛋仔！"); return; }
+  
+  const equip = EQUIPMENT_DATA.find(e => e.id === equipId);
+  if(!equip) return;
+  if(!appState.unlockedEquipment.includes(equipId)) { alert("尚未拥有此装备！"); return; }
+  
+  if(!appState.equippedGear[appState.selectedId]) {
+    appState.equippedGear[appState.selectedId] = {};
+  }
+  
+  appState.equippedGear[appState.selectedId][equip.slot] = equipId;
+  saveData();
+  renderShopList();
+  renderGrid();
+  select(appState.selectedId, document.querySelector('.pet-card.selected'));
+  showFloat("⚔️ 装备已穿上!", window.innerWidth/2, window.innerHeight/2, "#ffd166");
+}
 
-        // 初始化游戏
-        window.onload = initGame;
-    </script>
+function randomEffect() {
+  if(!appState.selectedId) { alert("请先选择一个蛋仔！"); return; }
+  const unlocked = appState.unlockedEffects;
+  if(unlocked.length === 0) return;
+  equipEffect(unlocked[Math.floor(Math.random() * unlocked.length)]);
+}
+
+function randomAction() {
+  if(!appState.selectedId) { alert("请先选择一个蛋仔！"); return; }
+  const unlocked = appState.unlockedActions;
+  if(unlocked.length === 0) return;
+  equipAction(unlocked[Math.floor(Math.random() * unlocked.length)]);
+}
+
+function randomEquipment() {
+  if(!appState.selectedId) { alert("请先选择一个蛋仔！"); return; }
+  const owned = appState.unlockedEquipment;
+  if(owned.length === 0) { alert("你还没有任何装备！快去商店购买吧！"); return; }
+  equipGear(owned[Math.floor(Math.random() * owned.length)]);
+}
+
+// ==================== 展示馆系统 ====================
+
+function showGallery() {
+  renderGalleryContent('all');
+  document.getElementById('galleryModal').classList.add('show');
+  renderUltimateShowcase();
+}
+
+function showGalleryTab(tab) {
+  // 更新标签状态
+  document.querySelectorAll('#galleryModal .tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderGalleryContent(tab);
+}
+
+function renderGalleryContent(tab) {
+  const content = document.getElementById('galleryContent');
+  let students = [...appState.students];
+  
+  if(tab === 'ultimate') {
+    students = students.filter(s => s.isUltimate || appState.ultimateForms[s.id] || s.level >= 8);
+  } else if(tab === 'max') {
+    students = students.filter(s => s.level >= 7);
+  } else if(tab === 'team') {
+    students = students.filter(s => s.group);
+  }
+  
+  content.innerHTML = `
+    <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:15px; max-height:50vh; overflow-y:auto; padding:10px;">
+      ${students.map(s => {
+        const pData = PET_TYPES[s.petIdx];
+        const isUlt = s.isUltimate || appState.ultimateForms[s.id];
+        return `
+          <div class="pet-card ${s.group ? 'team-' + s.group : ''}" 
+               style="${isUlt ? 'box-shadow:0 0 30px rgba(255,209,102,0.5);' : ''}">
+            <div class="canvas-container" id="gallery-${s.id}"></div>
+            <div class="info-area">
+              <div class="level-badge" style="${isUlt ? 'background:linear-gradient(135deg,#ffd166,#ff9e6d);' : ''}">${isUlt ? '⭐' : ''}Lv.${s.level}</div>
+              <div class="pet-name">${s.name}</div>
+              <div class="pet-role">${pData.name}${isUlt ? ' ★' : ''}</div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+  
+  // 渲染蛋仔
+  setTimeout(() => {
+    students.forEach(s => {
+      const container = document.getElementById(`gallery-${s.id}`);
+      if(container) drawPet(container, s, false);
+    });
+  }, 100);
+}
+
+function renderUltimateShowcase() {
+  const grid = document.getElementById('ultimateGrid');
+  
+  // 获取终极形态蛋仔
+  const ultimatePets = appState.students.filter(s => s.isUltimate || appState.ultimateForms[s.id] || s.level >= 8);
+  
+  if(ultimatePets.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1; text-align:center; padding:40px; color:rgba(255,107,107,0.5);">
+        <div style="font-size:3rem; margin-bottom:15px;">🌟</div>
+        <p>还没有蛋仔达到终极形态</p>
+        <p style="font-size:0.85rem; margin-top:10px;">升级到 Lv.10 或使用终极技能解锁</p>
+      </div>
+    `;
+    return;
+  }
+  
+  grid.innerHTML = ultimatePets.map(s => {
+    const pData = PET_TYPES[s.petIdx];
+    return `
+      <div class="ultimate-card">
+        <div class="ultimate-canvas" id="ultimate-${s.id}"></div>
+        <div class="ultimate-info">
+          <div class="ultimate-name">${s.name}</div>
+          <div style="font-size:0.9rem; color:rgba(255,107,107,0.8); margin:5px 0;">${pData.name} · ${pData.role}</div>
+          <div class="ultimate-level">Lv.${s.level} 终极形态</div>
+          <div style="margin-top:10px; font-size:0.75rem; color:rgba(255,107,107,0.6);">
+            积分: ${s.points} | ${pData.ultimate}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  // 渲染终极形态蛋仔
+  setTimeout(() => {
+    ultimatePets.forEach(s => {
+      const container = document.getElementById(`ultimate-${s.id}`);
+      if(container) drawPet(container, s, false);
+    });
+  }, 100);
+}
+
+// ==================== 管理功能 ====================
+
+function applyConfig() {
+  const list = document.getElementById('configList');
+  list.innerHTML = '';
+  const keys = ['labor','study','eat','sleep','listen','talk','manner','clean'];
+  keys.forEach(k => {
+    const c = appState.config[k];
+    const row = document.createElement('div');
+    row.className = 'config-row';
+    row.innerHTML = `
+      <span class="cfg-label">${c.label}:</span>
+      <input type="text" class="cfg-input" id="cfg-lbl-${k}" value="${c.label}">
+      <input type="number" class="cfg-score" id="cfg-sc-${k}" value="${Math.abs(c.score)}">
+    `;
+    list.appendChild(row);
+    
+    document.getElementById(`lbl-${k}`).innerText = c.label;
+    const bubbles = document.querySelectorAll(`.s-val[onclick*="'${k}'"]`);
+    bubbles.forEach(b => b.innerText = c.score > 0 ? c.score : '-'+Math.abs(c.score));
+  });
+}
+
+function saveConfig() {
+  const keys = ['labor','study','eat','sleep','listen','talk','manner','clean'];
+  keys.forEach(k => {
+    const lbl = document.getElementById(`cfg-lbl-${k}`).value;
+    const sc = parseInt(document.getElementById(`cfg-sc-${k}`).value);
+    const oldSign = appState.config[k].score < 0 ? -1 : 1;
+    appState.config[k] = { label: lbl, score: oldSign * sc };
+  });
+  saveData();
+  applyConfig();
+  alert("✅ 规则已保存！");
+}
+
+function openSettings() {
+  applyConfig();
+  renderGroups();
+  document.getElementById('studentList').value = appState.students.map(s=>s.name).join('\n');
+  document.getElementById('settingsModal').classList.add('show');
+  drawCaptain();
+}
+
+function renderGroups() {
+  ['red','blue','yellow','green','purple'].forEach(c => {
+    const div = document.getElementById(`list-${c}`);
+    div.innerHTML = '';
+    appState.students.filter(s=>s.group===c).forEach(s => {
+      const chip = document.createElement('div');
+      chip.className = 'student-chip';
+      chip.innerHTML = `<span>${s.name}</span><button onclick="removeGrp('${s.id}',event)">×</button>`;
+      chip.onclick = (e)=>{ if(e.target.tagName!='BUTTON') cycleGrp(s.id); };
+      div.appendChild(chip);
+    });
+  });
+  const ug = document.getElementById('ungrouped');
+  ug.innerHTML = '<div style="text-align:center;font-size:0.75rem;color:rgba(255,107,107,0.5);margin-bottom:8px;">待分配 (点我进红队)</div>';
+  appState.students.filter(s=>!s.group).forEach(s => {
+    const chip = document.createElement('div');
+    chip.className = 'student-chip';
+    chip.innerText = s.name;
+    chip.onclick = () => { s.group='red'; saveData(); renderGroups(); renderGrid(); };
+    ug.appendChild(chip);
+  });
+}
+
+function cycleGrp(id) {
+  const s = appState.students.find(x=>x.id===id);
+  const order = ['red','blue','yellow','green','purple',null];
+  s.group = order[(order.indexOf(s.group)+1)%order.length];
+  saveData(); renderGroups(); renderGrid();
+}
+
+function removeGrp(id, e) {
+  e.stopPropagation();
+  const s = appState.students.find(x=>x.id===id);
+  s.group = null;
+  saveData(); renderGroups(); renderGrid();
+}
+
+function autoBalance() {
+  const cols = ['red','blue','yellow','green','purple'];
+  appState.students.forEach((s,i)=> s.group = cols[i%5]);
+  saveData(); renderGroups(); renderGrid();
+}
+
+function clearGroups() {
+  appState.students.forEach(s=>s.group=null);
+  saveData(); renderGroups(); renderGrid();
+}
+
+function saveStudents() {
+  const names = document.getElementById('studentList').value.split('\n').filter(n=>n.trim());
+  if(!names.length) return;
+  const newS = names.map((n,i) => {
+    const old = appState.students.find(x=>x.name===n);
+    return old ? old : createStudent(n,i);
+  });
+  appState.students = newS;
+  appState.groups = {red:[],blue:[],yellow:[],green:[],purple:[]};
+  saveData(); renderGrid(); closeModal('settingsModal');
+  showFloat("🥚 蛋仔派对集结完毕!", window.innerWidth/2, window.innerHeight/2, "#06d6a0");
+}
+
+function resetAll() {
+  if(confirm("确定清空所有数据吗？")) {
+    appState.students = [];
+    appState.gold = 100;
+    appState.energy = 100;
+    appState.unlockedEffects = ['e1', 'e2', 'e3', 'e4', 'e5'];
+    appState.unlockedActions = ['a1', 'a2', 'a3', 'a4', 'a5'];
+    appState.unlockedEquipment = [];
+    appState.unlockedSkills = ['sk1', 'sk4', 'sk7', 'sk10', 'sk13', 'sk16'];
+    appState.equippedEffects = {};
+    appState.equippedActions = {};
+    appState.equippedGear = {};
+    appState.skillCooldowns = {};
+    appState.ultimateForms = {};
+    saveData(); renderGrid(); closeModal('settingsModal'); updateStatusDisplay();
+  }
+}
+
+function updateClassName() {
+  appState.className = document.getElementById('classNameInput').value;
+  saveData();
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function showPK() {
+  const teams = [
+    {id:'red', n:'🔴 红队', c:'#ef476f'},
+    {id:'blue', n:'🔵 蓝队', c:'#118ab2'},
+    {id:'yellow', n:'🟡 黄队', c:'#ffd166'},
+    {id:'green', n:'🟢 绿队', c:'#06d6a0'},
+    {id:'purple', n:'🟣 紫队', c:'#8ac926'}
+  ];
+  const scores = {red:0,blue:0,yellow:0,green:0,purple:0};
+  appState.students.forEach(s=>{ if(s.group) scores[s.group]+=s.points; });
+  
+  const sorted = teams.sort((a,b)=>scores[b.id]-scores[a.id]);
+  const max = Math.max(...Object.values(scores), 1);
+  
+  const con = document.getElementById('pkList');
+  con.innerHTML = '';
+  sorted.forEach((t,i) => {
+    const pct = (scores[t.id]/max)*100;
+    const row = document.createElement('div');
+    row.style.cssText = "display:flex; align-items:center; background:rgba(255,255,255,0.05); padding:15px; margin-bottom:12px; border-radius:15px; border:1px solid rgba(255,255,255,0.1);";
+    row.innerHTML = `
+      <div style="font-weight:bold; width:100px; text-align:left; color:#ff6b6b;">${i===0?'👑 ':''}${t.n}</div>
+      <div style="flex:1; height:18px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden; margin:0 15px;">
+        <div style="height:100%; width:${pct}%; background:linear-gradient(90deg,${t.c},${t.c}88); transition:width 1s; box-shadow:0 0 20px ${t.c}50;"></div>
+      </div>
+      <div style="font-weight:bold; width:50px; text-align:right; color:#ff6b6b; font-size:1.1rem;">${scores[t.id]}</div>
+    `;
+    con.appendChild(row);
+  });
+  document.getElementById('pkModal').classList.add('show');
+}
+</script>
 </body>
 </html>
