@@ -9,69 +9,90 @@
   * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif; }
   
   body { 
-    background: linear-gradient(135deg, #0c1929 0%, #1a3a5c 50%, #0d253f 100%);
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 30%, #0d1b2a 60%, #0a1628 100%);
     overflow: hidden; height: 100vh; width: 100vw;
     position: relative;
+  }
+  
+  /* 科技感动态网格背景 */
+  .tech-grid {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background-image: 
+      linear-gradient(rgba(52, 152, 219, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52, 152, 219, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
   }
   
   /* 动态背景星星 */
   .stars-bg {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 0;
-    background: radial-gradient(1px 1px at 20px 30px, white, transparent),
-                radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    background: radial-gradient(2px 2px at 20px 30px, rgba(0,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(52,152,219,0.8), transparent),
                 radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 90px 40px, white, transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
-                radial-gradient(2px 2px at 160px 120px, white, transparent);
-    background-size: 200px 200px;
+                radial-gradient(2px 2px at 90px 40px, rgba(0,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(52,152,219,0.7), transparent),
+                radial-gradient(3px 3px at 160px 120px, rgba(0,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 200px 50px, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 250px 150px, rgba(0,255,255,0.7), transparent);
+    background-size: 300px 200px;
     animation: twinkle 4s ease-in-out infinite;
   }
-  @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+  @keyframes twinkle { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
   /* ==================== 电影级顶部导航 ==================== */
   header {
-    position: absolute; top: 0; left: 0; right: 0; height: 80px;
-    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 100%);
-    backdrop-filter: blur(20px);
+    position: absolute; top: 0; left: 0; right: 0; height: 60px;
+    background: linear-gradient(180deg, rgba(8,18,38,0.95) 0%, rgba(5,15,30,0.85) 100%);
+    backdrop-filter: blur(15px);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 30px; z-index: 100;
-    border-bottom: 3px solid transparent;
-    background-clip: padding-box;
-    animation: headerGlow 3s ease-in-out infinite;
+    padding: 0 25px; z-index: 100;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.35);
+    box-shadow: 0 3px 20px rgba(0, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 255, 255, 0.08);
   }
-  @keyframes headerGlow {
-    0%, 100% { border-image: linear-gradient(90deg, #3498db, #e74c3c, #f1c40f, #2ecc71, #9b59b6) 1; }
-    50% { border-image: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71, #9b59b6, #3498db) 1; }
+  header::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, #00ffff, #3498db, #00ffff, transparent);
+    animation: headerLine 3s linear infinite;
+  }
+  @keyframes headerLine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
   
-  .title-area { display: flex; align-items: center; gap: 20px; }
+  .title-area { display: flex; align-items: center; gap: 15px; }
   .logo { 
-    font-size: 3rem; 
-    filter: drop-shadow(0 0 20px rgba(255,215,0,0.8));
+    font-size: 2.2rem; 
+    filter: drop-shadow(0 0 15px rgba(255,215,0,0.8));
     animation: logoFloat 3s ease-in-out infinite;
   }
-  @keyframes logoFloat { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
+  @keyframes logoFloat { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-8px) rotate(5deg); } }
   
   .class-name-input {
-    font-size: 1.8rem; font-weight: bold; color: #fff;
-    border: none; border-bottom: 3px solid transparent;
-    background: transparent; outline: none; width: 350px;
-    text-shadow: 0 0 30px rgba(52, 152, 219, 0.8);
+    font-size: 1.5rem; font-weight: bold; color: #fff;
+    border: none; border-bottom: 2px solid transparent;
+    background: transparent; outline: none; width: 280px;
+    text-shadow: 0 0 25px rgba(52, 152, 219, 0.8);
     background: linear-gradient(90deg, #3498db, #e74c3c, #f1c40f);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .header-btns { display: flex; gap: 12px; }
+  .header-btns { display: flex; gap: 10px; }
   .btn {
-    padding: 10px 20px; border: none; border-radius: 25px;
+    padding: 8px 16px; border: none; border-radius: 20px;
     font-weight: bold; cursor: pointer; color: white;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 0.95rem; position: relative; overflow: hidden;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.85rem; position: relative; overflow: hidden;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
   .btn::before {
     content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
@@ -79,7 +100,7 @@
     transition: left 0.5s;
   }
   .btn:hover::before { left: 100%; }
-  .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+  .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.35); }
   .btn:active { transform: translateY(0) scale(0.98); }
   
   .btn-pk { background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); }
@@ -93,189 +114,233 @@
 
   /* ==================== 电影级主网格 ==================== */
   #petGrid {
-    display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);
-    gap: 12px; padding: 20px;
-    height: calc(100vh - 230px); width: 100%;
-    position: absolute; top: 80px; left: 0; z-index: 1;
+    display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(5, 1fr);
+    gap: 5px; padding: 5px 10px;
+    height: calc(100vh - 135px); width: 100%;
+    position: absolute; top: 60px; left: 0; z-index: 1;
   }
   
   .pet-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
-    border-radius: 20px; position: relative;
-    cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 3px solid rgba(255,255,255,0.1);
+    background: linear-gradient(145deg, rgba(15,35,70,0.7) 0%, rgba(5,20,45,0.85) 100%);
+    border-radius: 8px; position: relative;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 255, 255, 0.25);
     overflow: hidden; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.1), inset 0 0 20px rgba(0, 255, 255, 0.03);
+    backdrop-filter: blur(5px);
+    transform-style: preserve-3d;
+    perspective: 500px;
+    animation: cardFloat 4s ease-in-out infinite;
   }
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+  /* 科技感扫描线 */
   .pet-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent 60%);
+    background: linear-gradient(180deg, 
+      transparent 0%, 
+      rgba(0, 255, 255, 0.05) 50%, 
+      transparent 100%);
     pointer-events: none;
+    animation: scanLine 2.5s linear infinite;
   }
+  @keyframes scanLine {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+  /* 科技感边框光效 */
+  .pet-card::after {
+    content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(0,255,255,0.5), transparent 40%, transparent 60%, rgba(0,255,255,0.3)) border-box;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .pet-card:hover::after { opacity: 1; }
   .pet-card:hover { 
-    transform: translateY(-8px) scale(1.05); 
+    transform: translateY(-5px) rotateX(5deg) scale(1.03); 
     z-index: 10;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(52, 152, 219, 0.3);
+    border-color: rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), 0 0 60px rgba(0, 255, 255, 0.15), inset 0 0 20px rgba(0, 255, 255, 0.08);
   }
   .pet-card.selected {
-    border-color: #f1c40f; 
-    transform: translateY(-10px) scale(1.08); 
+    border-color: #00ffff; 
+    transform: translateY(-6px) rotateX(3deg) scale(1.05); 
     z-index: 20;
-    box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.3), 0 0 60px rgba(241, 196, 15, 0.5),
-                0 25px 80px rgba(0,0,0,0.5);
-    animation: selectedPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.5),
+                0 0 80px rgba(0, 255, 255, 0.2), inset 0 0 25px rgba(0, 255, 255, 0.1);
+    animation: selectedPulse 1.5s ease-in-out infinite;
   }
   @keyframes selectedPulse {
-    0%, 100% { box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.3), 0 0 60px rgba(241, 196, 15, 0.5); }
-    50% { box-shadow: 0 0 0 8px rgba(241, 196, 15, 0.5), 0 0 80px rgba(241, 196, 15, 0.7); }
+    0%, 100% { box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.3), 0 0 60px rgba(0, 255, 255, 0.5), 0 0 100px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(0, 255, 255, 0.5), 0 0 80px rgba(0, 255, 255, 0.7), 0 0 150px rgba(0, 255, 255, 0.4); }
   }
 
-  /* 队伍颜色 */
-  .team-red { border-bottom: 5px solid #e74c3c; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(231, 76, 60, 0.3); }
-  .team-blue { border-bottom: 5px solid #3498db; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(52, 152, 219, 0.3); }
-  .team-yellow { border-bottom: 5px solid #f1c40f; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(241, 196, 15, 0.3); }
-  .team-green { border-bottom: 5px solid #2ecc71; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(46, 204, 113, 0.3); }
-  .team-purple { border-bottom: 5px solid #9b59b6; box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(155, 89, 182, 0.3); }
+  /* 队伍颜色 - 科技感增强 */
+  .team-red { border-bottom: 2px solid #ff4757; box-shadow: 0 0 15px rgba(255, 71, 87, 0.3); }
+  .team-blue { border-bottom: 2px solid #00bfff; box-shadow: 0 0 15px rgba(0, 191, 255, 0.3); }
+  .team-yellow { border-bottom: 2px solid #ffc107; box-shadow: 0 0 15px rgba(255, 193, 7, 0.3); }
+  .team-green { border-bottom: 2px solid #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+  .team-purple { border-bottom: 2px solid #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
 
   .canvas-container { 
-    width: 100%; height: 62%; 
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-    position: relative; border-radius: 15px 15px 0 0;
+    width: 100%; height: 100%; 
+    background: radial-gradient(ellipse at center, rgba(0,255,255,0.08) 0%, transparent 70%);
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 10px;
+  }
+  
+  /* 宠物动态呼吸动画 */
+  .canvas-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(0,255,255,0.1) 0%, transparent 60%);
+    animation: petBreathe 3s ease-in-out infinite;
+    pointer-events: none;
+    border-radius: 10px;
+  }
+  @keyframes petBreathe {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.02); }
   }
   
   .info-area {
-    height: 38%; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
-    padding: 8px; border-radius: 0 0 17px 17px;
+    display: none;  /* 完全隐藏信息区域 */
   }
   .pet-name { 
-    font-weight: bold; font-size: 1rem; color: #fff; 
-    margin-bottom: 3px; white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; width: 90%; text-align: center;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    display: none;
   }
   .pet-role { 
-    font-size: 0.75rem; color: rgba(255,255,255,0.8); 
-    background: rgba(255,255,255,0.1); padding: 3px 10px; 
-    border-radius: 10px; backdrop-filter: blur(5px);
+    display: none;
   }
   .level-badge {
-    position: absolute; top: 8px; right: 8px;
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-    color: white; font-size: 0.75rem; font-weight: bold;
-    padding: 4px 10px; border-radius: 15px; z-index: 5;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    position: absolute; top: 3px; right: 3px;
+    background: linear-gradient(135deg, #00ffff 0%, #0099cc 100%);
+    color: #000; font-size: 0.5rem; font-weight: bold;
+    padding: 1px 4px; border-radius: 5px; z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    animation: badgePulse 2s ease-in-out infinite;
   }
-  .xp-bar { width: 85%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 6px; overflow: hidden; }
-  .xp-fill { height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60); width: 0%; transition: width 0.5s; border-radius: 3px; box-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
+  @keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 255, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.8); }
+  }
+  .xp-bar { display: none; }
+  .xp-fill { display: none; }
 
   /* ==================== 电影级底部控制台 ==================== */
   footer {
     position: absolute; bottom: 0; left: 0; right: 0;
-    height: 150px; 
-    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.95) 100%);
-    backdrop-filter: blur(20px);
-    border-top: 2px solid rgba(52, 152, 219, 0.3);
+    height: 75px; 
+    background: linear-gradient(180deg, rgba(5,15,30,0.85) 0%, rgba(0,8,20,0.98) 100%);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(0, 255, 255, 0.4);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 25px; z-index: 100;
+    padding: 0 20px; z-index: 100;
+    box-shadow: 0 -3px 20px rgba(0, 255, 255, 0.15);
+  }
+  footer::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.6), transparent);
   }
 
   .selected-panel {
-    width: 200px; padding: 15px;
-    background: linear-gradient(145deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.1) 100%);
-    border: 2px solid rgba(52, 152, 219, 0.3);
-    border-radius: 15px; text-align: center;
-    backdrop-filter: blur(10px);
+    width: 160px; padding: 8px 12px;
+    background: linear-gradient(145deg, rgba(0,40,70,0.6) 0%, rgba(0,25,50,0.8) 100%);
+    border: 1px solid rgba(0, 255, 255, 0.35);
+    border-radius: 12px; text-align: center;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
   }
-  .selected-panel h3 { font-size: 1.2rem; color: #fff; margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-  .selected-panel p { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+  .selected-panel h3 { font-size: 0.9rem; color: #00ffff; margin-bottom: 3px; text-shadow: 0 0 8px rgba(0,255,255,0.5); }
+  .selected-panel p { font-size: 0.7rem; color: rgba(255,255,255,0.7); }
 
   .score-buttons {
-    display: flex; gap: 10px; flex: 1; justify-content: center;
-    overflow-x: auto; padding: 10px;
+    display: flex; gap: 6px; flex: 1; justify-content: center;
+    overflow-x: auto; padding: 8px;
   }
   .s-btn {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    width: 75px; height: 85px;
-    border: 2px solid rgba(255,255,255,0.2); border-radius: 15px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    width: 58px; height: 58px;
+    border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 10px;
+    background: linear-gradient(145deg, rgba(0,40,70,0.5) 0%, rgba(0,25,50,0.7) 100%);
     cursor: pointer; position: relative;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .s-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .s-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 15px rgba(0,255,255,0.25); border-color: rgba(0,255,255,0.5); }
   .s-btn:active { transform: translateY(0) scale(0.95); }
-  .s-btn.plus { border-color: rgba(46, 204, 113, 0.5); background: linear-gradient(145deg, rgba(46, 204, 113, 0.2) 0%, rgba(46, 204, 113, 0.1) 100%); }
-  .s-btn.minus { border-color: rgba(231, 76, 60, 0.5); background: linear-gradient(145deg, rgba(231, 76, 60, 0.2) 0%, rgba(231, 76, 60, 0.1) 100%); }
-  .s-icon { font-size: 1.8rem; margin-bottom: 3px; }
-  .s-label { font-size: 0.7rem; font-weight: bold; text-align: center; color: rgba(255,255,255,0.9); }
+  .s-btn.plus { border-color: rgba(0, 255, 150, 0.4); background: linear-gradient(145deg, rgba(0, 200, 120, 0.15) 0%, rgba(0, 150, 80, 0.1) 100%); }
+  .s-btn.minus { border-color: rgba(255, 100, 100, 0.4); background: linear-gradient(145deg, rgba(200, 80, 80, 0.15) 0%, rgba(150, 50, 50, 0.1) 100%); }
+  .s-icon { font-size: 1.3rem; margin-bottom: 1px; }
+  .s-label { font-size: 0.55rem; font-weight: bold; text-align: center; color: rgba(255,255,255,0.85); }
   .s-val {
-    position: absolute; top: -8px; right: -8px;
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    color: white; border: none;
-    width: 22px; height: 22px; border-radius: 50%;
-    font-size: 0.7rem; font-weight: bold;
+    position: absolute; top: -6px; right: -6px;
+    background: linear-gradient(135deg, #00ffff 0%, #0099cc 100%);
+    color: #000; border: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    font-size: 0.65rem; font-weight: bold;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5);
+    cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
   }
 
-  .action-area {
-    display: flex; gap: 12px; padding: 0 20px;
-    border-left: 2px solid rgba(255,255,255,0.1); border-right: 2px solid rgba(255,255,255,0.1);
+  /* 右下角快捷按钮 */
+  .quick-btns {
+    display: flex; gap: 8px; padding: 8px;
+    background: linear-gradient(145deg, rgba(0,50,80,0.4) 0%, rgba(0,30,50,0.6) 100%);
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: 12px;
   }
-  .act-btn {
-    padding: 10px 18px; border: none; border-radius: 25px;
-    font-weight: bold; color: white; cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    transition: all 0.3s;
+  .quick-btn {
+    width: 40px; height: 40px; border-radius: 10px;
+    border: 1px solid rgba(0, 255, 255, 0.4); 
+    background: linear-gradient(145deg, rgba(0, 255, 255, 0.12) 0%, rgba(0, 200, 200, 0.05) 100%);
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
   }
-  .act-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-  .act-btn:active { transform: translateY(0) scale(0.95); }
+  .quick-btn:hover { 
+    transform: scale(1.08) translateY(-2px); 
+    border-color: #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.08);
+    background: linear-gradient(145deg, rgba(0, 255, 255, 0.2) 0%, rgba(0, 200, 200, 0.08) 100%);
+  }
+  .quick-btn:active { transform: scale(0.95); }
 
   /* ==================== 电影级状态栏 ==================== */
   .status-bar {
-    position: absolute; top: 95px; right: 25px;
-    background: linear-gradient(145deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 100%);
-    padding: 15px 20px; border-radius: 20px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-    backdrop-filter: blur(15px); z-index: 50;
-    border: 1px solid rgba(255,255,255,0.1);
+    position: absolute; top: 75px; right: 20px;
+    background: linear-gradient(145deg, rgba(10,30,60,0.88) 0%, rgba(5,15,35,0.93) 100%);
+    padding: 12px 16px; border-radius: 12px; 
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(0, 255, 255, 0.03);
+    backdrop-filter: blur(12px); z-index: 50;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+  }
+  .status-bar::before {
+    content: ''; position: absolute; top: 0; left: 8px; right: 8px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.4), transparent);
   }
   .status-item { 
-    display: flex; align-items: center; gap: 8px; 
+    display: flex; align-items: center; gap: 6px; 
     margin-bottom: 8px; font-size: 0.9rem; color: #fff; 
+    text-shadow: 0 0 8px rgba(0,255,255,0.3);
   }
   .status-item:last-child { margin-bottom: 0; }
-  .status-icon { font-size: 1.4rem; }
+  .status-icon { font-size: 1.3rem; filter: drop-shadow(0 0 4px currentColor); }
   .status-value { 
     font-weight: bold; 
-    text-shadow: 0 0 20px currentColor;
+    text-shadow: 0 0 15px currentColor;
+    animation: valuePulse 2s ease-in-out infinite;
   }
-  
-  /* ==================== 快捷动作 ==================== */
-  .quick-actions {
-    position: absolute; top: 95px; left: 25px;
-    background: linear-gradient(145deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 100%);
-    padding: 12px; border-radius: 20px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    backdrop-filter: blur(15px); z-index: 50; 
-    display: flex; gap: 10px;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-  .quick-btn {
-    width: 45px; height: 45px; border-radius: 50%;
-    border: 2px solid rgba(52, 152, 219, 0.5); 
-    background: linear-gradient(145deg, rgba(52, 152, 219, 0.3) 0%, rgba(52, 152, 219, 0.1) 100%);
-    cursor: pointer; display: flex; align-items: center;
-    justify-content: center; font-size: 1.4rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .quick-btn:hover { 
-    transform: scale(1.15) rotate(10deg); 
-    box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+  @keyframes valuePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; text-shadow: 0 0 25px currentColor; }
   }
 
   /* ==================== 电影级模态框 ==================== */
@@ -426,6 +491,7 @@
 </style>
 </head>
 <body>
+<div class="tech-grid"></div>
 <div class="stars-bg"></div>
 <header>
   <div class="title-area">
@@ -460,14 +526,6 @@
   </div>
 </div>
 
-<!-- 快捷动作 -->
-<div class="quick-actions">
-  <button class="quick-btn" onclick="randomEffect()" title="随机特效">🎲</button>
-  <button class="quick-btn" onclick="randomAction()" title="随机动作">💫</button>
-  <button class="quick-btn" onclick="randomEquipment()" title="随机装备">🎁</button>
-  <button class="quick-btn" onclick="activateUltimate()" title="终极技能">🌟</button>
-</div>
-
 <main id="petGrid"></main>
 
 <footer>
@@ -478,7 +536,8 @@
     <div style="margin-top:8px; font-size:0.8rem; color:rgba(255,255,255,0.8);">
       <span id="selEffect" style="color:#9b59b6;">特效：无</span><br>
       <span id="selAction" style="color:#3498db;">动作：站立</span><br>
-      <span id="selEquip" style="color:#e74c3c;">装备：无</span>
+      <span id="selEquip" style="color:#e74c3c;">装备：无</span><br>
+      <span id="selAI" style="color:#667eea;">AI：原始形态</span>
     </div>
   </div>
 
@@ -522,11 +581,11 @@
     </div>
   </div>
 
-  <div class="action-area">
-    <button class="act-btn btn-skill" onclick="useSkill()">⚡ 技能</button>
-    <button class="act-btn btn-effect" onclick="openEffectsModal()">✨ 特效</button>
-    <button class="act-btn btn-action" onclick="openActionsModal()">🎭 动作</button>
-    <button class="act-btn btn-shop" onclick="useItem()">✨ 道具</button>
+  <div class="quick-btns">
+    <button class="quick-btn" onclick="randomEffect()" title="随机特效">🎲</button>
+    <button class="quick-btn" onclick="randomAction()" title="随机动作">💫</button>
+    <button class="quick-btn" onclick="randomEquipment()" title="随机装备">🎁</button>
+    <button class="quick-btn" onclick="activateUltimate()" title="终极觉醒">🌟</button>
   </div>
 </footer>
 
@@ -542,6 +601,7 @@
       <div style="text-align:center;">
         <div id="captain-preview"></div>
         <p style="margin-top:15px; font-weight:bold; color:#fff;">电影级3D指挥官</p>
+        <button onclick="openCaptainAIModal()" style="margin-top:10px; padding:8px 20px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border:none; border-radius:10px; color:#fff; font-weight:bold; cursor:pointer; box-shadow:0 3px 15px rgba(102,126,234,0.4);">🤖 AI换头像</button>
       </div>
       
       <div>
@@ -650,7 +710,7 @@
 <div id="aiModal" class="modal">
   <div class="modal-content" style="max-width:600px; max-height:90vh;">
     <span class="close-modal" onclick="closeModal('aiModal')">&times;</span>
-    <h2 style="text-align:center; color:#667eea; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(102,126,234,0.5);">🤖 AI智能换宠</h2>
+    <h2 id="aiTitle" style="text-align:center; color:#667eea; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(102,126,234,0.5);">🤖 AI智能换宠</h2>
     
     <div style="padding:20px;">
       <!-- 选择宠物类型 -->
@@ -695,6 +755,11 @@
         🎨 开始生成
       </button>
       
+      <!-- 恢复原始形态按钮 -->
+      <button onclick="removeAIImage()" style="width:100%; padding:12px; margin-top:10px; background:linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border:none; border-radius:12px; color:#fff; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 5px 20px rgba(231,76,60,0.4);">
+        🔄 恢复原始形态
+      </button>
+      
       <!-- 加载状态 -->
       <div id="aiLoading" style="display:none; text-align:center; padding:20px;">
         <div style="display:inline-block; width:40px; height:40px; border:4px solid rgba(255,255,255,0.3); border-top-color:#667eea; border-radius:50%; animation:spin 1s linear infinite;"></div>
@@ -706,6 +771,36 @@
         <h3 style="color:#fff; margin-bottom:15px;">生成结果：</h3>
         <div id="aiResultImages" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px;"></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- 指挥官AI换头像模态框 -->
+<div id="captainAIModal" class="modal">
+  <div class="modal-content" style="max-width:500px; max-height:80vh;">
+    <span class="close-modal" onclick="closeCaptainAIModal()">&times;</span>
+    <h2 style="text-align:center; color:#3498db; margin-bottom:25px; font-size:1.8rem; text-shadow:0 0 30px rgba(52,152,219,0.5);">🎬 指挥官AI头像</h2>
+    
+    <div style="padding:20px;">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="width:120px; height:120px; margin:0 auto; border-radius:50%; background:rgba(52,152,219,0.2); border:3px solid rgba(52,152,219,0.5); display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:3rem;">🎬</span>
+        </div>
+        <p style="color:#fff; margin-top:10px;">莱德队长</p>
+      </div>
+      
+      <div style="margin-bottom:20px;">
+        <label style="color:#fff; font-size:1rem; display:block; margin-bottom:10px;">描述你想要的指挥官形象：</label>
+        <textarea id="captainDescription" placeholder="例如：穿着指挥官制服，戴着帽子，帅气逼人..." style="width:100%; height:80px; padding:12px; border-radius:10px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:0.9rem; resize:none;"></textarea>
+      </div>
+      
+      <button onclick="generateCaptainAI()" id="captainGenerateBtn" style="width:100%; padding:15px; background:linear-gradient(135deg, #3498db 0%, #2980b9 100%); border:none; border-radius:12px; color:#fff; font-size:1.1rem; font-weight:bold; cursor:pointer; box-shadow:0 5px 20px rgba(52,152,219,0.4);">
+        🎨 生成AI头像
+      </button>
+      
+      <button onclick="resetCaptainAI()" style="width:100%; padding:12px; margin-top:10px; background:linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border:none; border-radius:12px; color:#fff; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 5px 20px rgba(231,76,60,0.4);">
+        🔄 恢复原始头像
+      </button>
     </div>
   </div>
 </div>
@@ -1035,7 +1130,8 @@ let appState = {
   equippedActions: {},
   equippedGear: {},
   skillCooldowns: {},
-  ultimateForms: {} // 终极形态状态
+  ultimateForms: {}, // 终极形态状态
+  captainAIImage: null // 指挥官AI头像
 };
 
 // ==================== 初始化 ====================
@@ -1518,6 +1614,434 @@ class MovieEquipmentRenderer {
 // ==================== 电影级宠物绘图函数 ====================
 function drawPet(container, student, isCaptain) {
   container.innerHTML = '';
+  
+  // 获取装备和特效数据
+  const effectId = appState.equippedEffects[student.id];
+  const actionId = appState.equippedActions[student.id] || 'a1';
+  const gear = appState.equippedGear[student.id] || {};
+  const effect = effectId ? EFFECTS_DATA.find(e => e.id === effectId) : null;
+  const action = ACTIONS_DATA.find(a => a.id === actionId) || ACTIONS_DATA[0];
+  const isUltimate = student.isUltimate || appState.ultimateForms[student.id];
+  const lvl = student.level;  // 统一在此处声明
+  
+  // 如果有AI生成的图片，显示AI图片+动态效果+装备特效
+  if (student.aiImage) {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `
+      width:100%; height:100%; 
+      position:absolute; top:0; left:0; right:0; bottom:0;
+      overflow:hidden; border-radius:10px;
+    `;
+    
+    // AI图片 - 完全铺满容器
+    const img = document.createElement('img');
+    img.src = student.aiImage;
+    img.className = 'ai-pet-image';
+    img.style.cssText = `
+      width:100%; height:100%; object-fit:cover; border-radius:10px;
+      filter: drop-shadow(0 0 15px rgba(102,126,234,0.5));
+    `;
+    img.alt = student.name;
+    wrapper.appendChild(img);
+    
+    // 表情动画Canvas层 - 绘制眼睛、嘴巴、脸红
+    const expressionCanvas = document.createElement('canvas');
+    expressionCanvas.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; z-index:5; pointer-events:none; border-radius:10px;';
+    wrapper.appendChild(expressionCanvas);
+    
+    // 图片加载后初始化表情动画
+    img.onload = function() {
+      const rect = wrapper.getBoundingClientRect();
+      expressionCanvas.width = rect.width;
+      expressionCanvas.height = rect.height;
+      
+      const ctx = expressionCanvas.getContext('2d');
+      const w = rect.width;
+      const h = rect.height;
+      
+      // 从图片采样获取肤色（用于眼皮颜色）
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = w;
+      tempCanvas.height = h;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(img, 0, 0, w, h);
+      
+      // 获取面部肤色（从额头区域采样）
+      const skinColor = tempCtx.getImageData(w * 0.4, h * 0.2, 1, 1).data;
+      const skinR = skinColor[0], skinG = skinColor[1], skinB = skinColor[2];
+      
+      // 表情状态
+      let blinkProgress = 0;  // 0=睁眼, 1=闭眼
+      let smileProgress = 0;  // 0=正常, 1=微笑
+      let blushOpacity = 0;   // 脸红透明度
+      let shyRotation = 0;    // 害羞旋转角度
+      
+      // 眼睛位置（假设在上方1/3处，左右各一）
+      const eyeY = h * 0.32;
+      const leftEyeX = w * 0.35;
+      const rightEyeX = w * 0.65;
+      const eyeWidth = w * 0.12;
+      const eyeHeight = h * 0.06;
+      
+      // 脸颊位置（眼睛下方两侧）
+      const cheekY = h * 0.45;
+      const leftCheekX = w * 0.25;
+      const rightCheekX = w * 0.75;
+      const cheekSize = w * 0.12;
+      
+      // 嘴巴位置（下方1/3处）
+      const mouthY = h * 0.65;
+      const mouthX = w * 0.5;
+      const mouthWidth = w * 0.15;
+      
+      // 绘制表情
+      function drawExpression() {
+        ctx.clearRect(0, 0, w, h);
+        
+        // 脸红效果（红晕圆形）
+        if (blushOpacity > 0) {
+          ctx.save();
+          ctx.globalAlpha = blushOpacity * 0.6;
+          ctx.fillStyle = '#ff6b6b';
+          
+          // 左脸颊
+          ctx.beginPath();
+          ctx.ellipse(leftCheekX, cheekY, cheekSize, cheekSize * 0.7, 0, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // 右脸颊
+          ctx.beginPath();
+          ctx.ellipse(rightCheekX, cheekY, cheekSize, cheekSize * 0.7, 0, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.restore();
+        }
+        
+        // 眨眼效果（绘制眼皮覆盖眼睛）
+        if (blinkProgress > 0) {
+          ctx.save();
+          ctx.fillStyle = `rgb(${skinR}, ${skinG}, ${skinB})`;
+          
+          // 左眼皮
+          ctx.beginPath();
+          ctx.ellipse(leftEyeX, eyeY, eyeWidth, eyeHeight * blinkProgress, 0, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // 右眼皮
+          ctx.beginPath();
+          ctx.ellipse(rightEyeX, eyeY, eyeWidth, eyeHeight * blinkProgress, 0, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.restore();
+        }
+        
+        // 微笑效果（嘴角上扬曲线）
+        if (smileProgress > 0) {
+          ctx.save();
+          ctx.strokeStyle = `rgba(200, 100, 100, ${smileProgress * 0.8})`;
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          
+          // 绘制微笑曲线
+          const smileAmount = smileProgress * mouthWidth * 0.3;
+          
+          ctx.beginPath();
+          ctx.moveTo(mouthX - mouthWidth, mouthY);
+          ctx.quadraticCurveTo(mouthX, mouthY + smileAmount, mouthX + mouthWidth, mouthY);
+          ctx.stroke();
+          
+          ctx.restore();
+        }
+        
+        requestAnimationFrame(drawExpression);
+      }
+      
+      drawExpression();
+      
+      // 眨眼动画
+      let isBlinking = false;
+      function doBlink() {
+        if (isBlinking) return;
+        isBlinking = true;
+        
+        // 闭眼动画 (0 -> 1)
+        const closeEye = () => {
+          blinkProgress += 0.3;
+          if (blinkProgress < 1) {
+            requestAnimationFrame(closeEye);
+          } else {
+            // 睁眼动画 (1 -> 0)
+            setTimeout(() => {
+              const openEye = () => {
+                blinkProgress -= 0.3;
+                if (blinkProgress > 0) {
+                  requestAnimationFrame(openEye);
+                } else {
+                  blinkProgress = 0;
+                  isBlinking = false;
+                }
+              };
+              openEye();
+            }, 80);
+          }
+        };
+        closeEye();
+        
+        // 随机3-6秒后再次眨眼
+        setTimeout(doBlink, 3000 + Math.random() * 3000);
+      }
+      setTimeout(doBlink, 500 + Math.random() * 1500);
+      
+      // 微笑动画
+      let isSmiling = false;
+      function doSmile() {
+        if (isSmiling) return;
+        isSmiling = true;
+        
+        // 微笑展开
+        const smile = () => {
+          smileProgress += 0.1;
+          if (smileProgress < 1) {
+            requestAnimationFrame(smile);
+          } else {
+            // 保持微笑一会儿
+            setTimeout(() => {
+              // 收回微笑
+              const unsmile = () => {
+                smileProgress -= 0.08;
+                if (smileProgress > 0) {
+                  requestAnimationFrame(unsmile);
+                } else {
+                  smileProgress = 0;
+                  isSmiling = false;
+                }
+              };
+              unsmile();
+            }, 800);
+          }
+        };
+        smile();
+        
+        // 随机5-10秒后再次微笑
+        setTimeout(doSmile, 5000 + Math.random() * 5000);
+      }
+      setTimeout(doSmile, 2000 + Math.random() * 3000);
+      
+      // 脸红动画
+      let isBlushing = false;
+      function doBlush() {
+        if (isBlushing) return;
+        isBlushing = true;
+        
+        // 脸红出现
+        const blush = () => {
+          blushOpacity += 0.05;
+          if (blushOpacity < 1) {
+            requestAnimationFrame(blush);
+          } else {
+            // 保持脸红一会儿
+            setTimeout(() => {
+              // 脸红消退
+              const unblush = () => {
+                blushOpacity -= 0.03;
+                if (blushOpacity > 0) {
+                  requestAnimationFrame(unblush);
+                } else {
+                  blushOpacity = 0;
+                  isBlushing = false;
+                }
+              };
+              unblush();
+            }, 1500);
+          }
+        };
+        blush();
+        
+        // 随机8-15秒后再次脸红
+        setTimeout(doBlush, 8000 + Math.random() * 7000);
+      }
+      setTimeout(doBlush, 4000 + Math.random() * 4000);
+      
+      // 害羞动画（偶尔触发）
+      function doShy() {
+        const wrapper = expressionCanvas.parentElement;
+        wrapper.style.transition = 'transform 0.3s ease';
+        wrapper.style.transform = 'scale(0.97) rotate(-3deg)';
+        
+        // 同时脸红
+        if (!isBlushing) {
+          blushOpacity = 0.5;
+        }
+        
+        setTimeout(() => {
+          wrapper.style.transform = 'scale(1) rotate(0deg)';
+          blushOpacity = 0;
+        }, 1200);
+      }
+      setInterval(doShy, 15000 + Math.random() * 10000);
+    };
+    
+    // 创建Canvas叠加层用于特效和装备
+    const effectCanvas = document.createElement('canvas');
+    effectCanvas.width = container.clientWidth || 100;
+    effectCanvas.height = container.clientHeight || 100;
+    effectCanvas.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none;';
+    wrapper.appendChild(effectCanvas);
+    
+    // 终极形态光环
+    if (isUltimate || lvl >= 8) {
+      const ultimateRing = document.createElement('div');
+      ultimateRing.style.cssText = `
+        position:absolute; width:100%; height:100%;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        background: linear-gradient(45deg, transparent, rgba(241,196,15,0.4), transparent) border-box;
+        animation: ultimateRotate 3s linear infinite;
+        z-index:0;
+      `;
+      wrapper.appendChild(ultimateRing);
+      
+      // 终极光粒子
+      for(let i = 0; i < 6; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+          position:absolute; width:3px; height:3px; background:#f1c40f;
+          border-radius:50%; box-shadow: 0 0 8px #f1c40f;
+          top:${20 + Math.random() * 60}%; left:${20 + Math.random() * 60}%;
+          animation: particleFloat ${1.5 + Math.random()}s ease-in-out infinite;
+        `;
+        wrapper.appendChild(particle);
+      }
+      
+      // 终极发光效果
+      img.style.filter = `drop-shadow(0 0 25px rgba(241,196,15,0.8)) brightness(1.2)`;
+      img.style.border = `2px solid rgba(241, 196, 15, 0.8)`;
+    }
+    
+    // 技能特效叠加
+    if (effect) {
+      const effectOverlay = document.createElement('div');
+      effectOverlay.style.cssText = `
+        position:absolute; top:0; left:0; width:100%; height:100%;
+        background: radial-gradient(circle, ${effect.color}40 0%, transparent 70%);
+        animation: effectOverlay 1.5s ease-in-out infinite;
+        z-index:1;
+        pointer-events:none;
+      `;
+      wrapper.appendChild(effectOverlay);
+    }
+    
+    // 科技感扫描线效果
+    const scanLine = document.createElement('div');
+    scanLine.style.cssText = `
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,255,255,0.15) 50%, transparent 100%);
+      animation: aiScan 2s linear infinite;
+      pointer-events: none; z-index:3;
+    `;
+    
+    // 等级发光边框
+    if (lvl >= 3 && !isUltimate) {
+      img.style.boxShadow = `0 0 ${8 + lvl * 2}px rgba(52, 152, 219, ${0.3 + lvl * 0.05})`;
+    }
+    if (lvl >= 5 && !isUltimate) {
+      img.style.border = `2px solid rgba(241, 196, 15, ${0.4 + lvl * 0.05})`;
+    }
+    if (lvl >= 7 && !isUltimate) {
+      img.style.filter = `drop-shadow(0 0 15px rgba(241, 196, 15, 0.5)) brightness(1.1)`;
+    }
+    
+    wrapper.appendChild(scanLine);
+    
+    // AI标签
+    const aiLabel = document.createElement('div');
+    aiLabel.style.cssText = `
+      position:absolute; top:2px; right:2px; 
+      background:linear-gradient(135deg,#667eea,#764ba2); 
+      color:#fff; font-size:9px; padding:1px 5px; 
+      border-radius:8px; z-index:10;
+      box-shadow: 0 0 10px rgba(102,126,234,0.5);
+      animation: labelPulse 2s ease-in-out infinite;
+    `;
+    aiLabel.innerText = '🤖';
+    wrapper.appendChild(aiLabel);
+    
+    // 等级标签 - 始终显示
+    const levelBadge = document.createElement('div');
+    levelBadge.style.cssText = `
+      position:absolute; top:2px; left:2px;
+      background: ${isUltimate ? 'linear-gradient(135deg,#f1c40f,#e67e22)' : 'linear-gradient(135deg,#00ffff,#0099cc)'};
+      color:#000; font-size:8px; font-weight:bold; padding:1px 4px;
+      border-radius:5px; z-index:10;
+      box-shadow: 0 0 8px ${isUltimate ? 'rgba(241,196,15,0.5)' : 'rgba(0,255,255,0.5)'};
+    `;
+    levelBadge.innerText = `${isUltimate ? '⭐' : ''}Lv.${lvl}`;
+    wrapper.appendChild(levelBadge);
+    
+    // 装备图标显示 - 与AI宠物联动
+    const gearIcons = Object.values(gear).map(gid => {
+      const g = EQUIPMENT_DATA.find(e => e.id === gid);
+      return g ? g.icon : '';
+    }).filter(icon => icon).join('');
+    
+    if (gearIcons) {
+      const gearBadge = document.createElement('div');
+      gearBadge.style.cssText = `
+        position:absolute; bottom:2px; left:2px;
+        background:rgba(0,0,0,0.7);
+        color:#fff; font-size:10px; padding:1px 4px;
+        border-radius:5px; z-index:10;
+        backdrop-filter: blur(3px);
+        border: 1px solid rgba(255,255,255,0.2);
+      `;
+      gearBadge.innerText = gearIcons;
+      wrapper.appendChild(gearBadge);
+      
+      // 装备光效叠加到AI图片
+      const gearGlow = document.createElement('div');
+      gearGlow.style.cssText = `
+        position:absolute; top:0; left:0; width:100%; height:100%;
+        background: radial-gradient(ellipse at bottom left, rgba(241,196,15,0.2) 0%, transparent 50%);
+        pointer-events:none; z-index:1;
+      `;
+      wrapper.appendChild(gearGlow);
+    }
+    
+    // 特效图标 - 与AI宠物联动
+    if (effect) {
+      const effectBadge = document.createElement('div');
+      effectBadge.style.cssText = `
+        position:absolute; bottom:2px; right:2px;
+        background:${effect.color}90;
+        color:#fff; font-size:10px; padding:1px 5px;
+        border-radius:5px; z-index:10;
+        animation: effectPulse 1s ease-in-out infinite;
+      `;
+      effectBadge.innerText = effect.icon;
+      wrapper.appendChild(effectBadge);
+    }
+    
+    container.appendChild(wrapper);
+    
+    // 渲染特效到Canvas
+    if (effect) {
+      const ctx = effectCanvas.getContext('2d');
+      let frame = 0;
+      const effectRenderer = new MovieEffectRenderer(ctx, effect, effectCanvas.width, effectCanvas.height);
+      
+      function animateEffect() {
+        frame++;
+        ctx.clearRect(0, 0, effectCanvas.width, effectCanvas.height);
+        effectRenderer.frame = frame;
+        effectRenderer.render();
+        requestAnimationFrame(animateEffect);
+      }
+      animateEffect();
+    }
+    
+    return;
+  }
+  
   const canvas = document.createElement('canvas');
   canvas.width = container.clientWidth || 120;
   canvas.height = container.clientHeight || 100;
@@ -1530,20 +2054,15 @@ function drawPet(container, student, isCaptain) {
 
   const petData = PET_TYPES[student.petIdx];
   const color = isCaptain ? '#e74c3c' : petData.color;
-  const lvl = student.level;
   const sub = isCaptain ? 'ryder' : petData.sub;
-  const isUltimate = student.isUltimate || appState.ultimateForms[student.id];
+  // lvl 和 isUltimate 已在函数开头声明
 
-  // 获取效果
-  const effectId = appState.equippedEffects[student.id];
-  const actionId = appState.equippedActions[student.id] || 'a1';
-  const gear = appState.equippedGear[student.id] || {};
+  // 获取效果 - effectId, actionId, gear 已在函数开头声明
+  const effect2 = effectId ? EFFECTS_DATA.find(e => e.id === effectId) : null;
+  const action2 = ACTIONS_DATA.find(a => a.id === actionId) || ACTIONS_DATA[0];
   
-  const effect = effectId ? EFFECTS_DATA.find(e => e.id === effectId) : null;
-  const action = ACTIONS_DATA.find(a => a.id === actionId) || ACTIONS_DATA[0];
-  
-  let effectRenderer = effect ? new MovieEffectRenderer(ctx, effect, w, h) : null;
-  let actionRenderer = new MovieActionRenderer(action);
+  let effectRenderer = effect2 ? new MovieEffectRenderer(ctx, effect2, w, h) : null;
+  let actionRenderer = new MovieActionRenderer(action2);
   
   let frame = 0;
   function animate() {
@@ -2033,7 +2552,58 @@ function darkenColor(color, percent) {
 function drawCaptain() {
   const container = document.getElementById('captain-preview');
   if(container) {
-    drawPet(container, {petIdx:0, level:8, hasItem:true, id:'captain', isUltimate:true}, true);
+    // 如果有AI头像，显示AI头像
+    if (appState.captainAIImage) {
+      container.innerHTML = '';
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = `
+        width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+        position:relative; overflow:hidden; border-radius:50%;
+      `;
+      
+      const img = document.createElement('img');
+      img.src = appState.captainAIImage;
+      img.style.cssText = `
+        width:100%; height:100%; object-fit:cover; border-radius:50%;
+        filter: drop-shadow(0 0 20px rgba(102,126,234,0.6));
+        animation: captainFloat 3s ease-in-out infinite;
+      `;
+      
+      // 添加光环效果
+      const ring = document.createElement('div');
+      ring.style.cssText = `
+        position:absolute; width:100%; height:100%;
+        border: 3px solid rgba(52,152,219,0.6);
+        border-radius:50%;
+        animation: captainRing 2s linear infinite;
+      `;
+      
+      wrapper.appendChild(img);
+      wrapper.appendChild(ring);
+      container.appendChild(wrapper);
+      
+      // 添加表情动画层
+      const expressionLayer = document.createElement('div');
+      expressionLayer.style.cssText = `
+        position:absolute; top:0; left:0; width:100%; height:100%;
+        pointer-events:none; z-index:5; border-radius:50%;
+      `;
+      
+      // 眨眼效果
+      const eyeLayer = document.createElement('div');
+      eyeLayer.style.cssText = `
+        position:absolute; top:30%; left:25%; width:50%; height:15%;
+        background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0.7) 55%, transparent 60%);
+        border-radius: 50%;
+        opacity: 0;
+        animation: eyeBlink 4s ease-in-out infinite;
+      `;
+      expressionLayer.appendChild(eyeLayer);
+      
+      wrapper.appendChild(expressionLayer);
+    } else {
+      drawPet(container, {petIdx:0, level:8, hasItem:true, id:'captain', isUltimate:true}, true);
+    }
   }
 }
 // ==================== 业务逻辑 ====================
@@ -2041,7 +2611,7 @@ function drawCaptain() {
 function renderGrid() {
   const grid = document.getElementById('petGrid');
   grid.innerHTML = '';
-  const list = appState.students.slice(0, 36);
+  const list = appState.students.slice(0, 50);  // 显示50个宠物
 
   list.forEach(s => {
     const card = document.createElement('div');
@@ -2099,6 +2669,7 @@ function select(id, card) {
     return g ? g.name : '';
   }).filter(n => n).join(', ');
   document.getElementById('selEquip').innerText = `装备：${gearNames || '无'}`;
+  document.getElementById('selAI').innerText = `AI：${s.aiImage ? '🤖 已换宠' : '原始形态'}`;
 }
 
 let tempKey = null, tempTarget = null;
@@ -2343,17 +2914,28 @@ function activateUltimate() {
     return;
   }
   
-  appState.energy -= 50;
-  appState.ultimateForms[appState.selectedId] = true;
   const s = appState.students.find(x => x.id === appState.selectedId);
-  if(s) s.isUltimate = true;
+  if(!s) return;
   
-  showFloat(`🌟 终极觉醒!`, window.innerWidth/2, window.innerHeight/2, "#f1c40f");
-  
-  saveData();
-  updateStatusDisplay();
-  renderGrid();
-  select(appState.selectedId, document.querySelector('.pet-card.selected'));
+  // 如果已经有AI图片，直接终极觉醒
+  if(s.aiImage) {
+    appState.energy -= 50;
+    appState.ultimateForms[appState.selectedId] = true;
+    s.isUltimate = true;
+    showFloat(`🌟 终极觉醒!`, window.innerWidth/2, window.innerHeight/2, "#f1c40f");
+    saveData();
+    updateStatusDisplay();
+    renderGrid();
+    select(appState.selectedId, document.querySelector('.pet-card.selected'));
+  } else {
+    // 没有AI图片，打开AI换宠面板进行终极觉醒
+    appState.pendingUltimateId = appState.selectedId;
+    openAIModal();
+    // 设置终极觉醒模式
+    document.getElementById('aiDescription').value = '终极觉醒形态，闪耀金色光芒，更加强大酷炫';
+    document.getElementById('aiTitle').innerText = '🌟 终极觉醒 - AI生成';
+    showFloat("请生成终极觉醒形态！", window.innerWidth/2, window.innerHeight/2, "#f1c40f");
+  }
 }
 
 // ==================== 模态框功能 ====================
@@ -2826,6 +3408,11 @@ let aiGeneratedImages = [];
 
 // 打开AI模态框
 function openAIModal() {
+  // 重置标题
+  const aiTitle = document.getElementById('aiTitle');
+  if(aiTitle) aiTitle.innerText = '🤖 AI智能换宠';
+  // 重置终极觉醒模式
+  appState.pendingUltimateId = null;
   // 更新目标宠物信息
   updateAITargetInfo();
   document.getElementById('aiModal').classList.add('show');
@@ -2838,7 +3425,8 @@ function updateAITargetInfo() {
     const student = appState.students.find(s => s.id === appState.selectedId);
     if (student) {
       const petType = PET_TYPES[student.petIdx];
-      targetEl.innerHTML = `当前选中：<strong>${student.name}</strong> (宠物: ${petType.name} - ${petType.role})`;
+      const isUltimate = student.isUltimate || appState.ultimateForms[student.id];
+      targetEl.innerHTML = `当前选中：<strong>${student.name}</strong> (宠物: ${petType.name} - ${petType.role})${isUltimate ? ' ⭐终极' : ''}${student.aiImage ? ' 🤖AI' : ''}`;
       targetEl.style.color = '#2ecc71';
     }
   } else {
@@ -2953,10 +3541,115 @@ function applyAIImage(imageUrl) {
   if (student) {
     // 保存AI生成的图片URL到学生对象
     student.aiImage = imageUrl;
-    alert(`已将AI生成的图片应用到 ${student.name}！`);
+    
+    // 检查是否是终极觉醒模式
+    if (appState.pendingUltimateId === appState.selectedId) {
+      if(appState.energy < 50) {
+        showFloat("能量不足！需要50能量", window.innerWidth/2, window.innerHeight/2, "#e74c3c");
+        return;
+      }
+      appState.energy -= 50;
+      appState.ultimateForms[appState.selectedId] = true;
+      student.isUltimate = true;
+      appState.pendingUltimateId = null;
+      showFloat("🌟 AI终极觉醒成功!", window.innerWidth/2, window.innerHeight/2, "#f1c40f");
+      // 重置AI模态框标题
+      const aiTitle = document.getElementById('aiTitle');
+      if(aiTitle) aiTitle.innerText = '🤖 AI智能换宠';
+    } else {
+      showFloat("🖼️ AI换宠成功!", window.innerWidth/2, window.innerHeight/2, "#667eea");
+    }
+    
+    saveData();
     // 刷新显示
-    renderPets();
+    renderGrid();
+    select(student.id, document.querySelector('.pet-card.selected'));
     closeModal('aiModal');
+    updateStatusDisplay();
+  }
+}
+
+// 移除AI图片，恢复原始宠物形态
+function removeAIImage() {
+  if (!appState.selectedId) {
+    alert('请先选择一个宠物！');
+    return;
+  }
+  
+  const student = appState.students.find(s => s.id === appState.selectedId);
+  if (student && student.aiImage) {
+    delete student.aiImage;
+    saveData();
+    alert(`已恢复 ${student.name} 的原始形态！`);
+    renderGrid();
+    select(student.id, document.querySelector('.pet-card.selected'));
+    showFloat("🐾 恢复原始形态!", window.innerWidth/2, window.innerHeight/2, "#2ecc71");
+  } else {
+    alert('该宠物没有应用AI图片！');
+  }
+}
+
+// 打开指挥官AI换头像模态框
+function openCaptainAIModal() {
+  const modal = document.getElementById('captainAIModal');
+  if (modal) {
+    modal.classList.add('show');
+    // 预填充描述
+    document.getElementById('captainDescription').value = '莱德队长，穿着指挥官制服，帅气逼人，电影级质感';
+  }
+}
+
+// 关闭指挥官AI模态框
+function closeCaptainAIModal() {
+  document.getElementById('captainAIModal').classList.remove('show');
+}
+
+// 生成指挥官AI头像
+async function generateCaptainAI() {
+  const description = document.getElementById('captainDescription').value || '莱德队长，指挥官形象';
+  
+  const btn = document.getElementById('captainGenerateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ 生成中...';
+  
+  try {
+    const response = await fetch('/api/generate-pet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        petName: '莱德队长',
+        petRole: '指挥官',
+        description: description + '，英俊帅气，电影级3D效果'
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success && data.imageUrls && data.imageUrls.length > 0) {
+      appState.captainAIImage = data.imageUrls[0];
+      saveData();
+      drawCaptain();
+      showFloat("🤖 指挥官头像已更新!", window.innerWidth/2, window.innerHeight/2, "#667eea");
+      closeCaptainAIModal();
+    } else {
+      alert('生成失败：' + (data.errors?.join(', ') || data.error || '未知错误'));
+    }
+  } catch (error) {
+    console.error('生成失败:', error);
+    alert('生成失败，请检查网络连接');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🎨 开始生成';
+  }
+}
+
+// 恢复指挥官原始头像
+function resetCaptainAI() {
+  if (appState.captainAIImage) {
+    appState.captainAIImage = null;
+    saveData();
+    drawCaptain();
+    showFloat("🔄 恢复原始头像!", window.innerWidth/2, window.innerHeight/2, "#2ecc71");
   }
 }
 
@@ -2977,9 +3670,131 @@ async function downloadAIImage(url) {
   }
 }
 
-// 添加旋转动画样式
+// 添加动画样式
 const style = document.createElement('style');
-style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
+style.textContent = `
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes aiGlow { 
+  0%, 100% { transform: scale(1); opacity: 0.3; } 
+  50% { transform: scale(1.1); opacity: 0.5; } 
+}
+@keyframes aiFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes aiGlowPulse {
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(102,126,234,0.5)); }
+  50% { filter: drop-shadow(0 0 30px rgba(102,126,234,0.8)); }
+}
+@keyframes aiScan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@keyframes ultimateRotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes labelPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(102,126,234,0.8); }
+}
+@keyframes effectPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+@keyframes effectOverlay {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+  50% { transform: translateY(-10px) scale(1.5); opacity: 0.5; }
+}
+/* AI宠物动作动画 */
+@keyframes aiBounce {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(-15px) scaleY(1.1); }
+  50% { transform: translateY(0) scaleY(0.9); }
+  70% { transform: translateY(-8px) scaleY(1); }
+}
+@keyframes aiSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes aiShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-2deg); }
+  75% { transform: translateX(5px) rotate(2deg); }
+}
+@keyframes aiDance {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-5px) rotate(-5deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-5px) rotate(5deg); }
+}
+@keyframes aiWave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+@keyframes aiJump {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  20% { transform: translateY(0) scaleY(0.8); }
+  40% { transform: translateY(-25px) scaleY(1.1); }
+  60% { transform: translateY(-25px) scaleY(1.1); }
+  80% { transform: translateY(0) scaleY(0.9); }
+}
+@keyframes aiFlip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+/* AI宠物表情动画 */
+@keyframes aiBlink {
+  0%, 45%, 55%, 100% { filter: brightness(1); }
+  50% { filter: brightness(0.3); }
+}
+@keyframes aiSmile {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  50% { transform: scaleY(1.03) translateY(-2%); }
+}
+@keyframes aiBlush {
+  0%, 100% { filter: sepia(0) saturate(1) brightness(1); }
+  50% { filter: sepia(0.3) saturate(1.5) brightness(1.05) hue-rotate(-10deg); }
+}
+@keyframes aiShy {
+  0%, 100% { transform: scale(1) rotate(0deg); filter: sepia(0); }
+  25% { transform: scale(0.97) rotate(-3deg); filter: sepia(0.2); }
+  50% { transform: scale(0.95) rotate(0deg); filter: sepia(0.3); }
+  75% { transform: scale(0.97) rotate(3deg); filter: sepia(0.2); }
+}
+@keyframes aiHappy {
+  0%, 100% { transform: scale(1) translateY(0); }
+  25% { transform: scale(1.02) translateY(-3px); }
+  50% { transform: scale(1.04) translateY(0); }
+  75% { transform: scale(1.02) translateY(-3px); }
+}
+/* 表情叠加层动画 */
+@keyframes eyeBlink {
+  0%, 40%, 60%, 100% { opacity: 0; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(0.1); }
+}
+@keyframes blushGlow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.6; }
+}
+@keyframes smileCurve {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.05); }
+}
+/* 指挥官动画 */
+@keyframes captainFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02); }
+}
+@keyframes captainRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+`;
 document.head.appendChild(style);
 </script>
 </body>
