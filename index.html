@@ -1104,6 +1104,24 @@ const EQUIPMENT_DATA = [
   { id: 's10', name: '神话光环', icon: '🌟', category: '特殊', color: '#FFD700', bonus: 30, price: 1500, slot: 'special', rarity: '神话' }
 ];
 
+// ==================== API 配置 ====================
+// 部署时请根据您的后端平台修改此配置
+// Cloudflare Workers: 'https://your-worker.your-subdomain.workers.dev'
+// Netlify Functions: 'https://your-site.netlify.app'
+// 本地开发: '' (空字符串，使用相对路径)
+const API_BASE_URL = '';
+
+// API 辅助函数
+async function callAPI(endpoint, data) {
+  const url = API_BASE_URL ? `${API_BASE_URL}${endpoint}` : endpoint;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return response.json();
+}
+
 // ==================== 应用程序状态 ====================
 let appState = {
   className: "汪汪队·电影救援总部",
@@ -3465,7 +3483,6 @@ async function generateAIPet() {
   
   const petType = document.getElementById('aiPetType').value;
   const description = document.getElementById('aiDescription').value;
-  const petInfo = PET_TYPES.find(p => p.name === petType);
   
   // 显示加载状态
   document.getElementById('aiGenerateBtn').disabled = true;
@@ -3474,27 +3491,21 @@ async function generateAIPet() {
   document.getElementById('aiResult').style.display = 'none';
   
   try {
+    // 构建提示词
+    const prompt = description || `汪汪队立大功风格的${petType}，可爱卡通形象`;
+    
     // 调用后端API生成图片
-    const response = await fetch('/api/generate-pet', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        petName: petType,
-        petRole: petInfo ? petInfo.role : '宠物',
-        description: description || `汪汪队立大功风格的${petType}`,
-        referenceImage: aiUploadedImage
-      })
+    const data = await callAPI('/api/generate-pet', {
+      prompt: prompt,
+      petName: petType,
+      style: '电影级3D卡通风格'
     });
     
-    const data = await response.json();
-    
-    if (data.success && data.imageUrls && data.imageUrls.length > 0) {
-      aiGeneratedImages = data.imageUrls;
-      displayAIResults(data.imageUrls);
+    if (data.success && data.imageUrl) {
+      aiGeneratedImages = [data.imageUrl];
+      displayAIResults([data.imageUrl]);
     } else {
-      throw new Error(data.errors?.join(', ') || '生成失败');
+      throw new Error(data.error || '生成失败');
     }
   } catch (error) {
     console.error('AI生成失败:', error);
